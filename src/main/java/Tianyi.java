@@ -8,7 +8,17 @@ public class Tianyi {
                 + "  | | | |/ _` | '_ \\| | | | |\n"
                 + "  | | | | (_| | | | | |_| | |\n"
                 + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
-                + "                     |___/";
-        System.out.println(banner);
+                + "                     |___/\n";
+        String greeting = "Hello! I'm Tianyi.\n"
+                + "What can I do for you?\n";
+        String farewell = "Bye. Hope to see you again soon!\n";
+        String divider = "____________________________________________________________\n";
+
+        System.out.println(divider
+                + banner
+                + greeting
+                + divider
+                + farewell
+                + divider);
     }
 }
