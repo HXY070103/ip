@@ -12,23 +12,30 @@ public class Tianyi {
                 + "____________________________________________________________");
     }
 
-    public static void printList(List<String> list) {
-        if (list == null || list.isEmpty()) {
+    public static void printTasks(List<String> tasks, List<Boolean> marks) {
+        if (tasks == null || tasks.isEmpty()) {
+            return;
+        }
+
+        if (marks == null || marks.isEmpty()) {
             return;
         }
 
         StringBuilder content = new StringBuilder();
 
-        for (int i = 0; i < list.size() - 1; i += 1) {
-            content.append(i + 1)
-                    .append(". ")
-                    .append(list.get(i))
-                    .append("\n");
-        }
+        for (int i = 0; i < tasks.size(); i += 1) {
+            String mark = marks.get(i) ?  "[X]" : "[ ]";
 
-        content.append(list.size())
-                .append(". ")
-                .append(list.getLast());
+            content.append(i + 1)
+                    .append(".")
+                    .append(mark)
+                    .append(" ")
+                    .append(tasks.get(i));
+
+            if (i < tasks.size() - 1) {
+                content.append("\n");
+            }
+        }
 
         print(content.toString());
     }
@@ -46,24 +53,34 @@ public class Tianyi {
 
         print(banner + "\n" + greeting);
 
+        List<String> tasks = new ArrayList<>();
+        List<Boolean> marks = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        List<String> list = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
+            String command = scanner.nextLine().trim();
+            String[] parts = command.split("\\s+", 2);
+            String commandWord = parts[0];
 
-            if (command.equals("bye")) {
+            if (commandWord.equals("bye")) {
                 break;
             }
 
-            switch (command) {
+            switch (commandWord) {
                 case "":
                     break;
                 case "list":
-                    printList(list);
+                    printTasks(tasks, marks);
+                    break;
+                case "mark":
+                    int taskIdx = Integer.parseInt(parts[1]) - 1;
+                    marks.set(taskIdx, true);
+                    print("Nice! I've marked this task as done:\n"
+                            + "  [X] " + tasks.get(taskIdx));
                     break;
                 default:
-                    list.add(command);
+                    tasks.add(command);
+                    marks.add(false);
                     print("added: " + command);
                     break;
             }
