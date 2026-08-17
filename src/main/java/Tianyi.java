@@ -66,6 +66,8 @@ public class Tianyi {
                 break;
             }
 
+            int taskIdx = 0;
+
             switch (commandWord) {
                 case "":
                     break;
@@ -73,10 +75,16 @@ public class Tianyi {
                     printTasks(tasks, marks);
                     break;
                 case "mark":
-                    int taskIdx = Integer.parseInt(parts[1]) - 1;
+                    taskIdx = Integer.parseInt(parts[1]) - 1;
                     marks.set(taskIdx, true);
                     print("Nice! I've marked this task as done:\n"
                             + "  [X] " + tasks.get(taskIdx));
+                    break;
+                case "unmark":
+                    taskIdx = Integer.parseInt(parts[1]) - 1;
+                    marks.set(taskIdx, false);
+                    print("OK, I've marked this task as not done yet:\n"
+                            + "  [ ] " + tasks.get(taskIdx));
                     break;
                 default:
                     tasks.add(command);
