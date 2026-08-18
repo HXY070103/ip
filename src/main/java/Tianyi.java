@@ -38,7 +38,16 @@ public class Tianyi {
             throw new TianyiException(errorMessage);
         }
 
-        return inputParts[1];
+        return inputParts[1].trim();
+    }
+
+    private static String getRequiredPart(String[] argumentParts, int index, String errorMessage)
+            throws TianyiException {
+        if (index >= argumentParts.length || argumentParts[index].isBlank()) {
+            throw new TianyiException(errorMessage);
+        }
+
+        return argumentParts[index].trim();
     }
 
     public static void main(String[] args) {
@@ -70,7 +79,7 @@ public class Tianyi {
 
                 if (command.equals("bye")) {
                     if (inputParts.length > 1 && !inputParts[1].isBlank()) {
-                        throw new TianyiException("The bye command does not accept any arguments.\n"
+                        throw new TianyiException("Bye command does not accept any arguments.\n"
                                 + "Try: bye");
                     }
 
@@ -81,7 +90,7 @@ public class Tianyi {
                     // List current tasks
                     case "list":
                         if (inputParts.length > 1 && !inputParts[1].isBlank()) {
-                            throw new TianyiException("The list command does not accept any arguments.\n"
+                            throw new TianyiException("List command does not accept any arguments.\n"
                                     + "Try: list");
                         }
 
@@ -104,66 +113,83 @@ public class Tianyi {
                                 break;
                         }
 
-                        if (inputParts.length < 2 || inputParts[1].isBlank()) {
-                            throw new TianyiException("The description of a " + command + " cannot be empty.\n"
-                                    + "Try: " + taskFormat);
-                        }
+                        String argument = getArgument(
+                                inputParts,
+                                "The argument of " + command + " command cannot be empty.\n"
+                                        + "Try: " + taskFormat
+                            );
 
                         Task task = null;
 
                         switch (command) {
                             case "todo":
-                                task = new ToDo(inputParts[1]);
+                                task = new ToDo(argument);
                                 break;
                             case "deadline":
-                                String[] deadlineParts = inputParts[1].split("\\s+/by\\s+", 2);
+                                String[] deadlineParts = argument.split("\\s*/by\\s*", 2);
 
-                                if (deadlineParts.length < 2 || deadlineParts[1].isBlank()) {
-                                    throw new TianyiException("A deadline must contain /by time.\n"
+                                if (deadlineParts.length < 2) {
+                                    throw new TianyiException("Deadline command must contain /by.\n"
                                             + "Try: " + taskFormat);
                                 }
 
-                                task = new Deadline(deadlineParts[0], deadlineParts[1]);
+                                String deadlineDescription = getRequiredPart(
+                                        deadlineParts,
+                                        0,
+                                        "The description of deadline command cannot be empty.\n"
+                                                + "Try: " + taskFormat
+                                    );
+                                String byTime = getRequiredPart(
+                                        deadlineParts,
+                                        1,
+                                        "The by time of deadline command cannot be empty.\n"
+                                                + "Try: " + taskFormat
+                                    );
+
+                                task = new Deadline(deadlineDescription, byTime);
                                 break;
                             case "event":
-                                boolean hasFrom = inputParts[1].contains("/from");
-                                boolean hasTo = inputParts[1].contains("/to");
-
-                                if (!hasFrom && !hasTo) {
-                                    throw new TianyiException("An event must contain /from time and /to time.\n"
-                                            + "Try: " + taskFormat);
-                                }
-
-                                if (hasFrom && !hasTo) {
-                                    throw new TianyiException("An event with /from must also contain /to time.\n"
-                                            + "Try: " + taskFormat);
-                                }
-
-                                if (!hasFrom && hasTo) {
-                                    throw new TianyiException("An event with /to must also contain /from time.\n"
-                                            + "Try: " + taskFormat);
-                                }
-
-                                if (inputParts[1].indexOf("/to") < inputParts[1].indexOf("/from")) {
-                                    throw new TianyiException("/from time must appear before /to time .\n"
-                                            + "Try: " + taskFormat);
-                                }
-
-                                String[] eventParts = inputParts[1].split("\\s+/from\\s+", 2);
+                                String[] eventParts = argument.split("\\s*/from\\s*", 2);
 
                                 if (eventParts.length < 2) {
-                                    throw new TianyiException("An event must contain /from time.\n"
+                                    throw new TianyiException("Event command must contain /from.\n"
                                             + "Try: " + taskFormat);
                                 }
 
-                                String[] timeParts = eventParts[1].split("\\s+/to\\s+", 2);
+                                String eventDescription = getRequiredPart(
+                                        eventParts,
+                                        0,
+                                        "The description of event command cannot be empty.\n"
+                                                + "Try: " + taskFormat
+                                    );
+                                String fromAndToTime = getRequiredPart(
+                                        eventParts,
+                                        1,
+                                        "Event command must contain /to.\n"
+                                                + "Try: " + taskFormat
+                                    );
+
+                                String[] timeParts = fromAndToTime.split("\\s*/to\\s*", 2);
 
                                 if (timeParts.length < 2) {
-                                    throw new TianyiException("An event must contain /to time.\n"
+                                    throw new TianyiException("Event command must contain /to.\n"
                                             + "Try: " + taskFormat);
                                 }
 
-                                task = new Event(eventParts[0], timeParts[0], timeParts[1]);
+                                String fromTime = getRequiredPart(
+                                        timeParts,
+                                        0,
+                                        "The from time of event command cannot be empty.\n"
+                                                +  "Try: " + taskFormat
+                                    );
+                                String toTime = getRequiredPart(
+                                        timeParts,
+                                        1,
+                                        "The to time of event command cannot be empty.\n"
+                                                +  "Try: " + taskFormat
+                                );
+
+                                task = new Event(eventDescription, fromTime, toTime);
                                 break;
                         }
 
@@ -181,7 +207,7 @@ public class Tianyi {
                         }
 
                         if (tasks.isEmpty()) {
-                            throw new TianyiException("There are no tasks in your list.\n"
+                            throw new TianyiException("There is no task in your list.\n"
                                     + "Please add a task.\n"
                                     + "Try: todo borrow book");
                         }
