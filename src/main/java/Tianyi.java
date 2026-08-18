@@ -174,7 +174,7 @@ public class Tianyi {
                         break;
 
                     // mark or unmark a task
-                    case "mark", "unmark":
+                    case "mark", "unmark", "delete":
                         if (inputParts.length < 2 || inputParts[1].isBlank()) {
                             throw new TianyiException("Please specify a task number.\n"
                                     + "Try: " + command + " 1");
@@ -212,7 +212,14 @@ public class Tianyi {
                                 print("OK, I've marked this task as not done yet:\n"
                                         + "  " + tasks.get(taskNumber - 1));
                                 break;
+                            case "delete":
+                                print("Noted. I've removed this task:\n"
+                                        + "  " +  tasks.get(taskNumber - 1) + "\n"
+                                        + "Now you have " + (tasks.size() - 1) + " tasks in the list.");
+                                tasks.remove(taskNumber - 1);
+                                break;
                         }
+
                         break;
                     default:
                         throw new TianyiException("I'm sorry, but I don't know what that means.");
