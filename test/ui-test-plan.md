@@ -419,6 +419,44 @@ Each test case starts a fresh `Tianyi` process. Inputs within one case run in or
       ]
     },
     {
+      "id": "case-insensitive-commands",
+      "aim": "Verify that command keywords are accepted regardless of letter case while argument text keeps its original case.",
+      "inputs": [
+        "ToDo Buy Milk",
+        "MaRk 1",
+        "LiSt",
+        "ByE"
+      ],
+      "expected_output": [
+        "____________________________________________________________",
+        " _____ _                   _",
+        "|_   _(_) __ _ _ __  _   _(_)",
+        "  | | | |/ _` | '_ \\| | | | |",
+        "  | | | | (_| | | | | |_| | |",
+        "  |_| |_|\\__,_|_| |_|\\__, |_|",
+        "                     |___/",
+        "Hello! I'm Tianyi.",
+        "What can I do for you?",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Got it. I've added this task:",
+        "  [T][ ] Buy Milk",
+        "Now you have 1 tasks in the list.",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Nice! I've marked this task as done:",
+        "  [T][X] Buy Milk",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Here are the tasks in your list:",
+        "1.[T][X] Buy Milk",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Bye. Hope to see you again soon!",
+        "____________________________________________________________"
+      ]
+    },
+    {
       "id": "blank-input-empty-list-and-unknown-command",
       "aim": "Verify that blank input and listing an empty list are ignored, empty-list task operations fail safely, and unknown commands report an error.",
       "inputs": [

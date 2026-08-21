@@ -75,118 +75,105 @@ public class Tianyi {
 
             try {
                 String[] inputParts = input.split("\\s+", 2);
-                String command = inputParts[0];
+                Command command = Command.from(inputParts[0]);
+                String example = command.getExample();
 
-                if (command.equals("bye")) {
+                if (command == Command.BYE) {
                     if (inputParts.length > 1 && !inputParts[1].isBlank()) {
                         throw new TianyiException("Bye command does not accept any arguments.\n"
-                                + "Try: bye");
+                                + "Try: " + example);
                     }
 
                     break;
                 }
 
                 switch (command) {
-                    // List current tasks
-                    case "list":
+                    // Command
+                    case LIST:
                         if (inputParts.length > 1 && !inputParts[1].isBlank()) {
                             throw new TianyiException("List command does not accept any arguments.\n"
-                                    + "Try: list");
+                                    + "Try: " + example);
                         }
 
                         printTasks(tasks);
                         break;
 
-                    // Add a task
-                    case "todo", "deadline", "event":
-                        String taskFormat = null;
-
-                        switch (command) {
-                            case "todo":
-                                taskFormat = "todo borrow book";
-                                break;
-                            case "deadline":
-                                taskFormat = "deadline return book /by Sunday";
-                                break;
-                            case "event":
-                                taskFormat = "event project meeting /from Mon 2pm /to 4pm";
-                                break;
-                        }
-
+                    // Command + Argument
+                    case TODO, DEADLINE, EVENT:
                         String argument = getArgument(
                                 inputParts,
                                 "The argument of " + command + " command cannot be empty.\n"
-                                        + "Try: " + taskFormat
+                                        + "Try: " + example
                             );
 
                         Task task = null;
 
                         switch (command) {
-                            case "todo":
+                            case TODO:
                                 task = new ToDo(argument);
                                 break;
-                            case "deadline":
+                            case DEADLINE:
                                 String[] deadlineParts = argument.split("\\s*/by\\s*", 2);
 
                                 if (deadlineParts.length < 2) {
                                     throw new TianyiException("Deadline command must contain /by.\n"
-                                            + "Try: " + taskFormat);
+                                            + "Try: " + example);
                                 }
 
                                 String deadlineDescription = getRequiredPart(
                                         deadlineParts,
                                         0,
                                         "The description of deadline command cannot be empty.\n"
-                                                + "Try: " + taskFormat
+                                                + "Try: " + example
                                     );
                                 String byTime = getRequiredPart(
                                         deadlineParts,
                                         1,
                                         "The by time of deadline command cannot be empty.\n"
-                                                + "Try: " + taskFormat
+                                                + "Try: " + example
                                     );
 
                                 task = new Deadline(deadlineDescription, byTime);
                                 break;
-                            case "event":
+                            case EVENT:
                                 String[] eventParts = argument.split("\\s*/from\\s*", 2);
 
                                 if (eventParts.length < 2) {
                                     throw new TianyiException("Event command must contain /from.\n"
-                                            + "Try: " + taskFormat);
+                                            + "Try: " + example);
                                 }
 
                                 String eventDescription = getRequiredPart(
                                         eventParts,
                                         0,
                                         "The description of event command cannot be empty.\n"
-                                                + "Try: " + taskFormat
+                                                + "Try: " + example
                                     );
                                 String fromAndToTime = getRequiredPart(
                                         eventParts,
                                         1,
                                         "Event command must contain /to.\n"
-                                                + "Try: " + taskFormat
+                                                + "Try: " + example
                                     );
 
                                 String[] timeParts = fromAndToTime.split("\\s*/to\\s*", 2);
 
                                 if (timeParts.length < 2) {
                                     throw new TianyiException("Event command must contain /to.\n"
-                                            + "Try: " + taskFormat);
+                                            + "Try: " + example);
                                 }
 
                                 String fromTime = getRequiredPart(
                                         timeParts,
                                         0,
                                         "The from time of event command cannot be empty.\n"
-                                                +  "Try: " + taskFormat
+                                                +  "Try: " + example
                                     );
                                 String toTime = getRequiredPart(
                                         timeParts,
                                         1,
                                         "The to time of event command cannot be empty.\n"
-                                                +  "Try: " + taskFormat
+                                                +  "Try: " + example
                                 );
 
                                 task = new Event(eventDescription, fromTime, toTime);
@@ -199,17 +186,17 @@ public class Tianyi {
                                 + "Now you have " + tasks.size() + " tasks in the list.");
                         break;
 
-                    // mark or unmark a task
-                    case "mark", "unmark", "delete":
+                    // Command + Number
+                    case MARK, UNMARK, DELETE:
                         if (inputParts.length < 2 || inputParts[1].isBlank()) {
                             throw new TianyiException("Please specify a task number.\n"
-                                    + "Try: " + command + " 1");
+                                    + "Try: " + example);
                         }
 
                         if (tasks.isEmpty()) {
                             throw new TianyiException("There is no task in your list.\n"
                                     + "Please add a task.\n"
-                                    + "Try: todo borrow book");
+                                    + "Try: " + Command.TODO.getExample());
                         }
 
                         int taskNumber = 0;
@@ -218,27 +205,27 @@ public class Tianyi {
                             taskNumber = Integer.parseInt(inputParts[1]);
                         } catch (NumberFormatException e) {
                             throw new TianyiException(inputParts[1] + " is not a valid task number."
-                                    + "Try: " + command + " 1");
+                                    + "Try: " + example);
                         }
 
                         if (taskNumber < 1 || taskNumber > tasks.size()) {
                             throw new TianyiException("Task number " + taskNumber + " does not exist.\n"
                                     + "Please enter a number from 1 to " + tasks.size() + "."
-                                    + "Try: " + command + " 1");
+                                    + "Try: " + example);
                         }
 
                         switch (command) {
-                            case "mark":
+                            case MARK:
                                 tasks.get(taskNumber - 1).markAsDone();
                                 print("Nice! I've marked this task as done:\n"
                                         + "  " + tasks.get(taskNumber - 1));
                                 break;
-                            case "unmark":
+                            case UNMARK:
                                 tasks.get(taskNumber - 1).unmarkAsDone();
                                 print("OK, I've marked this task as not done yet:\n"
                                         + "  " + tasks.get(taskNumber - 1));
                                 break;
-                            case "delete":
+                            case DELETE:
                                 print("Noted. I've removed this task:\n"
                                         + "  " +  tasks.get(taskNumber - 1) + "\n"
                                         + "Now you have " + (tasks.size() - 1) + " tasks in the list.");
