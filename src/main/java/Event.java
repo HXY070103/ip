@@ -1,8 +1,11 @@
+/**
+ * Represents a task occurring between dates with optional times.
+ */
 public class Event extends Task {
-    private String startTime;
-    private String endTime;
+    private final TaskTime startTime;
+    private final TaskTime endTime;
 
-    public Event(String description, String startTime, String endTime) {
+    public Event(String description, TaskTime startTime, TaskTime endTime) {
         super(description);
 
         this.startTime = startTime;
@@ -10,8 +13,13 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean isOccurringOn(TaskTime taskTime) {
+        return !startTime.isAfter(taskTime) && !endTime.isBefore(taskTime);
+    }
+
+    @Override
     public String getData() {
-        return "E | " + super.getData() + " | " + startTime + " | " + endTime;
+        return "E | " + super.getData() + " | " + startTime.getData() + " | " + endTime.getData();
     }
 
     @Override

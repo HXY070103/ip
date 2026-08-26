@@ -120,22 +120,24 @@ def run_case(
 ) -> bool:
     """Run one complete console session and compare its output exactly."""
     console_input = "\n".join(case["inputs"]) + "\n"
-    try:
-        result = subprocess.run(
-            ["java", "-cp", str(class_dir), main_class],
-            input=console_input,
-            capture_output=True,
-            text=True,
-            timeout=timeout_seconds,
-            check=False,
-        )
-    except subprocess.TimeoutExpired as error:
-        actual_output = normalize_newlines(error.stdout or "")
-        print_session(case, actual_output)
-        print(f"FAIL: timed out after {timeout_seconds:g} seconds")
-        print("--- Expected output ---")
-        print(lines_to_output(case["expected_output"]), end="")
-        return False
+    with tempfile.TemporaryDirectory(prefix="test-ui-case-") as case_dir:
+        try:
+            result = subprocess.run(
+                ["java", "-cp", str(class_dir), main_class],
+                input=console_input,
+                capture_output=True,
+                text=True,
+                timeout=timeout_seconds,
+                check=False,
+                cwd=case_dir,
+            )
+        except subprocess.TimeoutExpired as error:
+            actual_output = normalize_newlines(error.stdout or "")
+            print_session(case, actual_output)
+            print(f"FAIL: timed out after {timeout_seconds:g} seconds")
+            print("--- Expected output ---")
+            print(lines_to_output(case["expected_output"]), end="")
+            return False
 
     actual_output = normalize_newlines(result.stdout)
     expected_output = lines_to_output(case["expected_output"])

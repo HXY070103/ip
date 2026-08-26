@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ public class Tianyi {
 
     public static void printTasks(List<Task> tasks) {
         if (tasks == null || tasks.isEmpty()) {
+            print("No tasks found.");
             return;
         }
 
@@ -30,6 +32,41 @@ public class Tianyi {
                     .append(tasks.get(i).toString());
 
             if (i < tasks.size() - 1) {
+                content.append("\n");
+            }
+        }
+
+        print(content.toString());
+    }
+
+    public static void printTasks(List<Task> tasks, TaskTime taskTime) {
+        if (tasks == null || tasks.isEmpty()) {
+            print("No tasks found.");
+            return;
+        }
+
+        List<Task> occurringTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.isOccurringOn(taskTime)) {
+                occurringTasks.add(task);
+            }
+        }
+
+        if (occurringTasks.isEmpty()) {
+            print("No tasks found.");
+            return;
+        }
+
+        StringBuilder content = new StringBuilder("Here are deadlines/events occurring on "
+                + taskTime.getData() + ":\n");
+
+        for (int i = 0; i < occurringTasks.size(); i += 1) {
+            content.append(i + 1)
+                    .append(".")
+                    .append(occurringTasks.get(i).toString());
+
+            if (i < occurringTasks.size() - 1) {
                 content.append("\n");
             }
         }
@@ -95,8 +132,12 @@ public class Tianyi {
                     throw new TianyiException("Invalid deadline data: " + data);
                 }
 
-                String byTime = dataParts[3];
-                task = new Deadline(description, byTime);
+                try {
+                    TaskTime deadline = new TaskTime(dataParts[3]);
+                    task = new Deadline(description, deadline);
+                } catch (DateTimeParseException e) {
+                    throw new TianyiException("Invalid date and time in deadline data: " + dataParts[3]);
+                }
                 break;
 
             case "E":
@@ -104,9 +145,13 @@ public class Tianyi {
                     throw new TianyiException("Invalid event data: " + data);
                 }
 
-                String fromTime = dataParts[3];
-                String toTime = dataParts[4];
-                task = new Event(description, fromTime, toTime);
+                try {
+                    TaskTime startTime = new TaskTime(dataParts[3]);
+                    TaskTime endTime = new TaskTime(dataParts[4]);
+                    task = new Event(description, startTime, endTime);
+                } catch (DateTimeParseException e) {
+                    throw new TianyiException("Invalid date and time in event data: " + data);
+                }
                 break;
 
             default:
@@ -190,12 +235,26 @@ public class Tianyi {
                 switch (command) {
                     // Command
                     case LIST:
-                        if (inputParts.length > 1 && !inputParts[1].isBlank()) {
-                            throw new TianyiException("List command does not accept any arguments.\n"
-                                    + "Try: " + example);
+                        if (inputParts.length == 1) {
+                            printTasks(tasks);
+                        } else {
+                            try {
+                                TaskTime taskTime = new TaskTime(inputParts[1]);
+
+                                if (taskTime.hasTime()) {
+                                    throw new TianyiException(
+                                            "Invalid list date. Please use d-M-yyyy.\n"
+                                                    + "Try: " + example);
+                                }
+
+                                printTasks(tasks, taskTime);
+                            } catch (DateTimeParseException e) {
+                                throw new TianyiException(
+                                        "Invalid list date. Please use d-M-yyyy.\n"
+                                                + "Try: " + example);
+                            }
                         }
 
-                        printTasks(tasks);
                         break;
 
                     // Command + Argument
@@ -226,14 +285,22 @@ public class Tianyi {
                                         "The description of deadline command cannot be empty.\n"
                                                 + "Try: " + example
                                     );
-                                String byTime = getRequiredPart(
+                                String byDateTime = getRequiredPart(
                                         deadlineParts,
                                         1,
-                                        "The by time of deadline command cannot be empty.\n"
+                                        "The by date of deadline command cannot be empty.\n"
                                                 + "Try: " + example
                                     );
 
-                                task = new Deadline(deadlineDescription, byTime);
+                                try {
+                                    TaskTime deadline = new TaskTime(byDateTime);
+                                    task = new Deadline(deadlineDescription, deadline);
+                                } catch (DateTimeParseException e) {
+                                    throw new TianyiException(
+                                            "Invalid deadline date or time. "
+                                                    + "Please use d-M-yyyy with optional HH:mm.\n"
+                                                    + "Try: " + example);
+                                }
                                 break;
                             case EVENT:
                                 String[] eventParts = argument.split("\\s*/from\\s*", 2);
@@ -266,17 +333,26 @@ public class Tianyi {
                                 String fromTime = getRequiredPart(
                                         timeParts,
                                         0,
-                                        "The from time of event command cannot be empty.\n"
+                                        "The from date of event command cannot be empty.\n"
                                                 +  "Try: " + example
                                     );
                                 String toTime = getRequiredPart(
                                         timeParts,
                                         1,
-                                        "The to time of event command cannot be empty.\n"
+                                        "The to date of event command cannot be empty.\n"
                                                 +  "Try: " + example
                                 );
 
-                                task = new Event(eventDescription, fromTime, toTime);
+                                try {
+                                    TaskTime startTime = new TaskTime(fromTime);
+                                    TaskTime endTime = new TaskTime(toTime);
+                                    task = new Event(eventDescription, startTime, endTime);
+                                } catch (DateTimeParseException e) {
+                                    throw new TianyiException(
+                                            "Invalid event date or time. "
+                                                    + "Please use d-M-yyyy with optional HH:mm.\n"
+                                                    + "Try: " + example);
+                                }
                                 break;
                         }
 
