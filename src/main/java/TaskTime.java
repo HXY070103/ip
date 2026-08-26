@@ -9,11 +9,10 @@ import java.util.Locale;
  */
 public class TaskTime {
     private static final DateTimeFormatter DATE_FORMAT =
-            DateTimeFormatter.ofPattern("d-M-uuuu")
-                    .withResolverStyle(ResolverStyle.STRICT);
+            DateTimeFormatter.ofPattern("d-M-uuuu").withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter TIME_FORMAT =
-            DateTimeFormatter.ofPattern("HH:mm")
-                    .withResolverStyle(ResolverStyle.STRICT);
+            DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("EEE, MMM dd uuuu", Locale.ENGLISH);
     private static final DateTimeFormatter DISPLAY_TIME_FORMAT =
@@ -40,12 +39,12 @@ public class TaskTime {
         return hasTime;
     }
 
-    public boolean isBefore(TaskTime taskTime) {
-        return date.isBefore(taskTime.date);
+    public boolean isBefore(TaskTime time) {
+        return date.isBefore(time.date);
     }
 
-    public boolean isAfter(TaskTime taskTime) {
-        return date.isAfter(taskTime.date);
+    public boolean isAfter(TaskTime time) {
+        return date.isAfter(time.date);
     }
 
     public String getData() {
