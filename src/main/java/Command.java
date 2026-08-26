@@ -5,7 +5,7 @@ import java.util.Locale;
  */
 public enum Command {
     BYE("bye", "bye"),
-    LIST("list", "list"),
+    LIST("list", "list 2-12-2019"),
     TODO("todo", "todo borrow book"),
     DEADLINE("deadline", "deadline return book /by 2-12-2019 18:00"),
     EVENT("event", "event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00"),

@@ -39,6 +39,41 @@ public class Tianyi {
         print(content.toString());
     }
 
+    public static void printTasks(List<Task> tasks, TaskTime taskTime) {
+        if (tasks == null || tasks.isEmpty()) {
+            print("No tasks found.");
+            return;
+        }
+
+        List<Task> occurringTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.isOccurringOn(taskTime)) {
+                occurringTasks.add(task);
+            }
+        }
+
+        if (occurringTasks.isEmpty()) {
+            print("No tasks found.");
+            return;
+        }
+
+        StringBuilder content = new StringBuilder("Here are deadlines/events occurring on "
+                + taskTime.getData() + ":\n");
+
+        for (int i = 0; i < occurringTasks.size(); i += 1) {
+            content.append(i + 1)
+                    .append(".")
+                    .append(occurringTasks.get(i).toString());
+
+            if (i < occurringTasks.size() - 1) {
+                content.append("\n");
+            }
+        }
+
+        print(content.toString());
+    }
+
     private static String getArgument(String[] inputParts, String errorMessage)
             throws TianyiException {
         if (inputParts.length < 2 || inputParts[1].isBlank()) {
@@ -200,12 +235,26 @@ public class Tianyi {
                 switch (command) {
                     // Command
                     case LIST:
-                        if (inputParts.length > 1 && !inputParts[1].isBlank()) {
-                            throw new TianyiException("List command does not accept any arguments.\n"
-                                    + "Try: " + example);
+                        if (inputParts.length == 1) {
+                            printTasks(tasks);
+                        } else {
+                            try {
+                                TaskTime taskTime = new TaskTime(inputParts[1]);
+
+                                if (taskTime.hasTime()) {
+                                    throw new TianyiException(
+                                            "Invalid list date. Please use d-M-yyyy.\n"
+                                                    + "Try: " + example);
+                                }
+
+                                printTasks(tasks, taskTime);
+                            } catch (DateTimeParseException e) {
+                                throw new TianyiException(
+                                        "Invalid list date. Please use d-M-yyyy.\n"
+                                                + "Try: " + example);
+                            }
                         }
 
-                        printTasks(tasks);
                         break;
 
                     // Command + Argument

@@ -11,6 +11,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean isOccurringOn(TaskTime taskTime) {
+        return !deadline.isBefore(taskTime);
+    }
+
+    @Override
     public String getData() {
         return "D | " + super.getData() + " | " + deadline.getData();
     }

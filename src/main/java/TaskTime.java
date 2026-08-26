@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Locale;
 
 /**
@@ -8,9 +9,11 @@ import java.util.Locale;
  */
 public class TaskTime {
     private static final DateTimeFormatter DATE_FORMAT =
-            DateTimeFormatter.ofPattern("d-M-uuuu");
+            DateTimeFormatter.ofPattern("d-M-uuuu")
+                    .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter TIME_FORMAT =
-            DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter.ofPattern("HH:mm")
+                    .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("EEE, MMM dd uuuu", Locale.ENGLISH);
     private static final DateTimeFormatter DISPLAY_TIME_FORMAT =
@@ -31,6 +34,18 @@ public class TaskTime {
             time = LocalTime.parse(dateTimeParts[1], TIME_FORMAT);
             hasTime = true;
         }
+    }
+
+    public boolean hasTime() {
+        return hasTime;
+    }
+
+    public boolean isBefore(TaskTime taskTime) {
+        return date.isBefore(taskTime.date);
+    }
+
+    public boolean isAfter(TaskTime taskTime) {
+        return date.isAfter(taskTime.date);
     }
 
     public String getData() {

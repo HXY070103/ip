@@ -13,6 +13,11 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean isOccurringOn(TaskTime taskTime) {
+        return !startTime.isAfter(taskTime) && !endTime.isBefore(taskTime);
+    }
+
+    @Override
     public String getData() {
         return "E | " + super.getData() + " | " + startTime.getData() + " | " + endTime.getData();
     }

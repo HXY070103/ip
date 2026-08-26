@@ -18,6 +18,17 @@ public class Task {
         isDone = false;
     }
 
+    /**
+     * Returns whether this task should appear in a list for the specified date.
+     * Tasks without dates do not occur on any date by default.
+     *
+     * @param taskTime date being queried
+     * @return true if this task occurs on the date
+     */
+    public boolean isOccurringOn(TaskTime taskTime) {
+        return false;
+    }
+
     public String getData() {
         int status = isDone ? 1 : 0;
         return status + " | " + description;
