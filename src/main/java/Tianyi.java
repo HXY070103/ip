@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,6 +9,8 @@ import java.util.Scanner;
  * Runs the Tianyi chatbot application.
  */
 public class Tianyi {
+    private static final File DATA_FILE = new File("Data", "tianyi.txt");
+
     public static void print(String content) {
         System.out.println("____________________________________________________________\n"
                 + content + "\n"
@@ -50,6 +55,94 @@ public class Tianyi {
         return argumentParts[index].trim();
     }
 
+    private static void saveTasks(List<Task> tasks) throws IOException {
+        File dataFolder = DATA_FILE.getParentFile();
+        if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+            throw new IOException("Unable to create the data folder.");
+        }
+
+        try (FileWriter fw = new FileWriter(DATA_FILE)) {
+            for (Task task : tasks) {
+                fw.write(task.getData() + System.lineSeparator());
+            }
+        }
+    }
+
+    private static Task parseTask(String data) throws TianyiException {
+        String[] dataParts = data.split("\\s*\\|\\s*");
+
+        if (dataParts.length < 3) {
+            throw new TianyiException("Invalid task data: " + data);
+        }
+
+        String type = dataParts[0];
+        String status = dataParts[1];
+        String description = dataParts[2];
+
+        Task task;
+
+        switch (type) {
+            case "T":
+                if (dataParts.length != 3) {
+                    throw new TianyiException("Invalid todo data: " + data);
+                }
+
+                task = new ToDo(description);
+                break;
+
+            case "D":
+                if (dataParts.length != 4) {
+                    throw new TianyiException("Invalid deadline data: " + data);
+                }
+
+                String byTime = dataParts[3];
+                task = new Deadline(description, byTime);
+                break;
+
+            case "E":
+                if (dataParts.length != 5) {
+                    throw new TianyiException("Invalid event data: " + data);
+                }
+
+                String fromTime = dataParts[3];
+                String toTime = dataParts[4];
+                task = new Event(description, fromTime, toTime);
+                break;
+
+            default:
+                throw new TianyiException("Unknown task type: " + type);
+        }
+
+        if (status.equals("1")) {
+            task.markAsDone();
+        } else if (!status.equals("0")) {
+            throw new TianyiException("Invalid task status: " + status);
+        }
+
+        return task;
+    }
+
+    private static List<Task> loadTasks() throws IOException {
+        List<Task> tasks = new ArrayList<>();
+
+        if (!DATA_FILE.exists()) {
+            return tasks;
+        }
+
+        try (Scanner sc = new Scanner(DATA_FILE)) {
+            while (sc.hasNextLine()) {
+                try {
+                    Task task = parseTask(sc.nextLine());
+                    tasks.add(task);
+                } catch (TianyiException e) {
+                    print("Oops! " + e.getMessage());
+                }
+            }
+        }
+
+        return tasks;
+    }
+
     public static void main(String[] args) {
         String banner = " _____ _                   _\n"
                 + "|_   _(_) __ _ _ __  _   _(_)\n"
@@ -64,6 +157,13 @@ public class Tianyi {
         print(banner + "\n" + greeting);
 
         List<Task> tasks = new ArrayList<>();
+
+        try {
+            tasks = loadTasks();
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+
         Scanner scanner = new Scanner(System.in);
 
         while (scanner.hasNextLine()) {
@@ -181,6 +281,13 @@ public class Tianyi {
                         }
 
                         tasks.add(task);
+
+                        try {
+                            saveTasks(tasks);
+                        } catch (IOException e) {
+                            System.out.println("File not found");
+                        }
+
                         print("Got it. I've added this task:\n"
                                 + "  " + task + "\n"
                                 + "Now you have " + tasks.size() + " tasks in the list.");
@@ -230,7 +337,14 @@ public class Tianyi {
                                         + "  " +  tasks.get(taskNumber - 1) + "\n"
                                         + "Now you have " + (tasks.size() - 1) + " tasks in the list.");
                                 tasks.remove(taskNumber - 1);
+
                                 break;
+                        }
+
+                        try {
+                            saveTasks(tasks);
+                        } catch (IOException e) {
+                            System.out.println("File not found");
                         }
 
                         break;
