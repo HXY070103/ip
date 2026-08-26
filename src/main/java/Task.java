@@ -11,16 +11,21 @@ public class Task {
     }
 
     public void markAsDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
     public void unmarkAsDone() {
-        this.isDone = false;
+        isDone = false;
+    }
+
+    public String getData() {
+        int status = isDone ? 1 : 0;
+        return status + " | " + description;
     }
 
     @Override
     public String toString() {
-        String statusIcon = this.isDone ? "[X]" : "[ ]";
-        return statusIcon + " " + this.description;
+        String statusIcon = isDone ? "[X]" : "[ ]";
+        return statusIcon + " " + description;
     }
 }
