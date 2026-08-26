@@ -1,7 +1,10 @@
+/**
+ * Represents a task that must be completed by a specific date and optional time.
+ */
 public class Deadline extends Task {
-    private String deadline;
+    private final TaskTime deadline;
 
-    public Deadline(String description, String deadline) {
+    public Deadline(String description, TaskTime deadline) {
         super(description);
 
         this.deadline = deadline;
@@ -9,7 +12,7 @@ public class Deadline extends Task {
 
     @Override
     public String getData() {
-        return "D | " + super.getData() + " | " +  deadline;
+        return "D | " + super.getData() + " | " + deadline.getData();
     }
 
     @Override
