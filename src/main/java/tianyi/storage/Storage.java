@@ -1,9 +1,13 @@
+package tianyi.storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import tianyi.task.Task;
 
 /**
  * Loads tasks from a data file and saves tasks back to it.

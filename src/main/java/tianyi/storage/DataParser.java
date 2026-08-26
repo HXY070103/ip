@@ -1,4 +1,12 @@
+package tianyi.storage;
+
 import java.time.format.DateTimeParseException;
+
+import tianyi.task.Deadline;
+import tianyi.task.Event;
+import tianyi.task.Task;
+import tianyi.task.TaskTime;
+import tianyi.task.ToDo;
 
 /**
  * Converts stored task data into task objects.

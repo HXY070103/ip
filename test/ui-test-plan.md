@@ -6,11 +6,11 @@ Run the cases with:
 python3 .codex/skills/test-ui/scripts/run_ui_tests.py --plan test/ui-test-plan.md
 ```
 
-Each test case starts a fresh `Tianyi` process. Inputs within one case run in order and share the same in-memory task list. Output comparison is exact except that CRLF and CR line endings are normalized to LF. Testing stops at the first failed case.
+Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case run in order and share the same in-memory task list. Output comparison is exact except that CRLF and CR line endings are normalized to LF. Testing stops at the first failed case.
 
 ```json
 {
-  "main_class": "Tianyi",
+  "main_class": "tianyi.Tianyi",
   "timeout_seconds": 10,
   "test_cases": [
     {

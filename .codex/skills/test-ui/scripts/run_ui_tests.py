@@ -78,8 +78,8 @@ def require_java_25() -> None:
 
 
 def compile_program(source_dir: Path, output_dir: Path) -> None:
-    """Compile every top-level Java source file into a temporary directory."""
-    sources = sorted(source_dir.glob("*.java"))
+    """Compile every Java source file under the source root."""
+    sources = sorted(source_dir.rglob("*.java"))
     if not sources:
         raise RuntimeError(f"no Java sources found in {source_dir}")
     result = subprocess.run(

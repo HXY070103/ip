@@ -1,3 +1,11 @@
+package tianyi.command;
+
+import tianyi.TianyiException;
+import tianyi.storage.Storage;
+import tianyi.task.Task;
+import tianyi.task.TaskList;
+import tianyi.ui.Ui;
+
 /**
  * Adds a task to the task list.
  */
