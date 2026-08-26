@@ -1,3 +1,7 @@
+package tianyi.storage;
+
+import tianyi.TianyiException;
+
 /**
  * Represents an error encountered while loading or saving tasks.
  */

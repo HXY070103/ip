@@ -1,3 +1,5 @@
+package tianyi.ui;
+
 import java.util.Scanner;
 
 /**

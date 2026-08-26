@@ -1,3 +1,5 @@
+package tianyi;
+
 /**
  * Represents an application-level error in Tianyi.
  */

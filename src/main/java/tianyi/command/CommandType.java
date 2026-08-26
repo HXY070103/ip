@@ -1,4 +1,8 @@
+package tianyi.command;
+
 import java.util.Locale;
+
+import tianyi.TianyiException;
 
 /**
  * Represents a supported command type, keyword, and example usage.

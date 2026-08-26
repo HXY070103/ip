@@ -1,3 +1,10 @@
+package tianyi.command;
+
+import tianyi.TianyiException;
+import tianyi.storage.Storage;
+import tianyi.task.TaskList;
+import tianyi.ui.Ui;
+
 /**
  * Marks a task as completed.
  */

@@ -1,3 +1,11 @@
+package tianyi;
+
+import tianyi.command.Command;
+import tianyi.command.CommandParser;
+import tianyi.storage.Storage;
+import tianyi.task.TaskList;
+import tianyi.ui.Ui;
+
 /**
  * Runs the Tianyi chatbot application.
  */
