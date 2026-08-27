@@ -19,7 +19,8 @@ public class DataParserTest {
     private final DataParser parser = new DataParser();
 
     @Test
-    public void parse_incompleteTodo_returnsIncompleteTodo() throws StorageException {
+    public void parse_incompleteTodo_returnsIncompleteTodo()
+            throws StorageException {
         Task task = parser.parse("T | 0 | read book");
 
         assertInstanceOf(ToDo.class, task);
@@ -27,7 +28,8 @@ public class DataParserTest {
     }
 
     @Test
-    public void parse_completedTodo_returnsCompletedTodo() throws StorageException {
+    public void parse_completedTodo_returnsCompletedTodo()
+            throws StorageException {
         Task task = parser.parse("T | 1 | read book");
 
         assertInstanceOf(ToDo.class, task);
@@ -35,7 +37,8 @@ public class DataParserTest {
     }
 
     @Test
-    public void parse_deadlineWithDateAndTime_returnsDeadline() throws StorageException {
+    public void parse_deadlineWithDateAndTime_returnsDeadline()
+            throws StorageException {
         Task task = parser.parse("D | 0 | submit report | 2-12-2019 18:00");
 
         assertInstanceOf(Deadline.class, task);
@@ -43,7 +46,8 @@ public class DataParserTest {
     }
 
     @Test
-    public void parse_completedEvent_returnsCompletedEvent() throws StorageException {
+    public void parse_completedEvent_returnsCompletedEvent()
+            throws StorageException {
         Task task = parser.parse(
                 "E | 1 | workshop | 2-12-2019 09:00 | 3-12-2019 17:00");
 
@@ -53,7 +57,8 @@ public class DataParserTest {
     }
 
     @Test
-    public void parse_variableWhitespaceAroundSeparators_returnsTask() throws StorageException {
+    public void parse_variableWhitespaceAroundSeparators_returnsTask()
+            throws StorageException {
         Task task = parser.parse("D|0  |  submit report| 2-12-2019");
 
         assertEquals("D | 0 | submit report | 2-12-2019", task.getData());

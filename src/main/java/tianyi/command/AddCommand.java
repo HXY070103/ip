@@ -12,6 +12,9 @@ import tianyi.ui.Ui;
 public class AddCommand extends Command {
     private final Task task;
 
+    /**
+     * Creates a command that adds the specified task.
+     */
     public AddCommand(Task task) {
         this.task = task;
     }

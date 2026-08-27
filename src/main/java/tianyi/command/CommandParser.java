@@ -14,7 +14,13 @@ import tianyi.task.ToDo;
  * Parses user input into commands with appropriately typed arguments.
  */
 public class CommandParser {
-    public Command parse(String input, TaskList tasks) throws TianyiException {
+    /**
+     * Returns the command represented by the user's input.
+     *
+     * @throws TianyiException If the input is invalid.
+     */
+    public Command parse(String input, TaskList tasks)
+            throws TianyiException {
         String[] inputParts = input.trim().split("\\s+", 2);
 
         CommandType type = CommandType.from(inputParts[0]);

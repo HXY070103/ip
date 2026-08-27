@@ -11,6 +11,9 @@ import tianyi.ui.Ui;
 public class DeleteCommand extends Command {
     private final int index;
 
+    /**
+     * Creates a command that deletes the task at the specified zero-based index.
+     */
     public DeleteCommand(int index) {
         this.index = index;
     }

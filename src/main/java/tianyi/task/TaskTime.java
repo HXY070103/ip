@@ -24,6 +24,12 @@ public class TaskTime {
     private final LocalTime time;
     private final boolean hasTime;
 
+    /**
+     * Creates a task date with an optional time from the specified stored format.
+     *
+     * @throws java.time.format.DateTimeParseException If the input does not use {@code d-M-yyyy} with optional
+     *         {@code HH:mm}.
+     */
     public TaskTime(String input) {
         String[] dateTimeParts = input.trim().split("\\s+", 2);
         date = LocalDate.parse(dateTimeParts[0], DATE_FORMAT);
@@ -37,18 +43,30 @@ public class TaskTime {
         }
     }
 
+    /**
+     * Returns whether this value includes a time of day.
+     */
     public boolean hasTime() {
         return hasTime;
     }
 
+    /**
+     * Returns whether this date is before the specified date, ignoring time of day.
+     */
     public boolean isBefore(TaskTime time) {
         return date.isBefore(time.date);
     }
 
+    /**
+     * Returns whether this date is after the specified date, ignoring time of day.
+     */
     public boolean isAfter(TaskTime time) {
         return date.isAfter(time.date);
     }
 
+    /**
+     * Returns this value in its persistent date and optional time format.
+     */
     public String getData() {
         return hasTime
                 ? date.format(DATE_FORMAT) + " " + time.format(TIME_FORMAT)

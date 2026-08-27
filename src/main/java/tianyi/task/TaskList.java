@@ -9,18 +9,30 @@ import java.util.List;
 public class TaskList {
     private final List<Task> tasks;
 
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         tasks = new ArrayList<>();
     }
 
+    /**
+     * Creates a task list containing a defensive copy of the specified tasks.
+     */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
     }
 
+    /**
+     * Returns whether this task list contains no tasks.
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns the number of tasks in this list.
+     */
     public int size() {
         return tasks.size();
     }
@@ -29,6 +41,9 @@ public class TaskList {
         return List.copyOf(tasks);
     }
 
+    /**
+     * Adds a task and returns a user-facing confirmation.
+     */
     public String addTask(Task task) {
         tasks.add(task);
 
@@ -37,6 +52,9 @@ public class TaskList {
                 + "Now you have " + tasks.size() + " tasks in the list.";
     }
 
+    /**
+     * Deletes the task at the specified zero-based index and returns a user-facing confirmation.
+     */
     public String deleteTask(int index) {
         Task task = tasks.get(index);
         tasks.remove(index);
@@ -46,6 +64,9 @@ public class TaskList {
                 + "Now you have " + tasks.size() + " tasks in the list.";
     }
 
+    /**
+     * Marks the task at the specified zero-based index and returns a user-facing confirmation.
+     */
     public String markTask(int index) {
         Task task = tasks.get(index);
         task.markAsDone();
@@ -54,6 +75,9 @@ public class TaskList {
                 + "  " + task;
     }
 
+    /**
+     * Unmarks the task at the specified zero-based index and returns a user-facing confirmation.
+     */
     public String unmarkTask(int index) {
         Task task = tasks.get(index);
         task.unmarkAsDone();
@@ -62,10 +86,16 @@ public class TaskList {
                 + "  " + task;
     }
 
+    /**
+     * Returns a user-facing list of all tasks.
+     */
     public String listTasks() {
         return formatTasks(tasks, "Here are the tasks in your list:");
     }
 
+    /**
+     * Returns a user-facing list of deadlines and events occurring on the specified date.
+     */
     public String listTasks(TaskTime time) {
         List<Task> occurringTasks = new ArrayList<>();
 
@@ -78,7 +108,7 @@ public class TaskList {
         return formatTasks(
                 occurringTasks,
                 "Here are deadlines/events occurring on " + time.getData() + ":"
-            );
+        );
     }
 
     private String formatTasks(List<Task> tasksToDisplay, String heading) {

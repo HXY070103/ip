@@ -11,6 +11,9 @@ import tianyi.ui.Ui;
 public class ListCommand extends Command {
     private final TaskTime date;
 
+    /**
+     * Creates a command that lists all tasks, or tasks occurring on the specified date when non-null.
+     */
     public ListCommand(TaskTime date) {
         this.date = date;
     }

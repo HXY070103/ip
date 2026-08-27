@@ -25,7 +25,13 @@ public enum CommandType {
         this.example = example;
     }
 
-    public static CommandType from(String keyword) throws TianyiException {
+    /**
+     * Returns the command type matching the specified keyword.
+     *
+     * @throws TianyiException If the keyword does not identify a supported command.
+     */
+    public static CommandType from(String keyword)
+            throws TianyiException {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
 
         for (CommandType type : values()) {

@@ -11,6 +11,9 @@ import tianyi.ui.Ui;
 public class UnmarkCommand extends Command {
     private final int index;
 
+    /**
+     * Creates a command that unmarks the task at the specified zero-based index.
+     */
     public UnmarkCommand(int index) {
         this.index = index;
     }

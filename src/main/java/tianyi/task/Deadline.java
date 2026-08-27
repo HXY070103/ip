@@ -6,6 +6,9 @@ package tianyi.task;
 public class Deadline extends Task {
     private final TaskTime deadline;
 
+    /**
+     * Creates a deadline with the specified description and due date.
+     */
     public Deadline(String description, TaskTime deadline) {
         super(description);
 

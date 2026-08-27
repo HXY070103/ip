@@ -9,7 +9,6 @@ import tianyi.ui.Ui;
 /**
  * Runs the Tianyi chatbot application.
  */
-
 public class Tianyi {
     private static final String DATA_FILE_PATH = "Data/tianyi.txt";
 
@@ -18,6 +17,9 @@ public class Tianyi {
     private final Ui ui;
     private final CommandParser parser;
 
+    /**
+     * Creates a chatbot that persists tasks at the specified file path.
+     */
     public Tianyi(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -35,6 +37,9 @@ public class Tianyi {
         tasks = loadedTasks;
     }
 
+    /**
+     * Runs the chatbot until the user exits or the input stream ends.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -56,6 +61,9 @@ public class Tianyi {
         }
     }
 
+    /**
+     * Starts Tianyi using the default data file.
+     */
     public static void main(String[] args) {
         new Tianyi(DATA_FILE_PATH).run();
     }

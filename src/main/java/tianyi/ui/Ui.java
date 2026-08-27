@@ -16,36 +16,60 @@ public class Ui {
             + "What can I do for you?";
     private static final String FAREWELL = "Bye. Hope to see you again soon!";
 
-    private final Scanner sc;
+    private final Scanner scanner;
 
+    /**
+     * Creates a console UI that reads from standard input.
+     */
     public Ui() {
-        sc = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
 
+    /**
+     * Returns whether another console command is available.
+     */
     public boolean hasNextCommand() {
-        return sc.hasNextLine();
+        return scanner.hasNextLine();
     }
 
+    /**
+     * Returns the next console command.
+     */
     public String readCommand() {
-        return sc.nextLine();
+        return scanner.nextLine();
     }
 
+    /**
+     * Shows the application banner and greeting.
+     */
     public void showWelcome() {
         print(BANNER + "\n" + GREETING);
     }
 
+    /**
+     * Shows a successful response between separator lines.
+     */
     public void showResponse(String response) {
         print(response);
     }
 
+    /**
+     * Shows an error message between separator lines.
+     */
     public void showError(String message) {
         print("Oops! " + message);
     }
 
+    /**
+     * Shows the farewell message.
+     */
     public void showGoodbye() {
         print(FAREWELL);
     }
 
+    /**
+     * Shows a separator line.
+     */
     public void showLine() {
         System.out.println("____________________________________________________________");
     }

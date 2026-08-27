@@ -16,7 +16,8 @@ public class CommandTypeTest {
             "I'm sorry, but I don't know what that means.";
 
     @Test
-    public void from_allSupportedKeywords_returnsMatchingCommandType() throws TianyiException {
+    public void from_allSupportedKeywords_returnsMatchingCommandType()
+            throws TianyiException {
         assertSame(CommandType.BYE, CommandType.from("bye"));
         assertSame(CommandType.LIST, CommandType.from("list"));
         assertSame(CommandType.TODO, CommandType.from("todo"));
@@ -28,7 +29,8 @@ public class CommandTypeTest {
     }
 
     @Test
-    public void from_mixedCaseKeyword_returnsMatchingCommandType() throws TianyiException {
+    public void from_mixedCaseKeyword_returnsMatchingCommandType()
+            throws TianyiException {
         assertSame(CommandType.TODO, CommandType.from("ToDo"));
     }
 

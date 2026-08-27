@@ -11,6 +11,9 @@ import tianyi.ui.Ui;
 public class MarkCommand extends Command {
     private final int index;
 
+    /**
+     * Creates a command that marks the task at the specified zero-based index.
+     */
     public MarkCommand(int index) {
         this.index = index;
     }

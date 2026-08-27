@@ -18,7 +18,8 @@ import tianyi.task.ToDo;
  */
 public class UnmarkCommandTest {
     @Test
-    public void execute_validIndex_unmarksSavesAndShowsResponse() throws TianyiException {
+    public void execute_validIndex_unmarksSavesAndShowsResponse()
+            throws TianyiException {
         ToDo task = new ToDo("read book");
         task.markAsDone();
         TaskList tasks = new TaskList(List.of(task));

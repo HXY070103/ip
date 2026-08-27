@@ -12,7 +12,13 @@ import tianyi.task.ToDo;
  * Converts stored task data into task objects.
  */
 public class DataParser {
-    public Task parse(String data) throws StorageException {
+    /**
+     * Returns the task represented by a line of stored data.
+     *
+     * @throws StorageException If the stored data is invalid.
+     */
+    public Task parse(String data)
+            throws StorageException {
         String[] dataParts = data.split("\\s*\\|\\s*");
 
         if (dataParts.length < 3) {
@@ -39,7 +45,8 @@ public class DataParser {
         return task;
     }
 
-    private Task createTodo(String[] dataParts, String data) throws StorageException {
+    private Task createTodo(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 3) {
             throw new StorageException("Invalid todo data: " + data);
         }
@@ -47,7 +54,8 @@ public class DataParser {
         return new ToDo(dataParts[2]);
     }
 
-    private Task createDeadline(String[] dataParts, String data) throws StorageException {
+    private Task createDeadline(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 4) {
             throw new StorageException("Invalid deadline data: " + data);
         }
@@ -59,19 +67,25 @@ public class DataParser {
         }
     }
 
-    private Task createEvent(String[] dataParts, String data) throws StorageException {
+    private Task createEvent(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 5) {
             throw new StorageException("Invalid event data: " + data);
         }
 
         try {
-            return new Event(dataParts[2], new TaskTime(dataParts[3]), new TaskTime(dataParts[4]));
+            return new Event(
+                    dataParts[2],
+                    new TaskTime(dataParts[3]),
+                    new TaskTime(dataParts[4])
+            );
         } catch (DateTimeParseException e) {
             throw new StorageException("Invalid date and time in event data: " + data);
         }
     }
 
-    private void updateStatus(Task task, String status) throws StorageException {
+    private void updateStatus(Task task, String status)
+            throws StorageException {
         if (status.equals("1")) {
             task.markAsDone();
         } else if (!status.equals("0")) {

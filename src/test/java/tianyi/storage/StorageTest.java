@@ -28,7 +28,8 @@ public class StorageTest {
     private Path tempDir;
 
     @Test
-    public void load_fileDoesNotExist_returnsEmptyList() throws StorageException {
+    public void load_fileDoesNotExist_returnsEmptyList()
+            throws StorageException {
         Storage storage = new Storage(tempDir.resolve("missing.txt").toString());
 
         List<Task> tasks = storage.load();
@@ -37,7 +38,8 @@ public class StorageTest {
     }
 
     @Test
-    public void load_emptyFile_returnsEmptyList() throws IOException, StorageException {
+    public void load_emptyFile_returnsEmptyList()
+            throws IOException, StorageException {
         Path dataFile = Files.createFile(tempDir.resolve("empty.txt"));
         Storage storage = new Storage(dataFile.toString());
 
@@ -69,7 +71,8 @@ public class StorageTest {
     }
 
     @Test
-    public void load_fileContainingInvalidRecord_exceptionThrown() throws IOException {
+    public void load_fileContainingInvalidRecord_exceptionThrown()
+            throws IOException {
         Path dataFile = tempDir.resolve("invalid.txt");
         Files.writeString(dataFile, "T | 0 | valid" + System.lineSeparator()
                 + "X | 0 | invalid" + System.lineSeparator());
@@ -81,7 +84,8 @@ public class StorageTest {
     }
 
     @Test
-    public void save_mixedTasks_writesExpectedRecords() throws IOException, StorageException {
+    public void save_mixedTasks_writesExpectedRecords()
+            throws IOException, StorageException {
         Path dataFile = tempDir.resolve("tasks.txt");
         Storage storage = new Storage(dataFile.toString());
         ToDo todo = new ToDo("read book");
@@ -122,7 +126,8 @@ public class StorageTest {
     }
 
     @Test
-    public void saveThenLoad_tasksRoundTripWithoutDataLoss() throws StorageException {
+    public void saveThenLoad_tasksRoundTripWithoutDataLoss()
+            throws StorageException {
         Path dataFile = tempDir.resolve("round-trip.txt");
         Storage storage = new Storage(dataFile.toString());
         List<Task> originalTasks = List.of(
@@ -141,7 +146,8 @@ public class StorageTest {
     }
 
     @Test
-    public void save_targetPathIsDirectory_exceptionThrown() throws IOException {
+    public void save_targetPathIsDirectory_exceptionThrown()
+            throws IOException {
         Path directory = Files.createDirectory(tempDir.resolve("directory"));
         Storage storage = new Storage(directory.toString());
 

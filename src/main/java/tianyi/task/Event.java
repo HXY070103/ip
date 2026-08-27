@@ -7,6 +7,9 @@ public class Event extends Task {
     private final TaskTime startTime;
     private final TaskTime endTime;
 
+    /**
+     * Creates an event with the specified description and date range.
+     */
     public Event(String description, TaskTime startTime, TaskTime endTime) {
         super(description);
 

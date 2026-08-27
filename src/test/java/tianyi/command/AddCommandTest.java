@@ -16,7 +16,8 @@ import tianyi.task.ToDo;
  */
 public class AddCommandTest {
     @Test
-    public void execute_validTask_addsSavesAndShowsResponse() throws TianyiException {
+    public void execute_validTask_addsSavesAndShowsResponse()
+            throws TianyiException {
         TaskList tasks = new TaskList();
         RecordingUi ui = new RecordingUi();
         RecordingStorage storage = new RecordingStorage();

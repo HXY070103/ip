@@ -30,7 +30,8 @@ public class CommandParserTest {
     private final Storage storage = new NoOpStorage();
 
     @Test
-    public void parse_todoCommand_addsTodoWithOriginalDescription() throws TianyiException {
+    public void parse_todoCommand_addsTodoWithOriginalDescription()
+            throws TianyiException {
         TaskList tasks = new TaskList();
 
         parser.parse("ToDo Buy Milk", tasks).execute(tasks, ui, storage);
@@ -41,7 +42,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_deadlineCommand_addsDeadlineWithDateAndTime() throws TianyiException {
+    public void parse_deadlineCommand_addsDeadlineWithDateAndTime()
+            throws TianyiException {
         TaskList tasks = new TaskList();
 
         parser.parse("deadline submit report /by 2-12-2019 18:00", tasks)
@@ -53,7 +55,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_eventCommand_addsEventWithDateRange() throws TianyiException {
+    public void parse_eventCommand_addsEventWithDateRange()
+            throws TianyiException {
         TaskList tasks = new TaskList();
 
         parser.parse("event workshop /from 2-12-2019 /to 3-12-2019 16:00", tasks)
@@ -65,7 +68,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_markCommand_marksRequestedTask() throws TianyiException {
+    public void parse_markCommand_marksRequestedTask()
+            throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
         parser.parse("mark 2", tasks).execute(tasks, ui, storage);
@@ -75,7 +79,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_unmarkCommand_unmarksRequestedTask() throws TianyiException {
+    public void parse_unmarkCommand_unmarksRequestedTask()
+            throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
         tasks.markTask(0);
 
@@ -85,7 +90,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_deleteCommand_deletesRequestedTask() throws TianyiException {
+    public void parse_deleteCommand_deletesRequestedTask()
+            throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
         parser.parse("delete 2", tasks).execute(tasks, ui, storage);
@@ -95,7 +101,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_listWithoutDate_listsAllTasks() throws TianyiException {
+    public void parse_listWithoutDate_listsAllTasks()
+            throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
         parser.parse("list", tasks).execute(tasks, ui, storage);
@@ -106,7 +113,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_listWithDate_listsTasksOccurringOnDate() throws TianyiException {
+    public void parse_listWithDate_listsTasksOccurringOnDate()
+            throws TianyiException {
         TaskList tasks = new TaskList(List.of(
                 new ToDo("buy milk"),
                 new Deadline("submit report", new TaskTime("3-12-2019 18:00")),
@@ -122,7 +130,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_byeCommand_returnsExitCommand() throws TianyiException {
+    public void parse_byeCommand_returnsExitCommand()
+            throws TianyiException {
         Command command = parser.parse("bye", new TaskList());
 
         assertInstanceOf(ExitCommand.class, command);
@@ -130,7 +139,8 @@ public class CommandParserTest {
     }
 
     @Test
-    public void parse_nonExitCommand_isExitReturnsFalse() throws TianyiException {
+    public void parse_nonExitCommand_isExitReturnsFalse()
+            throws TianyiException {
         Command command = parser.parse("list", new TaskList());
 
         assertFalse(command.isExit());
