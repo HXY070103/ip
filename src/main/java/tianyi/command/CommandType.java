@@ -23,7 +23,9 @@ public enum CommandType {
     /** Marks a task as incomplete. */
     UNMARK("unmark", "unmark 1"),
     /** Removes a task from the task list. */
-    DELETE("delete", "delete 1");
+    DELETE("delete", "delete 1"),
+    /** Finds tasks whose descriptions contain a keyword. */
+    FIND("find", "find book");
 
     private final String keyword;
     private final String example;

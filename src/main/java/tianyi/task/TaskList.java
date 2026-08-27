@@ -140,6 +140,27 @@ public class TaskList {
     }
 
     /**
+     * Formats tasks whose descriptions contain the specified keyword.
+     *
+     * @param keyword Keyword used to select tasks.
+     * @return Numbered matching tasks, or a message indicating that none match.
+     */
+    public String listTasks(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.matchesKeyword(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return formatTasks(
+                matchingTasks,
+                "Here are the matching tasks in your list:"
+        );
+    }
+
+    /**
      * Builds a numbered display string for a collection of tasks.
      */
     private String formatTasks(List<Task> tasksToDisplay, String heading) {

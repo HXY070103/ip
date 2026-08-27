@@ -128,4 +128,25 @@ public class TaskListTest {
 
         assertEquals("No tasks found.", tasks.listTasks(new TaskTime("3-12-2019")));
     }
+
+    @Test
+    public void listTasks_keyword_listsMatchingTasksInOriginalOrder() {
+        TaskList tasks = new TaskList(List.of(
+                new ToDo("read book"),
+                new ToDo("buy milk"),
+                new ToDo("return book")));
+
+        String response = tasks.listTasks("book");
+
+        assertEquals("Here are the matching tasks in your list:\n"
+                + "1.[T][ ] read book\n"
+                + "2.[T][ ] return book", response);
+    }
+
+    @Test
+    public void listTasks_keywordWithNoMatches_noTasksFound() {
+        TaskList tasks = new TaskList(List.of(new ToDo("read book")));
+
+        assertEquals("No tasks found.", tasks.listTasks("milk"));
+    }
 }

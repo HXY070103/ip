@@ -26,6 +26,7 @@ public class CommandTypeTest {
         assertSame(CommandType.MARK, CommandType.from("mark"));
         assertSame(CommandType.UNMARK, CommandType.from("unmark"));
         assertSame(CommandType.DELETE, CommandType.from("delete"));
+        assertSame(CommandType.FIND, CommandType.from("find"));
     }
 
     @Test

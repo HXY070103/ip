@@ -651,6 +651,79 @@ Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case ru
         "Bye. Hope to see you again soon!",
         "____________________________________________________________"
       ]
+    },
+    {
+      "id": "find-book-matching-tasks",
+      "aim": "Verify that find book displays the completed todo and deadline whose descriptions contain book.",
+      "inputs": [
+        "todo read book",
+        "mark 1",
+        "deadline return book /by 6-6-2026",
+        "mark 2",
+        "find book"
+      ],
+      "expected_output": [
+        "____________________________________________________________",
+        " _____ _                   _",
+        "|_   _(_) __ _ _ __  _   _(_)",
+        "  | | | |/ _` | '_ \\| | | | |",
+        "  | | | | (_| | | | | |_| | |",
+        "  |_| |_|\\__,_|_| |_|\\__, |_|",
+        "                     |___/",
+        "Hello! I'm Tianyi.",
+        "What can I do for you?",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Got it. I've added this task:",
+        "  [T][ ] read book",
+        "Now you have 1 tasks in the list.",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Nice! I've marked this task as done:",
+        "  [T][X] read book",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Got it. I've added this task:",
+        "  [D][ ] return book (by: Sat, Jun 06 2026)",
+        "Now you have 2 tasks in the list.",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Nice! I've marked this task as done:",
+        "  [D][X] return book (by: Sat, Jun 06 2026)",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Here are the matching tasks in your list:",
+        "1.[T][X] read book",
+        "2.[D][X] return book (by: Sat, Jun 06 2026)",
+        "____________________________________________________________"
+      ]
+    },
+    {
+      "id": "find-missing-keyword",
+      "aim": "Verify that find without a keyword reports a helpful error and keeps the chatbot running.",
+      "inputs": [
+        "find",
+        "bye"
+      ],
+      "expected_output": [
+        "____________________________________________________________",
+        " _____ _                   _",
+        "|_   _(_) __ _ _ __  _   _(_)",
+        "  | | | |/ _` | '_ \\| | | | |",
+        "  | | | | (_| | | | | |_| | |",
+        "  |_| |_|\\__,_|_| |_|\\__, |_|",
+        "                     |___/",
+        "Hello! I'm Tianyi.",
+        "What can I do for you?",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Oops! The keyword of find command cannot be empty.",
+        "Try: find book",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Bye. Hope to see you again soon!",
+        "____________________________________________________________"
+      ]
     }
   ]
 }
