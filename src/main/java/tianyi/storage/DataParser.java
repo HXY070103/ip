@@ -21,11 +21,12 @@ public class DataParser {
     /**
      * Converts one serialized task record into a task object.
      *
-     * @param data serialized task record
-     * @return task represented by the record
-     * @throws StorageException if the record has an invalid type, status, or format
+     * @param data Serialized task record.
+     * @return Task represented by the record.
+     * @throws StorageException If the record has an invalid type, status, or format.
      */
-    public Task parse(String data) throws StorageException {
+    public Task parse(String data)
+            throws StorageException {
         String[] dataParts = data.split("\\s*\\|\\s*");
 
         if (dataParts.length < 3) {
@@ -55,7 +56,8 @@ public class DataParser {
     /**
      * Parses a serialized todo record after validating its field count.
      */
-    private Task createTodo(String[] dataParts, String data) throws StorageException {
+    private Task createTodo(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 3) {
             throw new StorageException("Invalid todo data: " + data);
         }
@@ -66,7 +68,8 @@ public class DataParser {
     /**
      * Parses a serialized deadline record after validating its fields.
      */
-    private Task createDeadline(String[] dataParts, String data) throws StorageException {
+    private Task createDeadline(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 4) {
             throw new StorageException("Invalid deadline data: " + data);
         }
@@ -81,13 +84,18 @@ public class DataParser {
     /**
      * Parses a serialized event record after validating its fields.
      */
-    private Task createEvent(String[] dataParts, String data) throws StorageException {
+    private Task createEvent(String[] dataParts, String data)
+            throws StorageException {
         if (dataParts.length != 5) {
             throw new StorageException("Invalid event data: " + data);
         }
 
         try {
-            return new Event(dataParts[2], new TaskTime(dataParts[3]), new TaskTime(dataParts[4]));
+            return new Event(
+                    dataParts[2],
+                    new TaskTime(dataParts[3]),
+                    new TaskTime(dataParts[4])
+            );
         } catch (DateTimeParseException e) {
             throw new StorageException("Invalid date and time in event data: " + data);
         }
@@ -96,7 +104,8 @@ public class DataParser {
     /**
      * Restores a task's completion status from its serialized flag.
      */
-    private void updateStatus(Task task, String status) throws StorageException {
+    private void updateStatus(Task task, String status)
+            throws StorageException {
         if (status.equals("1")) {
             task.markAsDone();
         } else if (!status.equals("0")) {

@@ -27,8 +27,8 @@ public class TaskTime {
     /**
      * Parses a task date with an optional time.
      *
-     * @param input date in {@code d-M-yyyy} format, optionally followed by {@code HH:mm}
-     * @throws java.time.format.DateTimeParseException if the date or time is invalid
+     * @param input Date in {@code d-M-yyyy} format, optionally followed by {@code HH:mm}.
+     * @throws java.time.format.DateTimeParseException If the date or time is invalid.
      */
     public TaskTime(String input) {
         String[] dateTimeParts = input.trim().split("\\s+", 2);
@@ -46,7 +46,7 @@ public class TaskTime {
     /**
      * Reports whether this value includes a time of day.
      *
-     * @return {@code true} if a time was supplied, otherwise {@code false}
+     * @return {@code true} if a time was supplied, otherwise {@code false}.
      */
     public boolean hasTime() {
         return hasTime;
@@ -55,8 +55,8 @@ public class TaskTime {
     /**
      * Compares this value's date with another value's date.
      *
-     * @param time value whose date is compared with this date
-     * @return {@code true} if this date is earlier than the other date
+     * @param time Value whose date is compared with this date.
+     * @return {@code true} if this date is earlier than the other date.
      */
     public boolean isBefore(TaskTime time) {
         return date.isBefore(time.date);
@@ -65,8 +65,8 @@ public class TaskTime {
     /**
      * Compares this value's date with another value's date.
      *
-     * @param time value whose date is compared with this date
-     * @return {@code true} if this date is later than the other date
+     * @param time Value whose date is compared with this date.
+     * @return {@code true} if this date is later than the other date.
      */
     public boolean isAfter(TaskTime time) {
         return date.isAfter(time.date);
@@ -75,7 +75,7 @@ public class TaskTime {
     /**
      * Formats this value in the machine-readable storage format.
      *
-     * @return date and optional time in their accepted input formats
+     * @return Date and optional time in their accepted input formats.
      */
     public String getData() {
         return hasTime
@@ -86,7 +86,7 @@ public class TaskTime {
     /**
      * Formats this value as a human-readable English date and optional time.
      *
-     * @return display representation of this date and optional time
+     * @return Display representation of this date and optional time.
      */
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ public class StorageException extends TianyiException {
     /**
      * Creates an exception describing a task storage failure.
      *
-     * @param message explanation of the storage failure
+     * @param message Explanation of the storage failure.
      */
     public StorageException(String message) {
         super(message);

@@ -17,9 +17,9 @@ public class ExitCommand extends Command {
     /**
      * Displays the farewell message without changing stored tasks.
      *
-     * @param tasks task list, which is not modified
-     * @param ui user interface used to display the farewell message
-     * @param storage storage instance, which is not used
+     * @param tasks Task list, which is not modified.
+     * @param ui User interface used to display the farewell message.
+     * @param storage Storage instance, which is not used.
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
@@ -29,7 +29,7 @@ public class ExitCommand extends Command {
     /**
      * Reports that executing this command should end the application session.
      *
-     * @return always {@code true}
+     * @return Always {@code true}.
      */
     @Override
     public boolean isExit() {

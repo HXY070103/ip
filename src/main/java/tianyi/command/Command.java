@@ -18,10 +18,10 @@ public abstract class Command {
     /**
      * Applies this command to the task list and displays its result.
      *
-     * @param tasks task list on which the command operates
-     * @param ui user interface used to display feedback
-     * @param storage storage used to persist task changes
-     * @throws TianyiException if the command cannot be completed
+     * @param tasks Task list on which the command operates.
+     * @param ui User interface used to display feedback.
+     * @param storage Storage used to persist task changes.
+     * @throws TianyiException If the command cannot be completed.
      */
     public abstract void execute(TaskList tasks, Ui ui, Storage storage)
             throws TianyiException;
@@ -29,7 +29,7 @@ public abstract class Command {
     /**
      * Reports whether this command should end the application session.
      *
-     * @return {@code true} if the application should exit, otherwise {@code false}
+     * @return {@code true} if the application should exit, otherwise {@code false}.
      */
     public boolean isExit() {
         return false;

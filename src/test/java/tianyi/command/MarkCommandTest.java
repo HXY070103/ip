@@ -18,7 +18,8 @@ import tianyi.task.ToDo;
  */
 public class MarkCommandTest {
     @Test
-    public void execute_validIndex_marksSavesAndShowsResponse() throws TianyiException {
+    public void execute_validIndex_marksSavesAndShowsResponse()
+            throws TianyiException {
         TaskList tasks = new TaskList(List.of(new ToDo("first"), new ToDo("second")));
         RecordingUi ui = new RecordingUi();
         RecordingStorage storage = new RecordingStorage();

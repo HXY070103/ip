@@ -19,7 +19,7 @@ public class TaskList {
     /**
      * Creates a task list containing a defensive copy of the supplied tasks.
      *
-     * @param tasks initial tasks
+     * @param tasks Initial tasks.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
@@ -28,7 +28,7 @@ public class TaskList {
     /**
      * Reports whether this list contains no tasks.
      *
-     * @return {@code true} if the list is empty, otherwise {@code false}
+     * @return {@code true} if the list is empty, otherwise {@code false}.
      */
     public boolean isEmpty() {
         return tasks.isEmpty();
@@ -37,7 +37,7 @@ public class TaskList {
     /**
      * Returns the number of tasks in this list.
      *
-     * @return task count
+     * @return Task count.
      */
     public int size() {
         return tasks.size();
@@ -46,7 +46,7 @@ public class TaskList {
     /**
      * Returns an unmodifiable snapshot of the current tasks.
      *
-     * @return copy of the current task sequence
+     * @return Copy of the current task sequence.
      */
     public List<Task> getTasks() {
         return List.copyOf(tasks);
@@ -55,8 +55,8 @@ public class TaskList {
     /**
      * Adds a task and formats a confirmation message.
      *
-     * @param task task to add
-     * @return confirmation containing the task and updated count
+     * @param task Task to add.
+     * @return Confirmation containing the task and updated count.
      */
     public String addTask(Task task) {
         tasks.add(task);
@@ -69,8 +69,8 @@ public class TaskList {
     /**
      * Deletes a task and formats a confirmation message.
      *
-     * @param index zero-based index of the task to delete
-     * @return confirmation containing the removed task and updated count
+     * @param index Zero-based index of the task to delete.
+     * @return Confirmation containing the removed task and updated count.
      */
     public String deleteTask(int index) {
         Task task = tasks.get(index);
@@ -84,8 +84,8 @@ public class TaskList {
     /**
      * Marks a task as completed and formats a confirmation message.
      *
-     * @param index zero-based index of the task to mark
-     * @return confirmation containing the updated task
+     * @param index Zero-based index of the task to mark.
+     * @return Confirmation containing the updated task.
      */
     public String markTask(int index) {
         Task task = tasks.get(index);
@@ -98,8 +98,8 @@ public class TaskList {
     /**
      * Marks a task as incomplete and formats a confirmation message.
      *
-     * @param index zero-based index of the task to unmark
-     * @return confirmation containing the updated task
+     * @param index Zero-based index of the task to unmark.
+     * @return Confirmation containing the updated task.
      */
     public String unmarkTask(int index) {
         Task task = tasks.get(index);
@@ -112,7 +112,7 @@ public class TaskList {
     /**
      * Formats every task in this list for display.
      *
-     * @return numbered task list, or a message indicating that no tasks exist
+     * @return Numbered task list, or a message indicating that no tasks exist.
      */
     public String listTasks() {
         return formatTasks(tasks, "Here are the tasks in your list:");
@@ -121,8 +121,8 @@ public class TaskList {
     /**
      * Formats dated tasks that occur on the specified date.
      *
-     * @param time date used to select deadlines and events
-     * @return numbered matching tasks, or a message indicating that none match
+     * @param time Date used to select deadlines and events.
+     * @return Numbered matching tasks, or a message indicating that none match.
      */
     public String listTasks(TaskTime time) {
         List<Task> occurringTasks = new ArrayList<>();
@@ -136,7 +136,7 @@ public class TaskList {
         return formatTasks(
                 occurringTasks,
                 "Here are deadlines/events occurring on " + time.getData() + ":"
-            );
+        );
     }
 
     /**

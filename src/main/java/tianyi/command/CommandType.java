@@ -36,11 +36,12 @@ public enum CommandType {
     /**
      * Resolves a command keyword without regard to letter case.
      *
-     * @param keyword command keyword entered by the user
-     * @return command type matching the keyword
-     * @throws TianyiException if the keyword is not supported
+     * @param keyword Command keyword entered by the user.
+     * @return Command type matching the keyword.
+     * @throws TianyiException If the keyword is not supported.
      */
-    public static CommandType from(String keyword) throws TianyiException {
+    public static CommandType from(String keyword)
+            throws TianyiException {
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
 
         for (CommandType type : values()) {
@@ -55,7 +56,7 @@ public enum CommandType {
     /**
      * Returns an example showing valid usage of this command type.
      *
-     * @return example command input
+     * @return Example command input.
      */
     public String getExample() {
         return example;
@@ -64,7 +65,7 @@ public enum CommandType {
     /**
      * Returns the input keyword for this command type.
      *
-     * @return lowercase command keyword
+     * @return Lowercase command keyword.
      */
     @Override
     public String toString() {

@@ -23,12 +23,13 @@ public class CommandParser {
     /**
      * Parses one line of user input into an executable command.
      *
-     * @param input complete line entered by the user
-     * @param tasks current task list, used to validate task indices
-     * @return command represented by the input
-     * @throws TianyiException if the command or any argument is invalid
+     * @param input Complete line entered by the user.
+     * @param tasks Current task list, used to validate task indices.
+     * @return Command represented by the input.
+     * @throws TianyiException If the command or any argument is invalid.
      */
-    public Command parse(String input, TaskList tasks) throws TianyiException {
+    public Command parse(String input, TaskList tasks)
+            throws TianyiException {
         String[] inputParts = input.trim().split("\\s+", 2);
 
         CommandType type = CommandType.from(inputParts[0]);

@@ -19,7 +19,7 @@ public class Storage {
     /**
      * Creates a storage manager for the specified data file.
      *
-     * @param filePath path of the data file
+     * @param filePath Path of the data file.
      */
     public Storage(String filePath) {
         file = new File(filePath);
@@ -29,19 +29,20 @@ public class Storage {
     /**
      * Loads all tasks from the data file.
      *
-     * @return tasks stored in the file, or an empty list if the file does not exist
-     * @throws StorageException if the file cannot be read or contains invalid data
+     * @return Tasks stored in the file, or an empty list if the file does not exist.
+     * @throws StorageException If the file cannot be read or contains invalid data.
      */
-    public List<Task> load() throws StorageException {
+    public List<Task> load()
+            throws StorageException {
         if (!file.exists()) {
             return new ArrayList<>();
         }
 
         List<Task> tasks = new ArrayList<>();
 
-        try (Scanner sc = new Scanner(file)) {
-            while (sc.hasNextLine()) {
-                tasks.add(parser.parse(sc.nextLine()));
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                tasks.add(parser.parse(scanner.nextLine()));
             }
         } catch (IOException e) {
             throw new StorageException("Unable to load tasks from " + file.getPath() + ".");
@@ -53,19 +54,20 @@ public class Storage {
     /**
      * Replaces the data file contents with the supplied tasks.
      *
-     * @param tasks tasks to persist
-     * @throws StorageException if the data directory or file cannot be written
+     * @param tasks Tasks to persist.
+     * @throws StorageException If the data directory or file cannot be written.
      */
-    public void save(List<Task> tasks) throws StorageException {
+    public void save(List<Task> tasks)
+            throws StorageException {
         File dataFolder = file.getParentFile();
 
         if (dataFolder != null && !dataFolder.exists() && !dataFolder.mkdirs()) {
             throw new StorageException("Unable to create the data folder.");
         }
 
-        try (FileWriter fw = new FileWriter(file)) {
+        try (FileWriter writer = new FileWriter(file)) {
             for (Task task : tasks) {
-                fw.write(task.getData() + System.lineSeparator());
+                writer.write(task.getData() + System.lineSeparator());
             }
         } catch (IOException e) {
             throw new StorageException("Unable to save tasks to " + file.getPath() + ".");

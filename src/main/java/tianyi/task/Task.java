@@ -10,7 +10,7 @@ public class Task {
     /**
      * Creates an incomplete task with the specified description.
      *
-     * @param description description of the task
+     * @param description Description of the task.
      */
     public Task(String description) {
         this.description = description;
@@ -35,8 +35,8 @@ public class Task {
      * Reports whether this task occurs on the specified date.
      * Plain tasks have no date and therefore never occur on a specific date.
      *
-     * @param taskTime date to check
-     * @return always {@code false} for a plain task
+     * @param taskTime Date to check.
+     * @return Always {@code false} for a plain task.
      */
     public boolean isOccurringOn(TaskTime taskTime) {
         return false;
@@ -45,7 +45,7 @@ public class Task {
     /**
      * Serializes the task's completion status and description.
      *
-     * @return storage representation of this task's common fields
+     * @return Storage representation of this task's common fields.
      */
     public String getData() {
         int status = isDone ? 1 : 0;
@@ -55,7 +55,7 @@ public class Task {
     /**
      * Formats the task's completion status and description for display.
      *
-     * @return user-facing representation of the task
+     * @return User-facing representation of the task.
      */
     @Override
     public String toString() {

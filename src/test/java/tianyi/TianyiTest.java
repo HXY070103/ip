@@ -79,7 +79,8 @@ public class TianyiTest {
     }
 
     @Test
-    public void run_existingTasks_listShowsLoadedTasks() throws IOException {
+    public void run_existingTasks_listShowsLoadedTasks()
+            throws IOException {
         Path dataFile = tempDir.resolve("tasks.txt");
         Files.writeString(dataFile, "T | 1 | read book" + NEWLINE);
         Tianyi tianyi = createTianyi("list\nbye\n", dataFile);
@@ -125,7 +126,8 @@ public class TianyiTest {
     }
 
     @Test
-    public void run_addCommand_savesTaskToConfiguredFile() throws IOException {
+    public void run_addCommand_savesTaskToConfiguredFile()
+            throws IOException {
         Path dataFile = tempDir.resolve("nested/tasks.txt");
         Tianyi tianyi = createTianyi("todo read book\nbye\n", dataFile);
 

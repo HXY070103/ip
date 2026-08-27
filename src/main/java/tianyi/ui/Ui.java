@@ -16,31 +16,31 @@ public class Ui {
             + "What can I do for you?";
     private static final String FAREWELL = "Bye. Hope to see you again soon!";
 
-    private final Scanner sc;
+    private final Scanner scanner;
 
     /**
      * Creates a console interface that reads from standard input.
      */
     public Ui() {
-        sc = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
 
     /**
      * Reports whether another command is available from standard input.
      *
-     * @return {@code true} if another line can be read
+     * @return {@code true} if another line can be read.
      */
     public boolean hasNextCommand() {
-        return sc.hasNextLine();
+        return scanner.hasNextLine();
     }
 
     /**
      * Reads the next complete command line.
      *
-     * @return command entered by the user
+     * @return Command entered by the user.
      */
     public String readCommand() {
-        return sc.nextLine();
+        return scanner.nextLine();
     }
 
     /**
@@ -53,7 +53,7 @@ public class Ui {
     /**
      * Displays a successful command response between separator lines.
      *
-     * @param response response to display
+     * @param response Response to display.
      */
     public void showResponse(String response) {
         print(response);
@@ -62,7 +62,7 @@ public class Ui {
     /**
      * Displays an application error between separator lines.
      *
-     * @param message error explanation to display
+     * @param message Error explanation to display.
      */
     public void showError(String message) {
         print("Oops! " + message);

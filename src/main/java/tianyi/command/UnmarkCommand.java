@@ -14,7 +14,7 @@ public class UnmarkCommand extends Command {
     /**
      * Creates a command that marks a task at a zero-based index as incomplete.
      *
-     * @param index zero-based index of the task to unmark
+     * @param index Zero-based index of the task to unmark.
      */
     public UnmarkCommand(int index) {
         this.index = index;
@@ -23,10 +23,10 @@ public class UnmarkCommand extends Command {
     /**
      * Unmarks the task, saves the updated list, and displays confirmation.
      *
-     * @param tasks task list to update
-     * @param ui user interface used to display confirmation
-     * @param storage storage used to persist the updated list
-     * @throws TianyiException if the updated task list cannot be saved
+     * @param tasks Task list to update.
+     * @param ui User interface used to display confirmation.
+     * @param storage Storage used to persist the updated list.
+     * @throws TianyiException If the updated task list cannot be saved.
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage)
