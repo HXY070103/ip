@@ -43,6 +43,8 @@ After every code update, complete these steps before reporting the task as finis
 
 ## Git
 
+Invoke and follow the project-specific `$seedu-git-standard` skill whenever proposing or creating commits or naming
+branches. All future commits in this project must follow that standard.
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
