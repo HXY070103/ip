@@ -16,11 +16,22 @@ public class Storage {
     private final File file;
     private final DataParser parser;
 
+    /**
+     * Creates a storage manager for the specified data file.
+     *
+     * @param filePath path of the data file
+     */
     public Storage(String filePath) {
         file = new File(filePath);
         parser = new DataParser();
     }
 
+    /**
+     * Loads all tasks from the data file.
+     *
+     * @return tasks stored in the file, or an empty list if the file does not exist
+     * @throws StorageException if the file cannot be read or contains invalid data
+     */
     public List<Task> load() throws StorageException {
         if (!file.exists()) {
             return new ArrayList<>();
@@ -39,6 +50,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Replaces the data file contents with the supplied tasks.
+     *
+     * @param tasks tasks to persist
+     * @throws StorageException if the data directory or file cannot be written
+     */
     public void save(List<Task> tasks) throws StorageException {
         File dataFolder = file.getParentFile();
 

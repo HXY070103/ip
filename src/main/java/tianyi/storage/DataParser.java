@@ -12,6 +12,19 @@ import tianyi.task.ToDo;
  * Converts stored task data into task objects.
  */
 public class DataParser {
+    /**
+     * Creates a parser for serialized task records.
+     */
+    public DataParser() {
+    }
+
+    /**
+     * Converts one serialized task record into a task object.
+     *
+     * @param data serialized task record
+     * @return task represented by the record
+     * @throws StorageException if the record has an invalid type, status, or format
+     */
     public Task parse(String data) throws StorageException {
         String[] dataParts = data.split("\\s*\\|\\s*");
 
@@ -39,6 +52,9 @@ public class DataParser {
         return task;
     }
 
+    /**
+     * Parses a serialized todo record after validating its field count.
+     */
     private Task createTodo(String[] dataParts, String data) throws StorageException {
         if (dataParts.length != 3) {
             throw new StorageException("Invalid todo data: " + data);
@@ -47,6 +63,9 @@ public class DataParser {
         return new ToDo(dataParts[2]);
     }
 
+    /**
+     * Parses a serialized deadline record after validating its fields.
+     */
     private Task createDeadline(String[] dataParts, String data) throws StorageException {
         if (dataParts.length != 4) {
             throw new StorageException("Invalid deadline data: " + data);
@@ -59,6 +78,9 @@ public class DataParser {
         }
     }
 
+    /**
+     * Parses a serialized event record after validating its fields.
+     */
     private Task createEvent(String[] dataParts, String data) throws StorageException {
         if (dataParts.length != 5) {
             throw new StorageException("Invalid event data: " + data);
@@ -71,6 +93,9 @@ public class DataParser {
         }
     }
 
+    /**
+     * Restores a task's completion status from its serialized flag.
+     */
     private void updateStatus(Task task, String status) throws StorageException {
         if (status.equals("1")) {
             task.markAsDone();

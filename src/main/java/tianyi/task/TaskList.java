@@ -9,26 +9,55 @@ import java.util.List;
 public class TaskList {
     private final List<Task> tasks;
 
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         tasks = new ArrayList<>();
     }
 
+    /**
+     * Creates a task list containing a defensive copy of the supplied tasks.
+     *
+     * @param tasks initial tasks
+     */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
     }
 
+    /**
+     * Reports whether this list contains no tasks.
+     *
+     * @return {@code true} if the list is empty, otherwise {@code false}
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns the number of tasks in this list.
+     *
+     * @return task count
+     */
     public int size() {
         return tasks.size();
     }
 
+    /**
+     * Returns an unmodifiable snapshot of the current tasks.
+     *
+     * @return copy of the current task sequence
+     */
     public List<Task> getTasks() {
         return List.copyOf(tasks);
     }
 
+    /**
+     * Adds a task and formats a confirmation message.
+     *
+     * @param task task to add
+     * @return confirmation containing the task and updated count
+     */
     public String addTask(Task task) {
         tasks.add(task);
 
@@ -37,6 +66,12 @@ public class TaskList {
                 + "Now you have " + tasks.size() + " tasks in the list.";
     }
 
+    /**
+     * Deletes a task and formats a confirmation message.
+     *
+     * @param index zero-based index of the task to delete
+     * @return confirmation containing the removed task and updated count
+     */
     public String deleteTask(int index) {
         Task task = tasks.get(index);
         tasks.remove(index);
@@ -46,6 +81,12 @@ public class TaskList {
                 + "Now you have " + tasks.size() + " tasks in the list.";
     }
 
+    /**
+     * Marks a task as completed and formats a confirmation message.
+     *
+     * @param index zero-based index of the task to mark
+     * @return confirmation containing the updated task
+     */
     public String markTask(int index) {
         Task task = tasks.get(index);
         task.markAsDone();
@@ -54,6 +95,12 @@ public class TaskList {
                 + "  " + task;
     }
 
+    /**
+     * Marks a task as incomplete and formats a confirmation message.
+     *
+     * @param index zero-based index of the task to unmark
+     * @return confirmation containing the updated task
+     */
     public String unmarkTask(int index) {
         Task task = tasks.get(index);
         task.unmarkAsDone();
@@ -62,10 +109,21 @@ public class TaskList {
                 + "  " + task;
     }
 
+    /**
+     * Formats every task in this list for display.
+     *
+     * @return numbered task list, or a message indicating that no tasks exist
+     */
     public String listTasks() {
         return formatTasks(tasks, "Here are the tasks in your list:");
     }
 
+    /**
+     * Formats dated tasks that occur on the specified date.
+     *
+     * @param time date used to select deadlines and events
+     * @return numbered matching tasks, or a message indicating that none match
+     */
     public String listTasks(TaskTime time) {
         List<Task> occurringTasks = new ArrayList<>();
 
@@ -81,6 +139,9 @@ public class TaskList {
             );
     }
 
+    /**
+     * Builds a numbered display string for a collection of tasks.
+     */
     private String formatTasks(List<Task> tasksToDisplay, String heading) {
         if (tasksToDisplay.isEmpty()) {
             return "No tasks found.";
