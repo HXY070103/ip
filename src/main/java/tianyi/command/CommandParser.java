@@ -14,6 +14,20 @@ import tianyi.task.ToDo;
  * Parses user input into commands with appropriately typed arguments.
  */
 public class CommandParser {
+    /**
+     * Creates a parser for supported Tianyi commands.
+     */
+    public CommandParser() {
+    }
+
+    /**
+     * Parses one line of user input into an executable command.
+     *
+     * @param input complete line entered by the user
+     * @param tasks current task list, used to validate task indices
+     * @return command represented by the input
+     * @throws TianyiException if the command or any argument is invalid
+     */
     public Command parse(String input, TaskList tasks) throws TianyiException {
         String[] inputParts = input.trim().split("\\s+", 2);
 
@@ -42,6 +56,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Parses the argument of a task-creation command.
+     */
     private Task parseTask(CommandType type, String argument, String example)
             throws TianyiException {
         if (argument.isBlank()) {
@@ -61,6 +78,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Creates a deadline from its description and {@code /by} value.
+     */
     private Task createDeadline(String argument, String example)
             throws TianyiException {
         String[] deadlineParts = argument.split("\\s*/by\\s*", 2);
@@ -92,6 +112,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Creates an event from its description, {@code /from}, and {@code /to} values.
+     */
     private Task createEvent(String argument, String example)
             throws TianyiException {
         String[] eventParts = argument.split("\\s*/from\\s*", 2);
@@ -142,6 +165,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Converts a user-facing task number into a validated zero-based index.
+     */
     private int parseIndex(String argument, String example, TaskList tasks)
             throws TianyiException {
         if (argument.isBlank()) {
@@ -174,6 +200,9 @@ public class CommandParser {
         return taskNumber - 1;
     }
 
+    /**
+     * Parses the optional date accepted by the list command.
+     */
     private TaskTime parseListDate(String argument, String example)
             throws TianyiException {
         if (argument.isBlank()) {
@@ -197,6 +226,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Rejects unexpected arguments for commands that accept none.
+     */
     private void validateNoArgument(String argument, String example)
             throws TianyiException {
         if (!argument.isBlank()) {
@@ -205,6 +237,9 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Extracts and validates one required component of a split argument.
+     */
     private String getRequiredPart(String[] parts, int index, String errorMessage)
             throws TianyiException {
         if (index >= parts.length || parts[index].isBlank()) {
