@@ -2,6 +2,7 @@ package tianyi.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,5 +44,19 @@ public class TaskTest {
         Task task = new Task("read book");
 
         assertFalse(task.isOccurringOn(new TaskTime("2-12-2019")));
+    }
+
+    @Test
+    public void matchesKeyword_descriptionContainsKeyword_returnsTrue() {
+        Task task = new Task("read book");
+
+        assertTrue(task.matchesKeyword("book"));
+    }
+
+    @Test
+    public void matchesKeyword_descriptionDoesNotContainKeyword_returnsFalse() {
+        Task task = new Task("read book");
+
+        assertFalse(task.matchesKeyword("milk"));
     }
 }

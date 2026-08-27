@@ -15,7 +15,9 @@ public enum CommandType {
     EVENT("event", "event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00"),
     MARK("mark", "mark 1"),
     UNMARK("unmark", "unmark 1"),
-    DELETE("delete", "delete 1");
+    DELETE("delete", "delete 1"),
+    /** Finds tasks whose descriptions contain a keyword. */
+    FIND("find", "find book");
 
     private final String keyword;
     private final String example;

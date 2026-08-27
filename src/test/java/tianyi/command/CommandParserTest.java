@@ -122,6 +122,21 @@ public class CommandParserTest {
     }
 
     @Test
+    public void parse_findCommand_listsTasksContainingKeyword()
+            throws TianyiException {
+        TaskList tasks = new TaskList(List.of(
+                new ToDo("read book"),
+                new ToDo("buy milk"),
+                new ToDo("return book")));
+
+        parser.parse("find book", tasks).execute(tasks, ui, storage);
+
+        assertEquals("Here are the matching tasks in your list:\n"
+                + "1.[T][ ] read book\n"
+                + "2.[T][ ] return book", ui.response);
+    }
+
+    @Test
     public void parse_byeCommand_returnsExitCommand() throws TianyiException {
         Command command = parser.parse("bye", new TaskList());
 
@@ -237,6 +252,12 @@ public class CommandParserTest {
     public void parse_byeWithArgument_exceptionThrown() {
         assertParseFails("bye now", new TaskList(),
                 "Bye command does not accept any arguments.\nTry: bye");
+    }
+
+    @Test
+    public void parse_findWithoutKeyword_exceptionThrown() {
+        assertParseFails("find", new TaskList(),
+                "The keyword of find command cannot be empty.\nTry: find book");
     }
 
     @Test

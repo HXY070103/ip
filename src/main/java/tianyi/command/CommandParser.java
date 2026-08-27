@@ -34,6 +34,9 @@ public class CommandParser {
                 return new DeleteCommand(parseIndex(argument, example, tasks));
             case LIST:
                 return new ListCommand(parseListDate(argument, example));
+            case FIND:
+                validateFindKeyword(argument, example);
+                return new FindCommand(argument);
             case BYE:
                 validateNoArgument(argument, example);
                 return new ExitCommand();
@@ -193,6 +196,17 @@ public class CommandParser {
         } catch (DateTimeParseException e) {
             throw new TianyiException("Invalid list date.\n"
                     + "Please use d-M-yyyy.\n"
+                    + "Try: " + example);
+        }
+    }
+
+    /**
+     * Rejects a find command whose keyword is empty.
+     */
+    private void validateFindKeyword(String argument, String example)
+            throws TianyiException {
+        if (argument.isBlank()) {
+            throw new TianyiException("The keyword of find command cannot be empty.\n"
                     + "Try: " + example);
         }
     }
