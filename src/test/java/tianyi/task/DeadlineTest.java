@@ -1,6 +1,5 @@
 package tianyi.task;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,11 +14,9 @@ public class DeadlineTest {
     public void isOccurringOn_beforeOnAndAfterDeadline_returnsExpectedResults() {
         Deadline deadline = new Deadline("submit report", new TaskTime("2-12-2019 18:00"));
 
-        assertAll(
-                () -> assertTrue(deadline.isOccurringOn(new TaskTime("1-12-2019"))),
-                () -> assertTrue(deadline.isOccurringOn(new TaskTime("2-12-2019"))),
-                () -> assertFalse(deadline.isOccurringOn(new TaskTime("3-12-2019")))
-        );
+        assertTrue(deadline.isOccurringOn(new TaskTime("1-12-2019")));
+        assertTrue(deadline.isOccurringOn(new TaskTime("2-12-2019")));
+        assertFalse(deadline.isOccurringOn(new TaskTime("3-12-2019")));
     }
 
     @Test

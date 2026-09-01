@@ -1,6 +1,5 @@
 package tianyi.task;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,40 +38,29 @@ public class TaskTimeTest {
 
     @Test
     public void constructor_invalidDateOrTime_exceptionThrown() {
-        assertAll(
-                () -> assertThrows(DateTimeParseException.class,
-                        () -> new TaskTime("")),
-                () -> assertThrows(DateTimeParseException.class,
-                        () -> new TaskTime("2019-12-2")),
-                () -> assertThrows(DateTimeParseException.class,
-                        () -> new TaskTime("31-2-2019")),
-                () -> assertThrows(DateTimeParseException.class,
-                        () -> new TaskTime("2-12-2019 24:00")),
-                () -> assertThrows(DateTimeParseException.class,
-                        () -> new TaskTime("2-12-2019 1800"))
-        );
+        assertThrows(DateTimeParseException.class, () -> new TaskTime(""));
+        assertThrows(DateTimeParseException.class, () -> new TaskTime("2019-12-2"));
+        assertThrows(DateTimeParseException.class, () -> new TaskTime("31-2-2019"));
+        assertThrows(DateTimeParseException.class, () -> new TaskTime("2-12-2019 24:00"));
+        assertThrows(DateTimeParseException.class, () -> new TaskTime("2-12-2019 1800"));
     }
 
     @Test
     public void isBefore_earlierEqualAndLaterDates_returnsExpectedResults() {
         TaskTime reference = new TaskTime("2-12-2019");
 
-        assertAll(
-                () -> assertTrue(new TaskTime("1-12-2019").isBefore(reference)),
-                () -> assertFalse(new TaskTime("2-12-2019").isBefore(reference)),
-                () -> assertFalse(new TaskTime("3-12-2019").isBefore(reference))
-        );
+        assertTrue(new TaskTime("1-12-2019").isBefore(reference));
+        assertFalse(new TaskTime("2-12-2019").isBefore(reference));
+        assertFalse(new TaskTime("3-12-2019").isBefore(reference));
     }
 
     @Test
     public void isAfter_earlierEqualAndLaterDates_returnsExpectedResults() {
         TaskTime reference = new TaskTime("2-12-2019");
 
-        assertAll(
-                () -> assertFalse(new TaskTime("1-12-2019").isAfter(reference)),
-                () -> assertFalse(new TaskTime("2-12-2019").isAfter(reference)),
-                () -> assertTrue(new TaskTime("3-12-2019").isAfter(reference))
-        );
+        assertFalse(new TaskTime("1-12-2019").isAfter(reference));
+        assertFalse(new TaskTime("2-12-2019").isAfter(reference));
+        assertTrue(new TaskTime("3-12-2019").isAfter(reference));
     }
 
     @Test
@@ -86,15 +74,9 @@ public class TaskTimeTest {
 
     @Test
     public void toString_dateAndDifferentTimes_formatsForDisplay() {
-        assertAll(
-                () -> assertEquals("Mon, Dec 02 2019",
-                        new TaskTime("2-12-2019").toString()),
-                () -> assertEquals("Mon, Dec 02 2019, 12:00 AM",
-                        new TaskTime("2-12-2019 00:00").toString()),
-                () -> assertEquals("Mon, Dec 02 2019, 12:00 PM",
-                        new TaskTime("2-12-2019 12:00").toString()),
-                () -> assertEquals("Mon, Dec 02 2019, 6:05 PM",
-                        new TaskTime("2-12-2019 18:05").toString())
-        );
+        assertEquals("Mon, Dec 02 2019", new TaskTime("2-12-2019").toString());
+        assertEquals("Mon, Dec 02 2019, 12:00 AM", new TaskTime("2-12-2019 00:00").toString());
+        assertEquals("Mon, Dec 02 2019, 12:00 PM", new TaskTime("2-12-2019 12:00").toString());
+        assertEquals("Mon, Dec 02 2019, 6:05 PM", new TaskTime("2-12-2019 18:05").toString());
     }
 }

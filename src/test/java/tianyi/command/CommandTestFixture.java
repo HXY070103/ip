@@ -17,8 +17,8 @@ final class CommandTestFixture {
      * Records the latest response or goodbye request without printing it.
      */
     static class RecordingUi extends Ui {
-        String response;
-        boolean goodbyeShown;
+        protected String response;
+        protected boolean goodbyeShown;
 
         @Override
         public void showResponse(String response) {
@@ -35,7 +35,7 @@ final class CommandTestFixture {
      * Records the task snapshot passed to save without writing a file.
      */
     static class RecordingStorage extends Storage {
-        List<Task> savedTasks;
+        protected List<Task> savedTasks;
 
         RecordingStorage() {
             super("unused");
