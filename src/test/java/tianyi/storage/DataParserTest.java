@@ -1,6 +1,5 @@
 package tianyi.storage;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -76,14 +75,12 @@ public class DataParserTest {
 
     @Test
     public void parse_wrongFieldCountForKnownType_exceptionThrown() {
-        assertAll(
-                () -> assertParseFails("T | 0 | todo | extra",
-                        "Invalid todo data: T | 0 | todo | extra"),
-                () -> assertParseFails("D | 0 | deadline",
-                        "Invalid deadline data: D | 0 | deadline"),
-                () -> assertParseFails("E | 0 | event | 2-12-2019",
-                        "Invalid event data: E | 0 | event | 2-12-2019")
-        );
+        assertParseFails("T | 0 | todo | extra",
+                "Invalid todo data: T | 0 | todo | extra");
+        assertParseFails("D | 0 | deadline",
+                "Invalid deadline data: D | 0 | deadline");
+        assertParseFails("E | 0 | event | 2-12-2019",
+                "Invalid event data: E | 0 | event | 2-12-2019");
     }
 
     @Test

@@ -42,7 +42,7 @@ public class UiTest {
     }
 
     @Test
-    public void hasNextCommand_andReadCommand_multipleLines_readsInOrderUntilEnd() {
+    public void readCommand_multipleLines_readsInOrderUntilEnd() {
         setInput("todo read book\nbye\n");
         Ui ui = new Ui();
 

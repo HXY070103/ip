@@ -1,6 +1,5 @@
 package tianyi.command;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -163,59 +162,50 @@ public class CommandParserTest {
 
     @Test
     public void parse_emptyAddCommandArguments_exceptionThrown() {
-        assertAll(
-                () -> assertParseFails("todo", new TaskList(),
-                        "The argument of todo command cannot be empty.\n"
-                                + "Try: todo borrow book"),
-                () -> assertParseFails("deadline", new TaskList(),
-                        "The argument of deadline command cannot be empty.\n"
-                                + "Try: deadline return book /by 2-12-2019 18:00"),
-                () -> assertParseFails("event", new TaskList(),
-                        "The argument of event command cannot be empty.\n"
-                                + "Try: event meeting /from 2-12-2019 14:00 "
-                                + "/to 2-12-2019 16:00")
-        );
+        assertParseFails("todo", new TaskList(),
+                "The argument of todo command cannot be empty.\n"
+                        + "Try: todo borrow book");
+        assertParseFails("deadline", new TaskList(),
+                "The argument of deadline command cannot be empty.\n"
+                        + "Try: deadline return book /by 2-12-2019 18:00");
+        assertParseFails("event", new TaskList(),
+                "The argument of event command cannot be empty.\n"
+                        + "Try: event meeting /from 2-12-2019 14:00 "
+                        + "/to 2-12-2019 16:00");
     }
 
     @Test
     public void parse_malformedDeadlineArguments_exceptionThrown() {
         String example = "Try: deadline return book /by 2-12-2019 18:00";
 
-        assertAll(
-                () -> assertParseFails("deadline return book", new TaskList(),
-                        "Deadline command must contain /by.\n" + example),
-                () -> assertParseFails("deadline /by 2-12-2019", new TaskList(),
-                        "The description of deadline command cannot be empty.\n" + example),
-                () -> assertParseFails("deadline return book /by", new TaskList(),
-                        "The by date of deadline command cannot be empty.\n" + example),
-                () -> assertParseFails("deadline return book /by 31-2-2019", new TaskList(),
-                        "Invalid deadline date or time. "
-                                + "Please use d-M-yyyy with optional HH:mm.\n" + example)
-        );
+        assertParseFails("deadline return book", new TaskList(),
+                "Deadline command must contain /by.\n" + example);
+        assertParseFails("deadline /by 2-12-2019", new TaskList(),
+                "The description of deadline command cannot be empty.\n" + example);
+        assertParseFails("deadline return book /by", new TaskList(),
+                "The by date of deadline command cannot be empty.\n" + example);
+        assertParseFails("deadline return book /by 31-2-2019", new TaskList(),
+                "Invalid deadline date or time. "
+                        + "Please use d-M-yyyy with optional HH:mm.\n" + example);
     }
 
     @Test
     public void parse_malformedEventArguments_exceptionThrown() {
         String example = "Try: event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00";
 
-        assertAll(
-                () -> assertParseFails("event meeting", new TaskList(),
-                        "Event command must contain /from.\n" + example),
-                () -> assertParseFails("event /from 2-12-2019 /to 3-12-2019",
-                        new TaskList(),
-                        "The description of event command cannot be empty.\n" + example),
-                () -> assertParseFails("event meeting /from", new TaskList(),
-                        "Event command must contain /to.\n" + example),
-                () -> assertParseFails("event meeting /from /to 3-12-2019",
-                        new TaskList(),
-                        "The from date of event command cannot be empty.\n" + example),
-                () -> assertParseFails("event meeting /from 2-12-2019 /to", new TaskList(),
-                        "The to date of event command cannot be empty.\n" + example),
-                () -> assertParseFails("event meeting /from invalid /to 3-12-2019",
-                        new TaskList(),
-                        "Invalid event date or time. "
-                                + "Please use d-M-yyyy with optional HH:mm.\n" + example)
-        );
+        assertParseFails("event meeting", new TaskList(),
+                "Event command must contain /from.\n" + example);
+        assertParseFails("event /from 2-12-2019 /to 3-12-2019", new TaskList(),
+                "The description of event command cannot be empty.\n" + example);
+        assertParseFails("event meeting /from", new TaskList(),
+                "Event command must contain /to.\n" + example);
+        assertParseFails("event meeting /from /to 3-12-2019", new TaskList(),
+                "The from date of event command cannot be empty.\n" + example);
+        assertParseFails("event meeting /from 2-12-2019 /to", new TaskList(),
+                "The to date of event command cannot be empty.\n" + example);
+        assertParseFails("event meeting /from invalid /to 3-12-2019", new TaskList(),
+                "Invalid event date or time. "
+                        + "Please use d-M-yyyy with optional HH:mm.\n" + example);
     }
 
     @Test
@@ -236,26 +226,22 @@ public class CommandParserTest {
     public void parse_invalidTaskNumbers_exceptionThrown() {
         TaskList tasks = createTwoTodoTasks();
 
-        assertAll(
-                () -> assertParseFails("mark abc", tasks,
-                        "abc is not a valid task number.\nTry: mark 1"),
-                () -> assertParseFails("mark 0", tasks,
-                        "Task number 0 does not exist.\n"
-                                + "Please enter a number from 1 to 2.Try: mark 1"),
-                () -> assertParseFails("mark 3", tasks,
-                        "Task number 3 does not exist.\n"
-                                + "Please enter a number from 1 to 2.Try: mark 1")
-        );
+        assertParseFails("mark abc", tasks,
+                "abc is not a valid task number.\nTry: mark 1");
+        assertParseFails("mark 0", tasks,
+                "Task number 0 does not exist.\n"
+                        + "Please enter a number from 1 to 2.Try: mark 1");
+        assertParseFails("mark 3", tasks,
+                "Task number 3 does not exist.\n"
+                        + "Please enter a number from 1 to 2.Try: mark 1");
     }
 
     @Test
     public void parse_listWithInvalidDate_exceptionThrown() {
-        assertAll(
-                () -> assertParseFails("list 31-2-2019", new TaskList(),
-                        "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019"),
-                () -> assertParseFails("list 2-12-2019 18:00", new TaskList(),
-                        "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019")
-        );
+        assertParseFails("list 31-2-2019", new TaskList(),
+                "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
+        assertParseFails("list 2-12-2019 18:00", new TaskList(),
+                "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
     }
 
     @Test

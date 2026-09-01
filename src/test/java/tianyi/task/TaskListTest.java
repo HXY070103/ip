@@ -27,8 +27,7 @@ public class TaskListTest {
     public void getTasks_returnedListCannotModifyTaskList() {
         TaskList tasks = new TaskList(List.of(new ToDo("first")));
 
-        assertThrows(UnsupportedOperationException.class,
-                () -> tasks.getTasks().add(new ToDo("second")));
+        assertThrows(UnsupportedOperationException.class, () -> tasks.getTasks().add(new ToDo("second")));
         assertEquals(1, tasks.size());
     }
 

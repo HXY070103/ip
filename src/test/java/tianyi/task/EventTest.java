@@ -1,6 +1,5 @@
 package tianyi.task;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,13 +15,11 @@ public class EventTest {
         Event event = new Event("workshop", new TaskTime("2-12-2019 09:00"),
                 new TaskTime("4-12-2019 17:00"));
 
-        assertAll(
-                () -> assertFalse(event.isOccurringOn(new TaskTime("1-12-2019"))),
-                () -> assertTrue(event.isOccurringOn(new TaskTime("2-12-2019"))),
-                () -> assertTrue(event.isOccurringOn(new TaskTime("3-12-2019"))),
-                () -> assertTrue(event.isOccurringOn(new TaskTime("4-12-2019"))),
-                () -> assertFalse(event.isOccurringOn(new TaskTime("5-12-2019")))
-        );
+        assertFalse(event.isOccurringOn(new TaskTime("1-12-2019")));
+        assertTrue(event.isOccurringOn(new TaskTime("2-12-2019")));
+        assertTrue(event.isOccurringOn(new TaskTime("3-12-2019")));
+        assertTrue(event.isOccurringOn(new TaskTime("4-12-2019")));
+        assertFalse(event.isOccurringOn(new TaskTime("5-12-2019")));
     }
 
     @Test
