@@ -16,6 +16,9 @@ import tianyi.Tianyi;
  * Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
+    /**
+     * Delay that keeps the goodbye response visible before the application closes.
+     */
     private static final Duration EXIT_DELAY = Duration.seconds(1);
 
     @FXML
@@ -29,8 +32,15 @@ public class MainWindow extends AnchorPane {
 
     private Tianyi tianyi;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser-square.png"));
-    private Image tianyiImage = new Image(this.getClass().getResourceAsStream("/images/DaTianyi-square-v2.png"));
+    private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser-square.png"));
+    private final Image tianyiImage = new Image(
+            getClass().getResourceAsStream("/images/DaTianyi-square-v2.png"));
+
+    /**
+     * Creates the controller loaded by the main-window FXML file.
+     */
+    public MainWindow() {
+    }
 
     /**
      * Binds the scroll position to the dialog container height.
@@ -53,8 +63,8 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Tianyi's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Appends the user's input and Tianyi's response to the dialog container.
+     * Clears the input field after processing and exits after a goodbye response.
      */
     @FXML
     private void handleUserInput() {

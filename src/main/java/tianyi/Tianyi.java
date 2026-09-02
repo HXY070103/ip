@@ -10,7 +10,14 @@ import tianyi.ui.Ui;
  * Runs the Tianyi chatbot application.
  */
 public class Tianyi {
+    /**
+     * Default location used to persist tasks in console mode.
+     */
     private static final String DATA_FILE_PATH = "Data/tianyi.txt";
+
+    /**
+     * Banner and greeting displayed when Tianyi starts.
+     */
     private static final String WELCOME_MESSAGE =
             " _____ _                   _\n"
                     + "|_   _(_) __ _ _ __  _   _(_)\n"
