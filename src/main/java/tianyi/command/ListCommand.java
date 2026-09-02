@@ -3,7 +3,6 @@ package tianyi.command;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
 import tianyi.task.TaskTime;
-import tianyi.ui.Ui;
 
 /**
  * Lists all tasks or tasks occurring on a specified date.
@@ -21,17 +20,16 @@ public class ListCommand extends Command {
     }
 
     /**
-     * Formats the requested tasks and displays them to the user.
+     * Formats and returns the requested tasks.
      *
      * @param tasks Task list to read.
-     * @param ui User interface used to display the tasks.
      * @param storage Storage instance, which is not used.
+     * @return Formatted tasks matching the command.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        String response = date == null
+    public String execute(TaskList tasks, Storage storage) {
+        return date == null
                 ? tasks.listTasks()
                 : tasks.listTasks(date);
-        ui.showResponse(response);
     }
 }

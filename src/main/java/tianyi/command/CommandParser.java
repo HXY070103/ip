@@ -197,7 +197,7 @@ public class CommandParser {
         if (taskNumber < 1 || taskNumber > tasks.size()) {
             throw new TianyiException(
                     "Task number " + taskNumber + " does not exist.\n"
-                            + "Please enter a number from 1 to " + tasks.size() + "."
+                            + "Please enter a number from 1 to " + tasks.size() + ".\n"
                             + "Try: " + example);
         }
 

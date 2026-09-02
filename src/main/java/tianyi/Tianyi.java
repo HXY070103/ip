@@ -10,7 +10,23 @@ import tianyi.ui.Ui;
  * Runs the Tianyi chatbot application.
  */
 public class Tianyi {
+    /**
+     * Default location used to persist tasks in console mode.
+     */
     private static final String DATA_FILE_PATH = "Data/tianyi.txt";
+
+    /**
+     * Banner and greeting displayed when Tianyi starts.
+     */
+    private static final String WELCOME_MESSAGE =
+            " _____ _                   _\n"
+                    + "|_   _(_) __ _ _ __  _   _(_)\n"
+                    + "  | | | |/ _` | '_ \\| | | | |\n"
+                    + "  | | | | (_| | | | | |_| | |\n"
+                    + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
+                    + "                     |___/\n"
+                    + "Hello! I'm Tianyi.\n"
+                    + "What can I do for you?";
 
     private final Storage storage;
     private final TaskList tasks;
@@ -40,6 +56,34 @@ public class Tianyi {
     }
 
     /**
+     * Returns Tianyi's welcome message.
+     *
+     * @return Welcome banner and greeting.
+     */
+    public String getWelcomeMessage() {
+        return WELCOME_MESSAGE;
+    }
+
+    /**
+     * Processes one user command and returns a response suitable for display.
+     *
+     * @param input Complete command entered by the user.
+     * @return Command response, or an empty string when the input is blank.
+     */
+    public String getResponse(String input) {
+        if (input.isBlank()) {
+            return "";
+        }
+
+        try {
+            Command command = parser.parse(input, tasks);
+            return command.execute(tasks, storage);
+        } catch (TianyiException e) {
+            return "Oops! " + e.getMessage();
+        }
+    }
+
+    /**
      * Starts the command loop and processes input until the user exits or input ends.
      */
     public void run() {
@@ -55,7 +99,8 @@ public class Tianyi {
 
             try {
                 Command command = parser.parse(fullCommand, tasks);
-                command.execute(tasks, ui, storage);
+                String response = command.execute(tasks, storage);
+                ui.showResponse(response);
                 isExit = command.isExit();
             } catch (TianyiException e) {
                 ui.showError(e.getMessage());

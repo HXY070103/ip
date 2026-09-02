@@ -3,7 +3,6 @@ package tianyi.command;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
-import tianyi.ui.Ui;
 
 /**
  * Finds and displays tasks whose descriptions contain a keyword.
@@ -21,9 +20,8 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage)
+    public String execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        String response = tasks.listTasks(keyword);
-        ui.showResponse(response);
+        return tasks.listTasks(keyword);
     }
 }

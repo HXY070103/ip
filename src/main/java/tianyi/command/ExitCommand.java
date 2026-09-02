@@ -2,12 +2,13 @@ package tianyi.command;
 
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
-import tianyi.ui.Ui;
 
 /**
  * Ends the chatbot session.
  */
 public class ExitCommand extends Command {
+    private static final String FAREWELL = "Bye. Hope to see you again soon!";
+
     /**
      * Creates a command that ends the current application session.
      */
@@ -15,15 +16,15 @@ public class ExitCommand extends Command {
     }
 
     /**
-     * Displays the farewell message without changing stored tasks.
+     * Returns the farewell message without changing stored tasks.
      *
      * @param tasks Task list, which is not modified.
-     * @param ui User interface used to display the farewell message.
      * @param storage Storage instance, which is not used.
+     * @return Farewell message for the user.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showGoodbye();
+    public String execute(TaskList tasks, Storage storage) {
+        return FAREWELL;
     }
 
     /**

@@ -24,15 +24,17 @@ public class TianyiTest {
     private static final String LINE =
             "____________________________________________________________";
     private static final String NEWLINE = System.lineSeparator();
-    private static final String WELCOME_OUTPUT = LINE + NEWLINE
-            + " _____ _                   _\n"
+    private static final String WELCOME_MESSAGE =
+            " _____ _                   _\n"
             + "|_   _(_) __ _ _ __  _   _(_)\n"
             + "  | | | |/ _` | '_ \\| | | | |\n"
             + "  | | | | (_| | | | | |_| | |\n"
             + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
             + "                     |___/\n"
             + "Hello! I'm Tianyi.\n"
-            + "What can I do for you?" + NEWLINE
+            + "What can I do for you?";
+    private static final String WELCOME_OUTPUT = LINE + NEWLINE
+            + WELCOME_MESSAGE + NEWLINE
             + LINE + NEWLINE;
     private static final String GOODBYE_OUTPUT = LINE + NEWLINE
             + "Bye. Hope to see you again soon!" + NEWLINE
@@ -135,6 +137,59 @@ public class TianyiTest {
 
         assertTrue(Files.isRegularFile(dataFile));
         assertEquals("T | 0 | read book" + NEWLINE, Files.readString(dataFile));
+    }
+
+    @Test
+    public void getResponse_addThenList_returnsResponsesAndKeepsState() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String addResponse = tianyi.getResponse("todo read book");
+        String listResponse = tianyi.getResponse("list");
+
+        assertEquals("Got it. I've added this task:\n"
+                + "  [T][ ] read book\n"
+                + "Now you have 1 tasks in the list.", addResponse);
+        assertEquals("Here are the tasks in your list:\n"
+                + "1.[T][ ] read book", listResponse);
+    }
+
+    @Test
+    public void getResponse_unknownCommand_returnsFormattedError() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String response = tianyi.getResponse("abracadabra");
+
+        assertEquals("Oops! I'm sorry, but I don't know what that means.", response);
+    }
+
+    @Test
+    public void getResponse_blankInput_returnsEmptyString() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String response = tianyi.getResponse("   ");
+
+        assertEquals("", response);
+    }
+
+    @Test
+    public void getWelcomeMessage_always_returnsBannerAndGreeting() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String message = tianyi.getWelcomeMessage();
+
+        assertEquals(WELCOME_MESSAGE, message);
+    }
+
+    @Test
+    public void getResponse_taskNumberOutOfRange_returnsTryOnSeparateLine() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+        tianyi.getResponse("todo read book");
+
+        String response = tianyi.getResponse("mark 2");
+
+        assertEquals("Oops! Task number 2 does not exist.\n"
+                + "Please enter a number from 1 to 1.\n"
+                + "Try: mark 1", response);
     }
 
     private Tianyi createTianyi(String input, Path dataFile) {

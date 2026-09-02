@@ -1,12 +1,12 @@
 package tianyi.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import tianyi.command.CommandTestFixture.RecordingStorage;
-import tianyi.command.CommandTestFixture.RecordingUi;
 import tianyi.task.TaskList;
 
 /**
@@ -14,16 +14,14 @@ import tianyi.task.TaskList;
  */
 public class ExitCommandTest {
     @Test
-    public void execute_always_showsGoodbyeWithoutSaving() {
+    public void execute_always_returnsGoodbyeWithoutSaving() {
         TaskList tasks = new TaskList();
-        RecordingUi ui = new RecordingUi();
         RecordingStorage storage = new RecordingStorage();
         ExitCommand command = new ExitCommand();
 
-        command.execute(tasks, ui, storage);
+        String response = command.execute(tasks, storage);
 
-        assertTrue(ui.goodbyeShown);
-        assertNull(ui.response);
+        assertEquals("Bye. Hope to see you again soon!", response);
         assertNull(storage.savedTasks);
         assertTrue(command.isExit());
     }
