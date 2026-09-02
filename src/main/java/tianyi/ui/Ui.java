@@ -47,7 +47,7 @@ public class Ui {
      * Displays the application banner and greeting.
      */
     public void showWelcome() {
-        print(BANNER + "\n" + GREETING);
+        showMessage(BANNER, GREETING);
     }
 
     /**
@@ -56,7 +56,7 @@ public class Ui {
      * @param response Response to display.
      */
     public void showResponse(String response) {
-        print(response);
+        showMessage(response);
     }
 
     /**
@@ -65,14 +65,14 @@ public class Ui {
      * @param message Error explanation to display.
      */
     public void showError(String message) {
-        print("Oops! " + message);
+        showMessage("Oops! " + message);
     }
 
     /**
      * Displays the farewell message.
      */
     public void showGoodbye() {
-        print(FAREWELL);
+        showMessage(FAREWELL);
     }
 
     /**
@@ -83,11 +83,17 @@ public class Ui {
     }
 
     /**
-     * Displays content enclosed by separator lines.
+     * Displays one or more messages enclosed by separator lines.
+     *
+     * @param messages Messages to display in order.
      */
-    private void print(String content) {
+    private void showMessage(String... messages) {
         showLine();
-        System.out.println(content);
+
+        for (String message : messages) {
+            System.out.println(message);
+        }
+
         showLine();
     }
 }
