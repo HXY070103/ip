@@ -137,6 +137,38 @@ public class TianyiTest {
         assertEquals("T | 0 | read book" + NEWLINE, Files.readString(dataFile));
     }
 
+    @Test
+    public void getResponse_addThenList_returnsResponsesAndKeepsState() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String addResponse = tianyi.getResponse("todo read book");
+        String listResponse = tianyi.getResponse("list");
+
+        assertEquals("Got it. I've added this task:\n"
+                + "  [T][ ] read book\n"
+                + "Now you have 1 tasks in the list.", addResponse);
+        assertEquals("Here are the tasks in your list:\n"
+                + "1.[T][ ] read book", listResponse);
+    }
+
+    @Test
+    public void getResponse_unknownCommand_returnsFormattedError() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String response = tianyi.getResponse("abracadabra");
+
+        assertEquals("Oops! I'm sorry, but I don't know what that means.", response);
+    }
+
+    @Test
+    public void getResponse_blankInput_returnsEmptyString() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        String response = tianyi.getResponse("   ");
+
+        assertEquals("", response);
+    }
+
     private Tianyi createTianyi(String input, Path dataFile) {
         System.setIn(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
         return new Tianyi(dataFile.toString());

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import tianyi.TianyiException;
 import tianyi.command.CommandTestFixture.RecordingStorage;
-import tianyi.command.CommandTestFixture.RecordingUi;
 import tianyi.task.TaskList;
 import tianyi.task.ToDo;
 
@@ -18,14 +17,13 @@ import tianyi.task.ToDo;
  */
 public class DeleteCommandTest {
     @Test
-    public void execute_validIndex_deletesSavesAndShowsResponse()
+    public void execute_validIndex_deletesSavesAndReturnsResponse()
             throws TianyiException {
         TaskList tasks = new TaskList(List.of(new ToDo("first"), new ToDo("second")));
-        RecordingUi ui = new RecordingUi();
         RecordingStorage storage = new RecordingStorage();
         DeleteCommand command = new DeleteCommand(0);
 
-        command.execute(tasks, ui, storage);
+        String response = command.execute(tasks, storage);
 
         assertEquals(1, tasks.size());
         assertEquals("T | 0 | second", tasks.getTasks().get(0).getData());
@@ -34,6 +32,6 @@ public class DeleteCommandTest {
         assertEquals("T | 0 | second", storage.savedTasks.get(0).getData());
         assertEquals("Noted. I've removed this task:\n"
                 + "  [T][ ] first\n"
-                + "Now you have 1 tasks in the list.", ui.response);
+                + "Now you have 1 tasks in the list.", response);
     }
 }

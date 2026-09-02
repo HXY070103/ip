@@ -9,7 +9,7 @@
     -fx-border-width: 2px;
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
-    -fx-font: 20px "Arial";
+    -fx-font: italic bold 20px "Arial";
     -fx-text-fill: #1f2937;
 }
 

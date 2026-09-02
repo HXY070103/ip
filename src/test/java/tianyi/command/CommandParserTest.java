@@ -18,14 +18,12 @@ import tianyi.task.Task;
 import tianyi.task.TaskList;
 import tianyi.task.TaskTime;
 import tianyi.task.ToDo;
-import tianyi.ui.Ui;
 
 /**
  * Tests parsing and validation for all supported command forms.
  */
 public class CommandParserTest {
     private final CommandParser parser = new CommandParser();
-    private final TestUi ui = new TestUi();
     private final Storage storage = new NoOpStorage();
 
     @Test
@@ -33,7 +31,7 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = new TaskList();
 
-        parser.parse("ToDo Buy Milk", tasks).execute(tasks, ui, storage);
+        parser.parse("ToDo Buy Milk", tasks).execute(tasks, storage);
 
         Task task = tasks.getTasks().get(0);
         assertInstanceOf(ToDo.class, task);
@@ -46,7 +44,7 @@ public class CommandParserTest {
         TaskList tasks = new TaskList();
 
         parser.parse("deadline submit report /by 2-12-2019 18:00", tasks)
-                .execute(tasks, ui, storage);
+                .execute(tasks, storage);
 
         Task task = tasks.getTasks().get(0);
         assertInstanceOf(Deadline.class, task);
@@ -59,7 +57,7 @@ public class CommandParserTest {
         TaskList tasks = new TaskList();
 
         parser.parse("event workshop /from 2-12-2019 /to 3-12-2019 16:00", tasks)
-                .execute(tasks, ui, storage);
+                .execute(tasks, storage);
 
         Task task = tasks.getTasks().get(0);
         assertInstanceOf(Event.class, task);
@@ -71,7 +69,7 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
-        parser.parse("mark 2", tasks).execute(tasks, ui, storage);
+        parser.parse("mark 2", tasks).execute(tasks, storage);
 
         assertEquals("T | 0 | first", tasks.getTasks().get(0).getData());
         assertEquals("T | 1 | second", tasks.getTasks().get(1).getData());
@@ -83,7 +81,7 @@ public class CommandParserTest {
         TaskList tasks = createTwoTodoTasks();
         tasks.markTask(0);
 
-        parser.parse("unmark 1", tasks).execute(tasks, ui, storage);
+        parser.parse("unmark 1", tasks).execute(tasks, storage);
 
         assertEquals("T | 0 | first", tasks.getTasks().get(0).getData());
     }
@@ -93,7 +91,7 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
-        parser.parse("delete 2", tasks).execute(tasks, ui, storage);
+        parser.parse("delete 2", tasks).execute(tasks, storage);
 
         assertEquals(1, tasks.size());
         assertEquals("T | 0 | first", tasks.getTasks().get(0).getData());
@@ -104,11 +102,11 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
-        parser.parse("list", tasks).execute(tasks, ui, storage);
+        String response = parser.parse("list", tasks).execute(tasks, storage);
 
         assertEquals("Here are the tasks in your list:\n"
                 + "1.[T][ ] first\n"
-                + "2.[T][ ] second", ui.response);
+                + "2.[T][ ] second", response);
     }
 
     @Test
@@ -120,12 +118,12 @@ public class CommandParserTest {
                 new Event("workshop", new TaskTime("2-12-2019"),
                         new TaskTime("3-12-2019 16:00"))));
 
-        parser.parse("list 2-12-2019", tasks).execute(tasks, ui, storage);
+        String response = parser.parse("list 2-12-2019", tasks).execute(tasks, storage);
 
         assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
                 + "1.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)\n"
                 + "2.[E][ ] workshop (from: Mon, Dec 02 2019 "
-                + "to: Tue, Dec 03 2019, 4:00 PM)", ui.response);
+                + "to: Tue, Dec 03 2019, 4:00 PM)", response);
     }
 
     @Test
@@ -136,11 +134,11 @@ public class CommandParserTest {
                 new ToDo("buy milk"),
                 new ToDo("return book")));
 
-        parser.parse("find book", tasks).execute(tasks, ui, storage);
+        String response = parser.parse("find book", tasks).execute(tasks, storage);
 
         assertEquals("Here are the matching tasks in your list:\n"
                 + "1.[T][ ] read book\n"
-                + "2.[T][ ] return book", ui.response);
+                + "2.[T][ ] return book", response);
     }
 
     @Test
@@ -230,10 +228,12 @@ public class CommandParserTest {
                 "abc is not a valid task number.\nTry: mark 1");
         assertParseFails("mark 0", tasks,
                 "Task number 0 does not exist.\n"
-                        + "Please enter a number from 1 to 2.Try: mark 1");
+                        + "Please enter a number from 1 to 2.\n"
+                        + "Try: mark 1");
         assertParseFails("mark 3", tasks,
                 "Task number 3 does not exist.\n"
-                        + "Please enter a number from 1 to 2.Try: mark 1");
+                        + "Please enter a number from 1 to 2.\n"
+                        + "Try: mark 1");
     }
 
     @Test
@@ -271,18 +271,6 @@ public class CommandParserTest {
                 TianyiException.class, () -> parser.parse(input, tasks));
 
         assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    /**
-     * Captures command responses without writing to standard output.
-     */
-    private static class TestUi extends Ui {
-        private String response;
-
-        @Override
-        public void showResponse(String response) {
-            this.response = response;
-        }
     }
 
     /**

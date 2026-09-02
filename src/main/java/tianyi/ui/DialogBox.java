@@ -49,13 +49,40 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /**
+     * Creates a dialog box for a user message.
+     *
+     * @param text Message text.
+     * @param img User display image.
+     * @return Dialog box aligned for the user.
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Creates a dialog box for a Tianyi response.
+     *
+     * @param text Response text.
+     * @param img Tianyi display image.
+     * @return Dialog box aligned for Tianyi.
+     */
     public static DialogBox getTianyiDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
         return db;
+    }
+
+    /**
+     * Creates a Tianyi dialog box styled for displaying the welcome banner.
+     *
+     * @param text Welcome message text.
+     * @param img Tianyi display image.
+     * @return Dialog box with monospaced banner styling.
+     */
+    public static DialogBox getWelcomeDialog(String text, Image img) {
+        DialogBox dialogBox = getTianyiDialog(text, img);
+        dialogBox.dialog.getStyleClass().add("welcome-label");
+        return dialogBox;
     }
 }

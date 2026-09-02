@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import tianyi.ui.MainWindow;
 
 /**
@@ -26,9 +25,9 @@ public class Main extends Application {
             Scene scene = new Scene(ap);
             stage.setScene(scene);
             stage.setMinHeight(220);
-            stage.setMinWidth(417);
-            // stage.setMaxWidth(417); // Add this if you didn't automatically resize elements
-            fxmlLoader.<MainWindow>getController().setTianyi(tianyi);  // inject the Tianyi instance
+            stage.setMinWidth(500);
+            fxmlLoader.<MainWindow>getController().setTianyi(tianyi);
+            stage.setTitle("Tianyi");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

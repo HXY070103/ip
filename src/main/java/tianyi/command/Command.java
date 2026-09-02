@@ -3,7 +3,6 @@ package tianyi.command;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
-import tianyi.ui.Ui;
 
 /**
  * Represents an executable command issued by the user.
@@ -16,14 +15,14 @@ public abstract class Command {
     }
 
     /**
-     * Applies this command to the task list and displays its result.
+     * Applies this command to the task list and returns its result.
      *
      * @param tasks Task list on which the command operates.
-     * @param ui User interface used to display feedback.
      * @param storage Storage used to persist task changes.
+     * @return Response describing the command result.
      * @throws TianyiException If the command cannot be completed.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage)
+    public abstract String execute(TaskList tasks, Storage storage)
             throws TianyiException;
 
     /**

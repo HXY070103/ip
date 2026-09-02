@@ -4,6 +4,7 @@
     -fx-border-width: 2px;
     -fx-background-radius: 1em 1em 0 1em;
     -fx-border-radius: 1em 1em 0 1em;
+    -fx-font: italic bold 16px "Arial";
     -fx-text-fill: #7f1d1d;
 }
 
@@ -13,6 +14,10 @@
     -fx-background-radius: 1em 1em 1em 0;
     -fx-border-radius: 1em 1em 1em 0;
     -fx-text-fill: #0b2e4f;
+}
+
+.welcome-label {
+    -fx-font: bold 16px "Monospaced";
 }
 
 #displayPicture {
