@@ -39,6 +39,10 @@ public class Tianyi {
         tasks = loadedTasks;
     }
 
+    public String getResponse(String input) {
+        return "";
+    }
+
     /**
      * Starts the command loop and processes input until the user exits or input ends.
      */
