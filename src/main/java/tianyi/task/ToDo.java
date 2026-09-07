@@ -5,6 +5,11 @@ package tianyi.task;
  */
 public class ToDo extends Task {
     /**
+     * Storage and display marker identifying a todo.
+     */
+    public static final String TYPE_MARKER = "T";
+
+    /**
      * Creates an incomplete todo with the specified description.
      *
      * @param description Description of the todo.
@@ -20,7 +25,7 @@ public class ToDo extends Task {
      */
     @Override
     public String getData() {
-        return "T | " + super.getData();
+        return TYPE_MARKER + DATA_SEPARATOR + super.getData();
     }
 
     /**
@@ -30,6 +35,6 @@ public class ToDo extends Task {
      */
     @Override
     public String toString() {
-        return "[T]" + super.toString();
+        return "[" + TYPE_MARKER + "]" + super.toString();
     }
 }

@@ -4,6 +4,11 @@ package tianyi.task;
  * Represents a task that must be completed by a specific date and optional time.
  */
 public class Deadline extends Task {
+    /**
+     * Storage and display marker identifying a deadline.
+     */
+    public static final String TYPE_MARKER = "D";
+
     private final TaskTime deadline;
 
     /**
@@ -36,7 +41,8 @@ public class Deadline extends Task {
      */
     @Override
     public String getData() {
-        return "D | " + super.getData() + " | " + deadline.getData();
+        return TYPE_MARKER + DATA_SEPARATOR + super.getData()
+                + DATA_SEPARATOR + deadline.getData();
     }
 
     /**
@@ -46,6 +52,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + deadline + ")";
+        return "[" + TYPE_MARKER + "]" + super.toString() + " (by: " + deadline + ")";
     }
 }

@@ -10,6 +10,11 @@ import java.util.Locale;
  * Represents a required task date with an optional time.
  */
 public class TaskTime {
+    private static final int DATE_TIME_PART_INDEX_DATE = 0;
+    private static final int DATE_TIME_PART_INDEX_TIME = 1;
+    private static final int DATE_TIME_PART_COUNT_DATE_ONLY = 1;
+    private static final int DATE_TIME_PART_COUNT_MAXIMUM = 2;
+
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("d-M-uuuu").withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter TIME_FORMAT =
@@ -31,14 +36,14 @@ public class TaskTime {
      * @throws java.time.format.DateTimeParseException If the date or time is invalid.
      */
     public TaskTime(String input) {
-        String[] dateTimeParts = input.trim().split("\\s+", 2);
-        date = LocalDate.parse(dateTimeParts[0], DATE_FORMAT);
+        String[] dateTimeParts = input.trim().split("\\s+", DATE_TIME_PART_COUNT_MAXIMUM);
+        date = LocalDate.parse(dateTimeParts[DATE_TIME_PART_INDEX_DATE], DATE_FORMAT);
 
-        if (dateTimeParts.length == 1) {
+        if (dateTimeParts.length == DATE_TIME_PART_COUNT_DATE_ONLY) {
             time = null;
             hasTime = false;
         } else {
-            time = LocalTime.parse(dateTimeParts[1], TIME_FORMAT);
+            time = LocalTime.parse(dateTimeParts[DATE_TIME_PART_INDEX_TIME], TIME_FORMAT);
             hasTime = true;
         }
 

@@ -3,21 +3,26 @@ package tianyi.command;
 import java.time.format.DateTimeParseException;
 
 import tianyi.TianyiException;
-import tianyi.task.Deadline;
-import tianyi.task.Event;
-import tianyi.task.Task;
 import tianyi.task.TaskList;
 import tianyi.task.TaskTime;
-import tianyi.task.ToDo;
 
 /**
  * Parses user input into commands with appropriately typed arguments.
  */
 public class CommandParser {
+    private static final int INPUT_PART_INDEX_COMMAND = 0;
+    private static final int INPUT_PART_INDEX_ARGUMENT = 1;
+    private static final int INPUT_PART_COUNT_EXPECTED = 2;
+
+    private static final int TASK_NUMBER_FIRST = 1;
+
+    private final TaskParser taskParser;
+
     /**
      * Creates a parser for supported Tianyi commands.
      */
     public CommandParser() {
+        taskParser = new TaskParser();
     }
 
     /**
@@ -30,148 +35,26 @@ public class CommandParser {
      */
     public Command parse(String input, TaskList tasks)
             throws TianyiException {
-        String[] inputParts = input.trim().split("\\s+", 2);
+        String[] inputParts = input.trim().split("\\s+", INPUT_PART_COUNT_EXPECTED);
 
-        CommandType type = CommandType.from(inputParts[0]);
-        String argument = inputParts.length == 2
-                ? inputParts[1].trim()
+        CommandType type = CommandType.from(inputParts[INPUT_PART_INDEX_COMMAND]);
+        String argument = inputParts.length == INPUT_PART_COUNT_EXPECTED
+                ? inputParts[INPUT_PART_INDEX_ARGUMENT].trim()
                 : "";
         String example = type.getExample();
 
-        switch (type) {
-            case TODO, DEADLINE, EVENT:
-                return new AddCommand(parseTask(type, argument, example));
-            case MARK:
-                return new MarkCommand(parseIndex(argument, example, tasks));
-            case UNMARK:
-                return new UnmarkCommand(parseIndex(argument, example, tasks));
-            case DELETE:
-                return new DeleteCommand(parseIndex(argument, example, tasks));
-            case LIST:
-                return new ListCommand(parseListDate(argument, example));
-            case FIND:
-                validateFindKeyword(argument, example);
-                return new FindCommand(argument);
-            case BYE:
+        return switch (type) {
+            case TODO, DEADLINE, EVENT -> new AddCommand(taskParser.parse(type, argument));
+            case MARK -> new MarkCommand(parseIndex(argument, example, tasks));
+            case UNMARK -> new UnmarkCommand(parseIndex(argument, example, tasks));
+            case DELETE -> new DeleteCommand(parseIndex(argument, example, tasks));
+            case LIST -> new ListCommand(parseListDate(argument, example));
+            case FIND -> new FindCommand(parseFindKeyword(argument, example));
+            case BYE -> {
                 validateNoArgument(argument, example);
-                return new ExitCommand();
-            default:
-                throw new TianyiException("I'm sorry, but I don't know what that means.");
-        }
-    }
-
-    /**
-     * Parses the argument of a task-creation command.
-     */
-    private Task parseTask(CommandType type, String argument, String example)
-            throws TianyiException {
-        assert type == CommandType.TODO
-                || type == CommandType.DEADLINE
-                || type == CommandType.EVENT
-                : "parseTask should only receive task-creation command types";
-
-        if (argument.isBlank()) {
-            throw new TianyiException("The argument of " + type + " command cannot be empty.\n"
-                    + "Try: " + example);
-        }
-
-        switch (type) {
-            case TODO:
-                return new ToDo(argument);
-            case DEADLINE:
-                return createDeadline(argument, example);
-            case EVENT:
-                return createEvent(argument, example);
-            default:
-                throw new TianyiException("Command does not create a task: " + type);
-        }
-    }
-
-    /**
-     * Creates a deadline from its description and {@code /by} value.
-     */
-    private Task createDeadline(String argument, String example)
-            throws TianyiException {
-        String[] deadlineParts = argument.split("\\s*/by\\s*", 2);
-
-        if (deadlineParts.length < 2) {
-            throw new TianyiException("Deadline command must contain /by.\n"
-                    + "Try: " + example);
-        }
-
-        String description = getRequiredPart(
-                deadlineParts,
-                0,
-                "The description of deadline command cannot be empty.\n"
-                        + "Try: " + example
-        );
-        String byDateTime = getRequiredPart(
-                deadlineParts,
-                1,
-                "The by date of deadline command cannot be empty.\n"
-                        + "Try: " + example
-        );
-
-        try {
-            return new Deadline(description, new TaskTime(byDateTime));
-        } catch (DateTimeParseException e) {
-            throw new TianyiException("Invalid deadline date or time. "
-                    + "Please use d-M-yyyy with optional HH:mm.\n"
-                    + "Try: " + example);
-        }
-    }
-
-    /**
-     * Creates an event from its description, {@code /from}, and {@code /to} values.
-     */
-    private Task createEvent(String argument, String example)
-            throws TianyiException {
-        String[] eventParts = argument.split("\\s*/from\\s*", 2);
-
-        if (eventParts.length < 2) {
-            throw new TianyiException("Event command must contain /from.\n"
-                    + "Try: " + example);
-        }
-
-        String description = getRequiredPart(
-                eventParts,
-                0,
-                "The description of event command cannot be empty.\n"
-                        + "Try: " + example
-        );
-        String fromAndToTime = getRequiredPart(
-                eventParts,
-                1,
-                "Event command must contain /to.\n"
-                        + "Try: " + example
-        );
-        String[] timeParts = fromAndToTime.split("\\s*/to\\s*", 2);
-
-        if (timeParts.length < 2) {
-            throw new TianyiException("Event command must contain /to.\n"
-                    + "Try: " + example);
-        }
-
-        String fromTime = getRequiredPart(
-                timeParts,
-                0,
-                "The from date of event command cannot be empty.\n"
-                        + "Try: " + example
-        );
-        String toTime = getRequiredPart(
-                timeParts,
-                1,
-                "The to date of event command cannot be empty.\n"
-                        + "Try: " + example
-        );
-
-        try {
-            return new Event(description, new TaskTime(fromTime), new TaskTime(toTime));
-        } catch (DateTimeParseException e) {
-            throw new TianyiException("Invalid event date or time. "
-                    + "Please use d-M-yyyy with optional HH:mm.\n"
-                    + "Try: " + example);
-        }
+                yield new ExitCommand();
+            }
+        };
     }
 
     /**
@@ -199,14 +82,14 @@ public class CommandParser {
                     + "Try: " + example);
         }
 
-        if (taskNumber < 1 || taskNumber > tasks.size()) {
+        if (taskNumber < TASK_NUMBER_FIRST || taskNumber > tasks.size()) {
             throw new TianyiException(
                     "Task number " + taskNumber + " does not exist.\n"
-                            + "Please enter a number from 1 to " + tasks.size() + ".\n"
+                            + "Please enter a number from " + TASK_NUMBER_FIRST + " to " + tasks.size() + ".\n"
                             + "Try: " + example);
         }
 
-        int index = taskNumber - 1;
+        int index = taskNumber - TASK_NUMBER_FIRST;
 
         assert index >= 0 && index < tasks.size()
                 : "Parsed task index should be within the task list";
@@ -241,14 +124,23 @@ public class CommandParser {
     }
 
     /**
-     * Rejects a find command whose keyword is empty.
+     * Validates and returns the keyword supplied to a find command.
+     *
+     * @param argument Keyword supplied by the user.
+     * @param example Example included in the validation error.
+     * @return Validated keyword.
+     * @throws TianyiException If the keyword is blank.
      */
-    private void validateFindKeyword(String argument, String example)
+    private String parseFindKeyword(String argument, String example)
             throws TianyiException {
         if (argument.isBlank()) {
-            throw new TianyiException("The keyword of find command cannot be empty.\n"
-                    + "Try: " + example);
+            throw new TianyiException(
+                    "The keyword of find command cannot be empty.\n"
+                            + "Try: " + example
+            );
         }
+
+        return argument;
     }
 
     /**
@@ -260,17 +152,5 @@ public class CommandParser {
             throw new TianyiException("Bye command does not accept any arguments.\n"
                     + "Try: " + example);
         }
-    }
-
-    /**
-     * Extracts and validates one required component of a split argument.
-     */
-    private String getRequiredPart(String[] parts, int index, String errorMessage)
-            throws TianyiException {
-        if (index >= parts.length || parts[index].isBlank()) {
-            throw new TianyiException(errorMessage);
-        }
-
-        return parts[index].trim();
     }
 }

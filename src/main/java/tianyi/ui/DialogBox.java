@@ -32,12 +32,12 @@ public class DialogBox extends HBox {
      */
     private DialogBox(String text, Image image) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(DialogBox.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Unable to load the dialog box layout.", e);
         }
 
         dialog.setText(text);
@@ -62,7 +62,7 @@ public class DialogBox extends HBox {
      * @param image User display image.
      * @return Dialog box aligned for the user.
      */
-    public static DialogBox getUserDialog(String text, Image image) {
+    public static DialogBox createUserDialog(String text, Image image) {
         return new DialogBox(text, image);
     }
 
@@ -73,7 +73,7 @@ public class DialogBox extends HBox {
      * @param image Tianyi display image.
      * @return Dialog box aligned for Tianyi.
      */
-    public static DialogBox getTianyiDialog(String text, Image image) {
+    public static DialogBox createTianyiDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
         return dialogBox;
@@ -86,8 +86,8 @@ public class DialogBox extends HBox {
      * @param image Tianyi display image.
      * @return Dialog box with monospaced banner styling.
      */
-    public static DialogBox getWelcomeDialog(String text, Image image) {
-        DialogBox dialogBox = getTianyiDialog(text, image);
+    public static DialogBox createWelcomeDialog(String text, Image image) {
+        DialogBox dialogBox = createTianyiDialog(text, image);
         dialogBox.dialog.getStyleClass().add("welcome-label");
         return dialogBox;
     }
