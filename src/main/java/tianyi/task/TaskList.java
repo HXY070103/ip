@@ -73,8 +73,7 @@ public class TaskList {
      * @return Confirmation containing the removed task and updated count.
      */
     public String deleteTask(int index) {
-        Task task = tasks.get(index);
-        tasks.remove(index);
+        Task task = tasks.remove(index);
 
         return "Noted. I've removed this task:\n"
                 + "  " + task + "\n"

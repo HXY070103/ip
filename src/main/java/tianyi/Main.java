@@ -13,11 +13,10 @@ import tianyi.ui.MainWindow;
  * A GUI for Tianyi using FXML.
  */
 public class Main extends Application {
-    private static final String DATA_FILE_PATH = "Data/tianyi.txt";
     private static final double WINDOW_MIN_HEIGHT = 220;
     private static final double WINDOW_MIN_WIDTH = 500;
 
-    private final Tianyi tianyi = new Tianyi(DATA_FILE_PATH);
+    private final Tianyi tianyi = new Tianyi();
 
     /**
      * Creates the Tianyi JavaFX application.
@@ -38,7 +37,7 @@ public class Main extends Application {
             stage.setTitle("Tianyi");
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Unable to load the main window layout.", e);
         }
     }
 }

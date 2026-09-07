@@ -3,7 +3,6 @@ package tianyi.ui;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -28,14 +27,13 @@ public class MainWindow extends AnchorPane {
     private VBox dialogContainer;
     @FXML
     private TextField userInput;
-    @FXML
-    private Button sendButton;
 
     private Tianyi tianyi;
 
-    private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser-square.png"));
-    private final Image tianyiImage = new Image(
-            getClass().getResourceAsStream("/images/DaTianyi-square-v2.png"));
+    private final Image userImage =
+            new Image(getClass().getResourceAsStream("/images/DaUser-square.png"));
+    private final Image tianyiImage =
+            new Image(getClass().getResourceAsStream("/images/DaTianyi-square-v2.png"));
 
     /**
      * Creates the controller loaded by the main-window FXML file.
@@ -60,7 +58,7 @@ public class MainWindow extends AnchorPane {
         this.tianyi = tianyi;
 
         dialogContainer.getChildren().add(
-                DialogBox.getWelcomeDialog(tianyi.getWelcomeMessage(), tianyiImage));
+                DialogBox.createWelcomeDialog(tianyi.getWelcomeMessage(), tianyiImage));
     }
 
     /**
@@ -77,8 +75,8 @@ public class MainWindow extends AnchorPane {
 
         String response = tianyi.getResponse(input);
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getTianyiDialog(response, tianyiImage)
+                DialogBox.createUserDialog(input, userImage),
+                DialogBox.createTianyiDialog(response, tianyiImage)
         );
         userInput.clear();
 
