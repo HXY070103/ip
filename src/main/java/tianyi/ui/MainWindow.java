@@ -9,8 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import tianyi.Response;
 import tianyi.Tianyi;
-import tianyi.command.CommandType;
 
 /**
  * Controller for the main GUI.
@@ -73,14 +73,14 @@ public class MainWindow extends AnchorPane {
             return;
         }
 
-        String response = tianyi.getResponse(input);
+        Response response = tianyi.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.createUserDialog(input, userImage),
-                DialogBox.createTianyiDialog(response, tianyiImage)
+                DialogBox.createTianyiDialog(response.getMessage(), tianyiImage)
         );
         userInput.clear();
 
-        if (input.trim().equalsIgnoreCase(CommandType.BYE.toString())) {
+        if (response.isExit()) {
             PauseTransition exitDelay = new PauseTransition(EXIT_DELAY);
             exitDelay.setOnFinished(event -> Platform.exit());
             exitDelay.play();

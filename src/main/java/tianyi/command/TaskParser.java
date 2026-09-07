@@ -27,109 +27,117 @@ class TaskParser {
      */
     public Task parse(CommandType type, String argument)
             throws TianyiException {
-        String example = type.getExample();
-
         if (argument.isBlank()) {
-            throw new TianyiException("The argument of " + type + " command cannot be empty.\n"
-                    + "Try: " + example);
+            throw new TianyiException("The argument of " + type + " cannot be empty.\n"
+                    + "Try: " + type.getExample());
         }
 
         return switch (type) {
             case TODO -> new ToDo(argument);
-            case DEADLINE -> createDeadline(argument, example);
-            case EVENT -> createEvent(argument, example);
-            default -> throw new TianyiException("Command does not create a task: " + type);
+            case DEADLINE -> createDeadline(type, argument);
+            case EVENT -> createEvent(type, argument);
+            default -> throw new TianyiException(type + " does not create a task.");
         };
     }
 
     /**
      * Creates a deadline from its description and {@code /by} value.
+     *
+     * @param type Command type that supplies error context and example usage.
+     * @param argument Deadline details supplied by the user.
+     * @return Deadline represented by the command argument.
+     * @throws TianyiException If the deadline details are incomplete or invalid.
      */
-    private Task createDeadline(String argument, String example)
+    private Task createDeadline(CommandType type, String argument)
             throws TianyiException {
         String[] deadlineParts = argument.split("\\s*/by\\s*", PART_COUNT_EXPECTED);
 
         if (deadlineParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException("Deadline command must contain /by.\n"
-                    + "Try: " + example);
+            throw new TianyiException(type + " must contain /by.\n"
+                    + "Try: " + type.getExample());
         }
 
         String description = getRequiredPart(
                 deadlineParts,
                 PART_INDEX_FIRST,
-                "The description of deadline command cannot be empty.\n"
-                        + "Try: " + example
+                "The description of " + type + " cannot be empty.\n"
+                        + "Try: " + type.getExample()
         );
         String deadline = getRequiredPart(
                 deadlineParts,
                 PART_INDEX_SECOND,
-                "The by date of deadline command cannot be empty.\n"
-                        + "Try: " + example
+                "The by date of " + type + " cannot be empty.\n"
+                        + "Try: " + type.getExample()
         );
 
-        TaskTime deadlineTime = parseTaskTime(deadline, CommandType.DEADLINE);
+        TaskTime deadlineTime = parseTaskTime(type, deadline);
         return new Deadline(description, deadlineTime);
     }
 
     /**
      * Creates an event from its description, {@code /from}, and {@code /to} values.
+     *
+     * @param type Command type that supplies error context and example usage.
+     * @param argument Event details supplied by the user.
+     * @return Event represented by the command argument.
+     * @throws TianyiException If the event details are incomplete or invalid.
      */
-    private Task createEvent(String argument, String example)
+    private Task createEvent(CommandType type, String argument)
             throws TianyiException {
         String[] eventParts = argument.split("\\s*/from\\s*", PART_COUNT_EXPECTED);
 
         if (eventParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException("Event command must contain /from.\n"
-                    + "Try: " + example);
+            throw new TianyiException(type + " must contain /from.\n"
+                    + "Try: " + type.getExample());
         }
 
         String description = getRequiredPart(
                 eventParts,
                 PART_INDEX_FIRST,
-                "The description of event command cannot be empty.\n"
-                        + "Try: " + example
+                "The description of " + type + " cannot be empty.\n"
+                        + "Try: " + type.getExample()
         );
         String timeRange = getRequiredPart(
                 eventParts,
                 PART_INDEX_SECOND,
-                "Event command must contain /to.\n"
-                        + "Try: " + example
+                type + " must contain /to.\n"
+                        + "Try: " + type.getExample()
         );
 
         String[] timeParts = timeRange.split("\\s*/to\\s*", PART_COUNT_EXPECTED);
 
         if (timeParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException("Event command must contain /to.\n"
-                    + "Try: " + example);
+            throw new TianyiException(type + " must contain /to.\n"
+                    + "Try: " + type.getExample());
         }
 
         String fromTime = getRequiredPart(
                 timeParts,
                 PART_INDEX_FIRST,
-                "The from date of event command cannot be empty.\n"
-                        + "Try: " + example
+                "The from date of " + type + " cannot be empty.\n"
+                        + "Try: " + type.getExample()
         );
         String toTime = getRequiredPart(
                 timeParts,
                 PART_INDEX_SECOND,
-                "The to date of event command cannot be empty.\n"
-                        + "Try: " + example
+                "The to date of " + type + " cannot be empty.\n"
+                        + "Try: " + type.getExample()
         );
 
-        TaskTime startTime = parseTaskTime(fromTime, CommandType.EVENT);
-        TaskTime endTime = parseTaskTime(toTime, CommandType.EVENT);
+        TaskTime startTime = parseTaskTime(type, fromTime);
+        TaskTime endTime = parseTaskTime(type, toTime);
         return new Event(description, startTime, endTime);
     }
 
     /**
      * Parses a task date and converts format errors into command-specific errors.
      *
-     * @param input Date and optional time supplied by the user.
      * @param type Command type that supplies error context and example usage.
+     * @param input Date and optional time supplied by the user.
      * @return Parsed task date and optional time.
      * @throws TianyiException If the date or time has an invalid format.
      */
-    private TaskTime parseTaskTime(String input, CommandType type)
+    private TaskTime parseTaskTime(CommandType type, String input)
             throws TianyiException {
         try {
             return new TaskTime(input);
@@ -142,6 +150,12 @@ class TaskParser {
 
     /**
      * Extracts and validates one required component of a split argument.
+     *
+     * @param parts Argument components to inspect.
+     * @param index Index of the required component.
+     * @param errorMessage Message to report if the component is absent or blank.
+     * @return Trimmed required component.
+     * @throws TianyiException If the required component is absent or blank.
      */
     private String getRequiredPart(String[] parts, int index, String errorMessage)
             throws TianyiException {

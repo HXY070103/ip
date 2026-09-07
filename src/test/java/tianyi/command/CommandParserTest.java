@@ -125,6 +125,16 @@ public class CommandParserTest {
     }
 
     @Test
+    public void parse_helpCommand_returnsCommandDescriptions()
+            throws TianyiException {
+        TaskList tasks = new TaskList();
+
+        String response = parser.parse("help", tasks).execute(tasks, storage);
+
+        assertEquals(CommandType.getCommands(), response);
+    }
+
+    @Test
     public void parse_nonExitCommand_isExitReturnsFalse()
             throws TianyiException {
         Command command = parser.parse("list", new TaskList());
@@ -165,21 +175,27 @@ public class CommandParserTest {
     @Test
     public void parse_listWithInvalidDate_exceptionThrown() {
         assertParseFails("list 31-2-2019", new TaskList(),
-                "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
+                "Invalid [list] date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
         assertParseFails("list 2-12-2019 18:00", new TaskList(),
-                "Invalid list date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
+                "Invalid [list] date.\nPlease use d-M-yyyy.\nTry: list 2-12-2019");
     }
 
     @Test
     public void parse_byeWithArgument_exceptionThrown() {
         assertParseFails("bye now", new TaskList(),
-                "Bye command does not accept any arguments.\nTry: bye");
+                "[bye] does not accept any arguments.\nTry: bye");
+    }
+
+    @Test
+    public void parse_helpWithArgument_exceptionThrown() {
+        assertParseFails("help commands", new TaskList(),
+                "[help] does not accept any arguments.\nTry: help");
     }
 
     @Test
     public void parse_findWithoutKeyword_exceptionThrown() {
         assertParseFails("find", new TaskList(),
-                "The keyword of find command cannot be empty.\nTry: find book");
+                "The keyword of [find] cannot be empty.\nTry: find book");
     }
 
     @Test

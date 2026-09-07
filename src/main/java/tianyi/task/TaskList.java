@@ -155,6 +155,10 @@ public class TaskList {
 
     /**
      * Builds a numbered display string for a collection of tasks.
+     *
+     * @param indexedTasks Numbered tasks to display.
+     * @param heading Heading shown before non-empty task results.
+     * @return Formatted task results, or a message indicating that no tasks match.
      */
     private String formatTasks(List<IndexedTask> indexedTasks, String heading) {
         if (indexedTasks.isEmpty()) {
@@ -170,6 +174,8 @@ public class TaskList {
 
     /**
      * Returns all tasks paired with their current one-based task numbers.
+     *
+     * @return Numbered tasks in their current list order.
      */
     private List<IndexedTask> getIndexedTasks() {
         return IntStream.range(0, tasks.size())
