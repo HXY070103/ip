@@ -89,7 +89,12 @@ public class CommandParser {
                             + "Try: " + example);
         }
 
-        return taskNumber - TASK_NUMBER_FIRST;
+        int index = taskNumber - TASK_NUMBER_FIRST;
+
+        assert index >= 0 && index < tasks.size()
+                : "Parsed task index should be within the task list";
+
+        return index;
     }
 
     /**
