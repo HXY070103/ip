@@ -50,13 +50,13 @@ public class TaskParserTest {
     @Test
     public void parse_emptyArgument_exceptionThrown() {
         assertParseFails(CommandType.TODO, "",
-                "The argument of todo command cannot be empty.\n"
+                "The argument of [todo] cannot be empty.\n"
                         + "Try: todo borrow book");
         assertParseFails(CommandType.DEADLINE, "",
-                "The argument of deadline command cannot be empty.\n"
+                "The argument of [deadline] cannot be empty.\n"
                         + "Try: deadline return book /by 2-12-2019 18:00");
         assertParseFails(CommandType.EVENT, "",
-                "The argument of event command cannot be empty.\n"
+                "The argument of [event] cannot be empty.\n"
                         + "Try: event meeting /from 2-12-2019 14:00 "
                         + "/to 2-12-2019 16:00");
     }
@@ -66,13 +66,13 @@ public class TaskParserTest {
         String example = "Try: deadline return book /by 2-12-2019 18:00";
 
         assertParseFails(CommandType.DEADLINE, "return book",
-                "Deadline command must contain /by.\n" + example);
+                "[deadline] must contain /by.\n" + example);
         assertParseFails(CommandType.DEADLINE, "/by 2-12-2019",
-                "The description of deadline command cannot be empty.\n" + example);
+                "The description of [deadline] cannot be empty.\n" + example);
         assertParseFails(CommandType.DEADLINE, "return book /by",
-                "The by date of deadline command cannot be empty.\n" + example);
+                "The by date of [deadline] cannot be empty.\n" + example);
         assertParseFails(CommandType.DEADLINE, "return book /by 31-2-2019",
-                "Invalid deadline date or time. "
+                "Invalid [deadline] date or time. "
                         + "Please use d-M-yyyy with optional HH:mm.\n" + example);
     }
 
@@ -81,24 +81,24 @@ public class TaskParserTest {
         String example = "Try: event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00";
 
         assertParseFails(CommandType.EVENT, "meeting",
-                "Event command must contain /from.\n" + example);
+                "[event] must contain /from.\n" + example);
         assertParseFails(CommandType.EVENT, "/from 2-12-2019 /to 3-12-2019",
-                "The description of event command cannot be empty.\n" + example);
+                "The description of [event] cannot be empty.\n" + example);
         assertParseFails(CommandType.EVENT, "meeting /from",
-                "Event command must contain /to.\n" + example);
+                "[event] must contain /to.\n" + example);
         assertParseFails(CommandType.EVENT, "meeting /from /to 3-12-2019",
-                "The from date of event command cannot be empty.\n" + example);
+                "The from date of [event] cannot be empty.\n" + example);
         assertParseFails(CommandType.EVENT, "meeting /from 2-12-2019 /to",
-                "The to date of event command cannot be empty.\n" + example);
+                "The to date of [event] cannot be empty.\n" + example);
         assertParseFails(CommandType.EVENT, "meeting /from invalid /to 3-12-2019",
-                "Invalid event date or time. "
+                "Invalid [event] date or time. "
                         + "Please use d-M-yyyy with optional HH:mm.\n" + example);
     }
 
     @Test
     public void parse_nonTaskCommand_exceptionThrown() {
         assertParseFails(CommandType.LIST, "2-12-2019",
-                "Command does not create a task: list");
+                "[list] does not create a task.");
     }
 
     private void assertParseFails(CommandType type, String argument, String expectedMessage) {

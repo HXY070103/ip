@@ -1,6 +1,7 @@
 package tianyi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -143,32 +144,36 @@ public class TianyiTest {
     public void getResponse_addThenList_returnsResponsesAndKeepsState() {
         Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
 
-        String addResponse = tianyi.getResponse("todo read book");
-        String listResponse = tianyi.getResponse("list");
+        Response addResponse = tianyi.getResponse("todo read book");
+        Response listResponse = tianyi.getResponse("list");
 
         assertEquals("Got it. I've added this task:\n"
                 + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", addResponse);
+                + "Now you have 1 tasks in the list.", addResponse.getMessage());
         assertEquals("Here are the tasks in your list:\n"
-                + "1.[T][ ] read book", listResponse);
+                + "1.[T][ ] read book", listResponse.getMessage());
+        assertFalse(addResponse.isExit());
+        assertFalse(listResponse.isExit());
     }
 
     @Test
     public void getResponse_unknownCommand_returnsFormattedError() {
         Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
 
-        String response = tianyi.getResponse("abracadabra");
+        Response response = tianyi.getResponse("abracadabra");
 
-        assertEquals("Oops! I'm sorry, but I don't know what that means.", response);
+        assertEquals("Oops! I'm sorry, but I don't know what that means.", response.getMessage());
+        assertFalse(response.isExit());
     }
 
     @Test
     public void getResponse_blankInput_returnsEmptyString() {
         Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
 
-        String response = tianyi.getResponse("   ");
+        Response response = tianyi.getResponse("   ");
 
-        assertEquals("", response);
+        assertEquals("", response.getMessage());
+        assertFalse(response.isExit());
     }
 
     @Test
@@ -185,11 +190,22 @@ public class TianyiTest {
         Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
         tianyi.getResponse("todo read book");
 
-        String response = tianyi.getResponse("mark 2");
+        Response response = tianyi.getResponse("mark 2");
 
         assertEquals("Oops! Task number 2 does not exist.\n"
                 + "Please enter a number from 1 to 1.\n"
-                + "Try: mark 1", response);
+                + "Try: mark 1", response.getMessage());
+        assertFalse(response.isExit());
+    }
+
+    @Test
+    public void getResponse_byeCommand_returnsExitResponse() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        Response response = tianyi.getResponse("bye");
+
+        assertEquals("Bye. Hope to see you again soon!", response.getMessage());
+        assertTrue(response.isExit());
     }
 
     private Tianyi createTianyi(String input, Path dataFile) {

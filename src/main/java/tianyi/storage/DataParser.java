@@ -58,6 +58,11 @@ public class DataParser {
 
     /**
      * Parses a serialized todo record after validating its field count.
+     *
+     * @param dataParts Fields parsed from the serialized record.
+     * @param data Original serialized record used in error messages.
+     * @return Todo represented by the serialized record.
+     * @throws StorageException If the record has an invalid field count.
      */
     private Task createTodo(String[] dataParts, String data)
             throws StorageException {
@@ -70,6 +75,11 @@ public class DataParser {
 
     /**
      * Parses a serialized deadline record after validating its fields.
+     *
+     * @param dataParts Fields parsed from the serialized record.
+     * @param data Original serialized record used in error messages.
+     * @return Deadline represented by the serialized record.
+     * @throws StorageException If the record has invalid fields or date values.
      */
     private Task createDeadline(String[] dataParts, String data)
             throws StorageException {
@@ -90,6 +100,11 @@ public class DataParser {
 
     /**
      * Parses a serialized event record after validating its fields.
+     *
+     * @param dataParts Fields parsed from the serialized record.
+     * @param data Original serialized record used in error messages.
+     * @return Event represented by the serialized record.
+     * @throws StorageException If the record has invalid fields or date values.
      */
     private Task createEvent(String[] dataParts, String data)
             throws StorageException {
@@ -110,6 +125,10 @@ public class DataParser {
 
     /**
      * Restores a task's completion status from its serialized flag.
+     *
+     * @param task Task whose completion status is restored.
+     * @param status Serialized completion-status flag.
+     * @throws StorageException If the status flag is invalid.
      */
     private void updateStatus(Task task, String status)
             throws StorageException {

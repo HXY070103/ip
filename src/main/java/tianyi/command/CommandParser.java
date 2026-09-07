@@ -41,17 +41,20 @@ public class CommandParser {
         String argument = inputParts.length == INPUT_PART_COUNT_EXPECTED
                 ? inputParts[INPUT_PART_INDEX_ARGUMENT].trim()
                 : "";
-        String example = type.getExample();
 
         return switch (type) {
             case TODO, DEADLINE, EVENT -> new AddCommand(taskParser.parse(type, argument));
-            case MARK -> new MarkCommand(parseIndex(argument, example, tasks));
-            case UNMARK -> new UnmarkCommand(parseIndex(argument, example, tasks));
-            case DELETE -> new DeleteCommand(parseIndex(argument, example, tasks));
-            case LIST -> new ListCommand(parseListDate(argument, example));
-            case FIND -> new FindCommand(parseFindKeyword(argument, example));
+            case MARK -> new MarkCommand(parseIndex(type, argument, tasks));
+            case UNMARK -> new UnmarkCommand(parseIndex(type, argument, tasks));
+            case DELETE -> new DeleteCommand(parseIndex(type, argument, tasks));
+            case LIST -> new ListCommand(parseListDate(type, argument));
+            case FIND -> new FindCommand(parseFindKeyword(type, argument));
+            case HELP -> {
+                validateNoArgument(type, argument);
+                yield new HelpCommand();
+            }
             case BYE -> {
-                validateNoArgument(argument, example);
+                validateNoArgument(type, argument);
                 yield new ExitCommand();
             }
         };
@@ -59,12 +62,18 @@ public class CommandParser {
 
     /**
      * Converts a user-facing task number into a validated zero-based index.
+     *
+     * @param type Command type that supplies the example usage.
+     * @param argument Task number supplied by the user.
+     * @param tasks Current task list, used to validate the task number.
+     * @return Validated zero-based task index.
+     * @throws TianyiException If the task number is missing or invalid.
      */
-    private int parseIndex(String argument, String example, TaskList tasks)
+    private int parseIndex(CommandType type, String argument, TaskList tasks)
             throws TianyiException {
         if (argument.isBlank()) {
             throw new TianyiException("Please specify a task number.\n"
-                    + "Try: " + example);
+                    + "Try: " + type.getExample());
         }
 
         if (tasks.isEmpty()) {
@@ -79,14 +88,14 @@ public class CommandParser {
             taskNumber = Integer.parseInt(argument);
         } catch (NumberFormatException e) {
             throw new TianyiException(argument + " is not a valid task number.\n"
-                    + "Try: " + example);
+                    + "Try: " + type.getExample());
         }
 
         if (taskNumber < TASK_NUMBER_FIRST || taskNumber > tasks.size()) {
             throw new TianyiException(
                     "Task number " + taskNumber + " does not exist.\n"
                             + "Please enter a number from " + TASK_NUMBER_FIRST + " to " + tasks.size() + ".\n"
-                            + "Try: " + example);
+                            + "Try: " + type.getExample());
         }
 
         int index = taskNumber - TASK_NUMBER_FIRST;
@@ -99,8 +108,13 @@ public class CommandParser {
 
     /**
      * Parses the optional date accepted by the list command.
+     *
+     * @param type Command type that supplies error context and example usage.
+     * @param argument Optional date supplied by the user.
+     * @return Parsed date, or {@code null} when no date is supplied.
+     * @throws TianyiException If the date is invalid or includes a time.
      */
-    private TaskTime parseListDate(String argument, String example)
+    private TaskTime parseListDate(CommandType type, String argument)
             throws TianyiException {
         if (argument.isBlank()) {
             return null;
@@ -110,33 +124,33 @@ public class CommandParser {
             TaskTime time = new TaskTime(argument);
 
             if (time.hasTime()) {
-                throw new TianyiException("Invalid list date.\n"
+                throw new TianyiException("Invalid " + type + " date.\n"
                         + "Please use d-M-yyyy.\n"
-                        + "Try: " + example);
+                        + "Try: " + type.getExample());
             }
 
             return time;
         } catch (DateTimeParseException e) {
-            throw new TianyiException("Invalid list date.\n"
+            throw new TianyiException("Invalid " + type + " date.\n"
                     + "Please use d-M-yyyy.\n"
-                    + "Try: " + example);
+                    + "Try: " + type.getExample());
         }
     }
 
     /**
      * Validates and returns the keyword supplied to a find command.
      *
+     * @param type Command type that supplies error context and example usage.
      * @param argument Keyword supplied by the user.
-     * @param example Example included in the validation error.
      * @return Validated keyword.
      * @throws TianyiException If the keyword is blank.
      */
-    private String parseFindKeyword(String argument, String example)
+    private String parseFindKeyword(CommandType type, String argument)
             throws TianyiException {
         if (argument.isBlank()) {
             throw new TianyiException(
-                    "The keyword of find command cannot be empty.\n"
-                            + "Try: " + example
+                    "The keyword of " + type + " cannot be empty.\n"
+                            + "Try: " + type.getExample()
             );
         }
 
@@ -145,12 +159,16 @@ public class CommandParser {
 
     /**
      * Rejects unexpected arguments for commands that accept none.
+     *
+     * @param type Command type that supplies error context and example usage.
+     * @param argument Unexpected argument supplied by the user.
+     * @throws TianyiException If an argument is present.
      */
-    private void validateNoArgument(String argument, String example)
+    private void validateNoArgument(CommandType type, String argument)
             throws TianyiException {
         if (!argument.isBlank()) {
-            throw new TianyiException("Bye command does not accept any arguments.\n"
-                    + "Try: " + example);
+            throw new TianyiException(type + " does not accept any arguments.\n"
+                    + "Try: " + type.getExample());
         }
     }
 }

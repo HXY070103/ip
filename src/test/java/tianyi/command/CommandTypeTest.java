@@ -3,6 +3,7 @@ package tianyi.command;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,12 +28,18 @@ public class CommandTypeTest {
         assertSame(CommandType.UNMARK, CommandType.from("unmark"));
         assertSame(CommandType.DELETE, CommandType.from("delete"));
         assertSame(CommandType.FIND, CommandType.from("find"));
+        assertSame(CommandType.HELP, CommandType.from("help"));
     }
 
     @Test
     public void from_mixedCaseKeyword_returnsMatchingCommandType()
             throws TianyiException {
         assertSame(CommandType.TODO, CommandType.from("ToDo"));
+    }
+
+    @Test
+    public void toString_byeType_returnsDisplayForm() {
+        assertEquals("[bye]", CommandType.BYE.toString());
     }
 
     @Test
@@ -49,5 +56,15 @@ public class CommandTypeTest {
                 TianyiException.class, () -> CommandType.from("abracadabra"));
 
         assertEquals(UNKNOWN_COMMAND_MESSAGE, exception.getMessage());
+    }
+
+    @Test
+    public void getCommands_allCommandTypes_returnsDescriptionsAndExamples() {
+        String commands = CommandType.getCommands();
+
+        for (CommandType type : CommandType.values()) {
+            assertTrue(commands.contains(type.toString()));
+            assertTrue(commands.contains("Example: " + type.getExample()));
+        }
     }
 }
