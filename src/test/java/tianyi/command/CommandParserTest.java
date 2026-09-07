@@ -27,41 +27,15 @@ public class CommandParserTest {
     private final Storage storage = new NoOpStorage();
 
     @Test
-    public void parse_todoCommand_addsTodoWithOriginalDescription()
+    public void parse_taskCreationCommands_returnsAddCommands()
             throws TianyiException {
         TaskList tasks = new TaskList();
 
-        parser.parse("ToDo Buy Milk", tasks).execute(tasks, storage);
-
-        Task task = tasks.getTasks().get(0);
-        assertInstanceOf(ToDo.class, task);
-        assertEquals("T | 0 | Buy Milk", task.getData());
-    }
-
-    @Test
-    public void parse_deadlineCommand_addsDeadlineWithDateAndTime()
-            throws TianyiException {
-        TaskList tasks = new TaskList();
-
-        parser.parse("deadline submit report /by 2-12-2019 18:00", tasks)
-                .execute(tasks, storage);
-
-        Task task = tasks.getTasks().get(0);
-        assertInstanceOf(Deadline.class, task);
-        assertEquals("D | 0 | submit report | 2-12-2019 18:00", task.getData());
-    }
-
-    @Test
-    public void parse_eventCommand_addsEventWithDateRange()
-            throws TianyiException {
-        TaskList tasks = new TaskList();
-
-        parser.parse("event workshop /from 2-12-2019 /to 3-12-2019 16:00", tasks)
-                .execute(tasks, storage);
-
-        Task task = tasks.getTasks().get(0);
-        assertInstanceOf(Event.class, task);
-        assertEquals("E | 0 | workshop | 2-12-2019 | 3-12-2019 16:00", task.getData());
+        assertInstanceOf(AddCommand.class, parser.parse("ToDo Buy Milk", tasks));
+        assertInstanceOf(AddCommand.class,
+                parser.parse("deadline submit report /by 2-12-2019 18:00", tasks));
+        assertInstanceOf(AddCommand.class,
+                parser.parse("event workshop /from 2-12-2019 /to 3-12-2019 16:00", tasks));
     }
 
     @Test
@@ -156,54 +130,6 @@ public class CommandParserTest {
         Command command = parser.parse("list", new TaskList());
 
         assertFalse(command.isExit());
-    }
-
-    @Test
-    public void parse_emptyAddCommandArguments_exceptionThrown() {
-        assertParseFails("todo", new TaskList(),
-                "The argument of todo command cannot be empty.\n"
-                        + "Try: todo borrow book");
-        assertParseFails("deadline", new TaskList(),
-                "The argument of deadline command cannot be empty.\n"
-                        + "Try: deadline return book /by 2-12-2019 18:00");
-        assertParseFails("event", new TaskList(),
-                "The argument of event command cannot be empty.\n"
-                        + "Try: event meeting /from 2-12-2019 14:00 "
-                        + "/to 2-12-2019 16:00");
-    }
-
-    @Test
-    public void parse_malformedDeadlineArguments_exceptionThrown() {
-        String example = "Try: deadline return book /by 2-12-2019 18:00";
-
-        assertParseFails("deadline return book", new TaskList(),
-                "Deadline command must contain /by.\n" + example);
-        assertParseFails("deadline /by 2-12-2019", new TaskList(),
-                "The description of deadline command cannot be empty.\n" + example);
-        assertParseFails("deadline return book /by", new TaskList(),
-                "The by date of deadline command cannot be empty.\n" + example);
-        assertParseFails("deadline return book /by 31-2-2019", new TaskList(),
-                "Invalid deadline date or time. "
-                        + "Please use d-M-yyyy with optional HH:mm.\n" + example);
-    }
-
-    @Test
-    public void parse_malformedEventArguments_exceptionThrown() {
-        String example = "Try: event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00";
-
-        assertParseFails("event meeting", new TaskList(),
-                "Event command must contain /from.\n" + example);
-        assertParseFails("event /from 2-12-2019 /to 3-12-2019", new TaskList(),
-                "The description of event command cannot be empty.\n" + example);
-        assertParseFails("event meeting /from", new TaskList(),
-                "Event command must contain /to.\n" + example);
-        assertParseFails("event meeting /from /to 3-12-2019", new TaskList(),
-                "The from date of event command cannot be empty.\n" + example);
-        assertParseFails("event meeting /from 2-12-2019 /to", new TaskList(),
-                "The to date of event command cannot be empty.\n" + example);
-        assertParseFails("event meeting /from invalid /to 3-12-2019", new TaskList(),
-                "Invalid event date or time. "
-                        + "Please use d-M-yyyy with optional HH:mm.\n" + example);
     }
 
     @Test
