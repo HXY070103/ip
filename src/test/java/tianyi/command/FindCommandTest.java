@@ -30,7 +30,7 @@ public class FindCommandTest {
 
         assertEquals("Here are the matching tasks in your list:\n"
                 + "1.[T][ ] read book\n"
-                + "2.[T][ ] return book", response);
+                + "3.[T][ ] return book", response);
         assertNull(storage.savedTasks);
     }
 

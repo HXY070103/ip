@@ -628,8 +628,8 @@ Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case ru
         "____________________________________________________________",
         "____________________________________________________________",
         "Here are deadlines/events occurring on 2-12-2019:",
-        "1.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)",
-        "2.[E][ ] workshop (from: Mon, Dec 02 2019 to: Tue, Dec 03 2019, 4:00 PM)",
+        "2.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)",
+        "3.[E][ ] workshop (from: Mon, Dec 02 2019 to: Tue, Dec 03 2019, 4:00 PM)",
         "____________________________________________________________",
         "____________________________________________________________",
         "No tasks found.",
@@ -660,8 +660,9 @@ Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case ru
       "inputs": [
         "todo read book",
         "mark 1",
+        "todo buy milk",
         "deadline return book /by 6-6-2026",
-        "mark 2",
+        "mark 3",
         "find book"
       ],
       "expected_output": [
@@ -686,8 +687,13 @@ Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case ru
         "____________________________________________________________",
         "____________________________________________________________",
         "Got it. I've added this task:",
-        "  [D][ ] return book (by: Sat, Jun 06 2026)",
+        "  [T][ ] buy milk",
         "Now you have 2 tasks in the list.",
+        "____________________________________________________________",
+        "____________________________________________________________",
+        "Got it. I've added this task:",
+        "  [D][ ] return book (by: Sat, Jun 06 2026)",
+        "Now you have 3 tasks in the list.",
         "____________________________________________________________",
         "____________________________________________________________",
         "Nice! I've marked this task as done:",
@@ -696,7 +702,7 @@ Each test case starts a fresh `tianyi.Tianyi` process. Inputs within one case ru
         "____________________________________________________________",
         "Here are the matching tasks in your list:",
         "1.[T][X] read book",
-        "2.[D][X] return book (by: Sat, Jun 06 2026)",
+        "3.[D][X] return book (by: Sat, Jun 06 2026)",
         "____________________________________________________________"
       ]
     },

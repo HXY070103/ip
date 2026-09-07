@@ -121,8 +121,8 @@ public class CommandParserTest {
         String response = parser.parse("list 2-12-2019", tasks).execute(tasks, storage);
 
         assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
-                + "1.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)\n"
-                + "2.[E][ ] workshop (from: Mon, Dec 02 2019 "
+                + "2.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)\n"
+                + "3.[E][ ] workshop (from: Mon, Dec 02 2019 "
                 + "to: Tue, Dec 03 2019, 4:00 PM)", response);
     }
 
@@ -138,7 +138,7 @@ public class CommandParserTest {
 
         assertEquals("Here are the matching tasks in your list:\n"
                 + "1.[T][ ] read book\n"
-                + "2.[T][ ] return book", response);
+                + "3.[T][ ] return book", response);
     }
 
     @Test

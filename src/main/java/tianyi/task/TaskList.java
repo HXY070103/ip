@@ -2,6 +2,8 @@ package tianyi.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Stores tasks and provides operations for managing and displaying them.
@@ -115,7 +117,7 @@ public class TaskList {
      * @return Numbered task list, or a message indicating that no tasks exist.
      */
     public String listTasks() {
-        return formatTasks(tasks, "Here are the tasks in your list:");
+        return formatTasks(getIndexedTasks(), "Here are the tasks in your list:");
     }
 
     /**
@@ -125,13 +127,9 @@ public class TaskList {
      * @return Numbered matching tasks, or a message indicating that none match.
      */
     public String listTasks(TaskTime time) {
-        List<Task> occurringTasks = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task.isOccurringOn(time)) {
-                occurringTasks.add(task);
-            }
-        }
+        List<IndexedTask> occurringTasks = getIndexedTasks().stream()
+                .filter(indexedTask -> indexedTask.getTask().isOccurringOn(time))
+                .toList();
 
         return formatTasks(
                 occurringTasks,
@@ -146,13 +144,9 @@ public class TaskList {
      * @return Numbered matching tasks, or a message indicating that none match.
      */
     public String listTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task.matchesKeyword(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
+        List<IndexedTask> matchingTasks = getIndexedTasks().stream()
+                .filter(indexedTask -> indexedTask.getTask().matchesKeyword(keyword))
+                .toList();
 
         return formatTasks(
                 matchingTasks,
@@ -163,21 +157,24 @@ public class TaskList {
     /**
      * Builds a numbered display string for a collection of tasks.
      */
-    private String formatTasks(List<Task> tasksToDisplay, String heading) {
-        if (tasksToDisplay.isEmpty()) {
+    private String formatTasks(List<IndexedTask> indexedTasks, String heading) {
+        if (indexedTasks.isEmpty()) {
             return "No tasks found.";
         }
 
-        StringBuilder content = new StringBuilder(heading).append("\n");
+        String formattedTasks = indexedTasks.stream()
+                .map(IndexedTask::toString)
+                .collect(Collectors.joining("\n"));
 
-        for (int i = 0; i < tasksToDisplay.size(); i += 1) {
-            content.append(i + 1).append(".").append(tasksToDisplay.get(i));
+        return heading + "\n" + formattedTasks;
+    }
 
-            if (i < tasksToDisplay.size() - 1) {
-                content.append("\n");
-            }
-        }
-
-        return content.toString();
+    /**
+     * Returns all tasks paired with their current one-based task numbers.
+     */
+    private List<IndexedTask> getIndexedTasks() {
+        return IntStream.range(0, tasks.size())
+                .mapToObj(index -> new IndexedTask(index + 1, tasks.get(index)))
+                .toList();
     }
 }
