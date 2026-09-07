@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tianyi.Tianyi;
+import tianyi.command.CommandType;
 
 /**
  * Controller for the main GUI.
@@ -81,7 +82,7 @@ public class MainWindow extends AnchorPane {
         );
         userInput.clear();
 
-        if (input.trim().equalsIgnoreCase("bye")) {
+        if (input.trim().equalsIgnoreCase(CommandType.BYE.toString())) {
             PauseTransition exitDelay = new PauseTransition(EXIT_DELAY);
             exitDelay.setOnFinished(event -> Platform.exit());
             exitDelay.play();

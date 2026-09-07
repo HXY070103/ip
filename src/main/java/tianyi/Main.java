@@ -14,6 +14,8 @@ import tianyi.ui.MainWindow;
  */
 public class Main extends Application {
     private static final String DATA_FILE_PATH = "Data/tianyi.txt";
+    private static final double WINDOW_MIN_HEIGHT = 220;
+    private static final double WINDOW_MIN_WIDTH = 500;
 
     private final Tianyi tianyi = new Tianyi(DATA_FILE_PATH);
 
@@ -30,8 +32,8 @@ public class Main extends Application {
             AnchorPane root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setMinHeight(220);
-            stage.setMinWidth(500);
+            stage.setMinHeight(WINDOW_MIN_HEIGHT);
+            stage.setMinWidth(WINDOW_MIN_WIDTH);
             fxmlLoader.<MainWindow>getController().setTianyi(tianyi);
             stage.setTitle("Tianyi");
             stage.show();

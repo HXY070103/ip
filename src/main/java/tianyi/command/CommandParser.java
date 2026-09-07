@@ -10,6 +10,12 @@ import tianyi.task.TaskTime;
  * Parses user input into commands with appropriately typed arguments.
  */
 public class CommandParser {
+    private static final int INPUT_PART_INDEX_COMMAND = 0;
+    private static final int INPUT_PART_INDEX_ARGUMENT = 1;
+    private static final int INPUT_PART_COUNT_EXPECTED = 2;
+
+    private static final int TASK_NUMBER_FIRST = 1;
+
     private final TaskParser taskParser;
 
     /**
@@ -29,11 +35,11 @@ public class CommandParser {
      */
     public Command parse(String input, TaskList tasks)
             throws TianyiException {
-        String[] inputParts = input.trim().split("\\s+", 2);
+        String[] inputParts = input.trim().split("\\s+", INPUT_PART_COUNT_EXPECTED);
 
-        CommandType type = CommandType.from(inputParts[0]);
-        String argument = inputParts.length == 2
-                ? inputParts[1].trim()
+        CommandType type = CommandType.from(inputParts[INPUT_PART_INDEX_COMMAND]);
+        String argument = inputParts.length == INPUT_PART_COUNT_EXPECTED
+                ? inputParts[INPUT_PART_INDEX_ARGUMENT].trim()
                 : "";
         String example = type.getExample();
 
@@ -84,14 +90,14 @@ public class CommandParser {
                     + "Try: " + example);
         }
 
-        if (taskNumber < 1 || taskNumber > tasks.size()) {
+        if (taskNumber < TASK_NUMBER_FIRST || taskNumber > tasks.size()) {
             throw new TianyiException(
                     "Task number " + taskNumber + " does not exist.\n"
-                            + "Please enter a number from 1 to " + tasks.size() + ".\n"
+                            + "Please enter a number from " + TASK_NUMBER_FIRST + " to " + tasks.size() + ".\n"
                             + "Try: " + example);
         }
 
-        return taskNumber - 1;
+        return taskNumber - TASK_NUMBER_FIRST;
     }
 
     /**

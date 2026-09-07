@@ -12,6 +12,18 @@ import tianyi.task.ToDo;
  * Converts stored task data into task objects.
  */
 public class DataParser {
+    private static final int FIELD_INDEX_TYPE = 0;
+    private static final int FIELD_INDEX_STATUS = 1;
+    private static final int FIELD_INDEX_DESCRIPTION = 2;
+    private static final int FIELD_INDEX_DEADLINE = 3;
+    private static final int FIELD_INDEX_EVENT_START = 3;
+    private static final int FIELD_INDEX_EVENT_END = 4;
+
+    private static final int FIELD_COUNT_MINIMUM = 3;
+    private static final int FIELD_COUNT_TODO = 3;
+    private static final int FIELD_COUNT_DEADLINE = 4;
+    private static final int FIELD_COUNT_EVENT = 5;
+
     /**
      * Creates a parser for serialized task records.
      */
@@ -29,27 +41,27 @@ public class DataParser {
             throws StorageException {
         String[] dataParts = data.split("\\s*\\|\\s*");
 
-        if (dataParts.length < 3) {
+        if (dataParts.length < FIELD_COUNT_MINIMUM) {
             throw new StorageException("Invalid task data: " + data);
         }
 
         Task task;
 
-        switch (dataParts[0]) {
-            case "T":
+        switch (dataParts[FIELD_INDEX_TYPE]) {
+            case ToDo.TYPE_MARKER:
                 task = createTodo(dataParts, data);
                 break;
-            case "D":
+            case Deadline.TYPE_MARKER:
                 task = createDeadline(dataParts, data);
                 break;
-            case "E":
+            case Event.TYPE_MARKER:
                 task = createEvent(dataParts, data);
                 break;
             default:
                 throw new StorageException("Unknown task type: " + data);
         }
 
-        updateStatus(task, dataParts[1]);
+        updateStatus(task, dataParts[FIELD_INDEX_STATUS]);
         return task;
     }
 
@@ -58,11 +70,11 @@ public class DataParser {
      */
     private Task createTodo(String[] dataParts, String data)
             throws StorageException {
-        if (dataParts.length != 3) {
+        if (dataParts.length != FIELD_COUNT_TODO) {
             throw new StorageException("Invalid todo data: " + data);
         }
 
-        return new ToDo(dataParts[2]);
+        return new ToDo(dataParts[FIELD_INDEX_DESCRIPTION]);
     }
 
     /**
@@ -70,14 +82,18 @@ public class DataParser {
      */
     private Task createDeadline(String[] dataParts, String data)
             throws StorageException {
-        if (dataParts.length != 4) {
+        if (dataParts.length != FIELD_COUNT_DEADLINE) {
             throw new StorageException("Invalid deadline data: " + data);
         }
 
         try {
-            return new Deadline(dataParts[2], new TaskTime(dataParts[3]));
+            return new Deadline(
+                    dataParts[FIELD_INDEX_DESCRIPTION],
+                    new TaskTime(dataParts[FIELD_INDEX_DEADLINE])
+            );
         } catch (DateTimeParseException e) {
-            throw new StorageException("Invalid date and time in deadline data: " + dataParts[3]);
+            throw new StorageException(
+                    "Invalid date and time in deadline data: " + dataParts[FIELD_INDEX_DEADLINE]);
         }
     }
 
@@ -86,15 +102,15 @@ public class DataParser {
      */
     private Task createEvent(String[] dataParts, String data)
             throws StorageException {
-        if (dataParts.length != 5) {
+        if (dataParts.length != FIELD_COUNT_EVENT) {
             throw new StorageException("Invalid event data: " + data);
         }
 
         try {
             return new Event(
-                    dataParts[2],
-                    new TaskTime(dataParts[3]),
-                    new TaskTime(dataParts[4])
+                    dataParts[FIELD_INDEX_DESCRIPTION],
+                    new TaskTime(dataParts[FIELD_INDEX_EVENT_START]),
+                    new TaskTime(dataParts[FIELD_INDEX_EVENT_END])
             );
         } catch (DateTimeParseException e) {
             throw new StorageException("Invalid date and time in event data: " + data);
@@ -106,9 +122,9 @@ public class DataParser {
      */
     private void updateStatus(Task task, String status)
             throws StorageException {
-        if (status.equals("1")) {
+        if (status.equals(Task.DATA_STATUS_DONE)) {
             task.markAsDone();
-        } else if (!status.equals("0")) {
+        } else if (!status.equals(Task.DATA_STATUS_NOT_DONE)) {
             throw new StorageException("Invalid task status: " + status);
         }
     }

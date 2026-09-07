@@ -13,6 +13,10 @@ import tianyi.task.ToDo;
  * Parses task-creation command arguments into tasks.
  */
 class TaskParser {
+    private static final int PART_INDEX_FIRST = 0;
+    private static final int PART_INDEX_SECOND = 1;
+    private static final int PART_COUNT_EXPECTED = 2;
+
     /**
      * Parses the argument of a task-creation command.
      *
@@ -21,7 +25,7 @@ class TaskParser {
      * @return Task represented by the command argument.
      * @throws TianyiException If the command does not create a task or its argument is invalid.
      */
-    Task parse(CommandType type, String argument)
+    public Task parse(CommandType type, String argument)
             throws TianyiException {
         String example = type.getExample();
 
@@ -47,22 +51,22 @@ class TaskParser {
      */
     private Task createDeadline(String argument, String example)
             throws TianyiException {
-        String[] deadlineParts = argument.split("\\s*/by\\s*", 2);
+        String[] deadlineParts = argument.split("\\s*/by\\s*", PART_COUNT_EXPECTED);
 
-        if (deadlineParts.length < 2) {
+        if (deadlineParts.length < PART_COUNT_EXPECTED) {
             throw new TianyiException("Deadline command must contain /by.\n"
                     + "Try: " + example);
         }
 
         String description = getRequiredPart(
                 deadlineParts,
-                0,
+                PART_INDEX_FIRST,
                 "The description of deadline command cannot be empty.\n"
                         + "Try: " + example
         );
         String deadline = getRequiredPart(
                 deadlineParts,
-                1,
+                PART_INDEX_SECOND,
                 "The by date of deadline command cannot be empty.\n"
                         + "Try: " + example
         );
@@ -76,41 +80,42 @@ class TaskParser {
      */
     private Task createEvent(String argument, String example)
             throws TianyiException {
-        String[] eventParts = argument.split("\\s*/from\\s*", 2);
+        String[] eventParts = argument.split("\\s*/from\\s*", PART_COUNT_EXPECTED);
 
-        if (eventParts.length < 2) {
+        if (eventParts.length < PART_COUNT_EXPECTED) {
             throw new TianyiException("Event command must contain /from.\n"
                     + "Try: " + example);
         }
 
         String description = getRequiredPart(
                 eventParts,
-                0,
+                PART_INDEX_FIRST,
                 "The description of event command cannot be empty.\n"
                         + "Try: " + example
         );
         String timeRange = getRequiredPart(
                 eventParts,
-                1,
+                PART_INDEX_SECOND,
                 "Event command must contain /to.\n"
                         + "Try: " + example
         );
-        String[] timeParts = timeRange.split("\\s*/to\\s*", 2);
 
-        if (timeParts.length < 2) {
+        String[] timeParts = timeRange.split("\\s*/to\\s*", PART_COUNT_EXPECTED);
+
+        if (timeParts.length < PART_COUNT_EXPECTED) {
             throw new TianyiException("Event command must contain /to.\n"
                     + "Try: " + example);
         }
 
         String fromTime = getRequiredPart(
                 timeParts,
-                0,
+                PART_INDEX_FIRST,
                 "The from date of event command cannot be empty.\n"
                         + "Try: " + example
         );
         String toTime = getRequiredPart(
                 timeParts,
-                1,
+                PART_INDEX_SECOND,
                 "The to date of event command cannot be empty.\n"
                         + "Try: " + example
         );
