@@ -60,8 +60,9 @@ public class Storage {
     public void save(List<Task> tasks)
             throws StorageException {
         File dataFolder = file.getParentFile();
+        boolean shouldCreateDataFolder = dataFolder != null && !dataFolder.exists();
 
-        if (dataFolder != null && !dataFolder.exists() && !dataFolder.mkdirs()) {
+        if (shouldCreateDataFolder && !dataFolder.mkdirs()) {
             throw new StorageException("Unable to create the data folder.");
         }
 

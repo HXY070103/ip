@@ -43,26 +43,18 @@ public class CommandParser {
                 : "";
         String example = type.getExample();
 
-        switch (type) {
-            case TODO, DEADLINE, EVENT:
-                return new AddCommand(taskParser.parse(type, argument));
-            case MARK:
-                return new MarkCommand(parseIndex(argument, example, tasks));
-            case UNMARK:
-                return new UnmarkCommand(parseIndex(argument, example, tasks));
-            case DELETE:
-                return new DeleteCommand(parseIndex(argument, example, tasks));
-            case LIST:
-                return new ListCommand(parseListDate(argument, example));
-            case FIND:
-                validateFindKeyword(argument, example);
-                return new FindCommand(argument);
-            case BYE:
+        return switch (type) {
+            case TODO, DEADLINE, EVENT -> new AddCommand(taskParser.parse(type, argument));
+            case MARK -> new MarkCommand(parseIndex(argument, example, tasks));
+            case UNMARK -> new UnmarkCommand(parseIndex(argument, example, tasks));
+            case DELETE -> new DeleteCommand(parseIndex(argument, example, tasks));
+            case LIST -> new ListCommand(parseListDate(argument, example));
+            case FIND -> new FindCommand(parseFindKeyword(argument, example));
+            case BYE -> {
                 validateNoArgument(argument, example);
-                return new ExitCommand();
-            default:
-                throw new TianyiException("I'm sorry, but I don't know what that means.");
-        }
+                yield new ExitCommand();
+            }
+        };
     }
 
     /**
@@ -126,15 +118,16 @@ public class CommandParser {
         }
     }
 
-    /**
-     * Rejects a find command whose keyword is empty.
-     */
-    private void validateFindKeyword(String argument, String example)
+    private String parseFindKeyword(String argument, String example)
             throws TianyiException {
         if (argument.isBlank()) {
-            throw new TianyiException("The keyword of find command cannot be empty.\n"
-                    + "Try: " + example);
+            throw new TianyiException(
+                    "The keyword of find command cannot be empty.\n"
+                            + "Try: " + example
+            );
         }
+
+        return argument;
     }
 
     /**

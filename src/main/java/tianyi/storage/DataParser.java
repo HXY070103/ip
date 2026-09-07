@@ -45,21 +45,12 @@ public class DataParser {
             throw new StorageException("Invalid task data: " + data);
         }
 
-        Task task;
-
-        switch (dataParts[FIELD_INDEX_TYPE]) {
-            case ToDo.TYPE_MARKER:
-                task = createTodo(dataParts, data);
-                break;
-            case Deadline.TYPE_MARKER:
-                task = createDeadline(dataParts, data);
-                break;
-            case Event.TYPE_MARKER:
-                task = createEvent(dataParts, data);
-                break;
-            default:
-                throw new StorageException("Unknown task type: " + data);
-        }
+        Task task = switch (dataParts[FIELD_INDEX_TYPE]) {
+            case ToDo.TYPE_MARKER -> createTodo(dataParts, data);
+            case Deadline.TYPE_MARKER -> createDeadline(dataParts, data);
+            case Event.TYPE_MARKER -> createEvent(dataParts, data);
+            default -> throw new StorageException("Unknown task type: " + data);
+        };
 
         updateStatus(task, dataParts[FIELD_INDEX_STATUS]);
         return task;

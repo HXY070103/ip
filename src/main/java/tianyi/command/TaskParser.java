@@ -34,16 +34,12 @@ class TaskParser {
                     + "Try: " + example);
         }
 
-        switch (type) {
-            case TODO:
-                return new ToDo(argument);
-            case DEADLINE:
-                return createDeadline(argument, example);
-            case EVENT:
-                return createEvent(argument, example);
-            default:
-                throw new TianyiException("Command does not create a task: " + type);
-        }
+        return switch (type) {
+            case TODO -> new ToDo(argument);
+            case DEADLINE -> createDeadline(argument, example);
+            case EVENT -> createEvent(argument, example);
+            default -> throw new TianyiException("Command does not create a task: " + type);
+        };
     }
 
     /**
