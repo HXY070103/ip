@@ -23,7 +23,7 @@ import org.junit.jupiter.api.io.TempDir;
 public class TianyiTest {
     private static final String LINE =
             "____________________________________________________________";
-    private static final String NEWLINE = System.lineSeparator();
+    private static final String FILE_NEWLINE = System.lineSeparator();
     private static final String WELCOME_MESSAGE =
             " _____ _                   _\n"
             + "|_   _(_) __ _ _ __  _   _(_)\n"
@@ -33,12 +33,12 @@ public class TianyiTest {
             + "                     |___/\n"
             + "Hello! I'm Tianyi.\n"
             + "What can I do for you?";
-    private static final String WELCOME_OUTPUT = LINE + NEWLINE
-            + WELCOME_MESSAGE + NEWLINE
-            + LINE + NEWLINE;
-    private static final String GOODBYE_OUTPUT = LINE + NEWLINE
-            + "Bye. Hope to see you again soon!" + NEWLINE
-            + LINE + NEWLINE;
+    private static final String WELCOME_OUTPUT = LINE + "\n"
+            + WELCOME_MESSAGE + "\n"
+            + LINE + "\n";
+    private static final String GOODBYE_OUTPUT = LINE + "\n"
+            + "Bye. Hope to see you again soon!\n"
+            + LINE + "\n";
 
     @TempDir
     private Path tempDir;
@@ -84,15 +84,15 @@ public class TianyiTest {
     public void run_existingTasks_listShowsLoadedTasks()
             throws IOException {
         Path dataFile = tempDir.resolve("tasks.txt");
-        Files.writeString(dataFile, "T | 1 | read book" + NEWLINE);
+        Files.writeString(dataFile, "T | 1 | read book" + FILE_NEWLINE);
         Tianyi tianyi = createTianyi("list\nbye\n", dataFile);
 
         tianyi.run();
 
-        String listOutput = LINE + NEWLINE
+        String listOutput = LINE + "\n"
                 + "Here are the tasks in your list:\n"
-                + "1.[T][X] read book" + NEWLINE
-                + LINE + NEWLINE;
+                + "1.[T][X] read book\n"
+                + LINE + "\n";
         assertEquals(WELCOME_OUTPUT + listOutput + GOODBYE_OUTPUT, getOutput());
     }
 
@@ -100,17 +100,17 @@ public class TianyiTest {
     public void constructor_invalidStoredData_showsErrorAndStartsWithEmptyList()
             throws IOException {
         Path dataFile = tempDir.resolve("invalid.txt");
-        Files.writeString(dataFile, "X | 0 | invalid" + NEWLINE);
+        Files.writeString(dataFile, "X | 0 | invalid" + FILE_NEWLINE);
         Tianyi tianyi = createTianyi("list\nbye\n", dataFile);
 
         tianyi.run();
 
-        String loadErrorOutput = LINE + NEWLINE
-                + "Oops! Unknown task type: X | 0 | invalid" + NEWLINE
-                + LINE + NEWLINE;
-        String emptyListOutput = LINE + NEWLINE
-                + "No tasks found." + NEWLINE
-                + LINE + NEWLINE;
+        String loadErrorOutput = LINE + "\n"
+                + "Oops! Unknown task type: X | 0 | invalid\n"
+                + LINE + "\n";
+        String emptyListOutput = LINE + "\n"
+                + "No tasks found.\n"
+                + LINE + "\n";
         assertEquals(loadErrorOutput + WELCOME_OUTPUT + emptyListOutput + GOODBYE_OUTPUT,
                 getOutput());
     }
@@ -121,9 +121,9 @@ public class TianyiTest {
 
         tianyi.run();
 
-        String commandErrorOutput = LINE + NEWLINE
-                + "Oops! I'm sorry, but I don't know what that means." + NEWLINE
-                + LINE + NEWLINE;
+        String commandErrorOutput = LINE + "\n"
+                + "Oops! I'm sorry, but I don't know what that means.\n"
+                + LINE + "\n";
         assertEquals(WELCOME_OUTPUT + commandErrorOutput + GOODBYE_OUTPUT, getOutput());
     }
 
@@ -136,7 +136,7 @@ public class TianyiTest {
         tianyi.run();
 
         assertTrue(Files.isRegularFile(dataFile));
-        assertEquals("T | 0 | read book" + NEWLINE, Files.readString(dataFile));
+        assertEquals("T | 0 | read book" + FILE_NEWLINE, Files.readString(dataFile));
     }
 
     @Test
@@ -198,6 +198,8 @@ public class TianyiTest {
     }
 
     private String getOutput() {
-        return output.toString(StandardCharsets.UTF_8);
+        return output.toString(StandardCharsets.UTF_8)
+                .replace("\r\n", "\n")
+                .replace('\r', '\n');
     }
 }

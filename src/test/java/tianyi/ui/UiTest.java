@@ -20,8 +20,6 @@ import org.junit.jupiter.api.Test;
 public class UiTest {
     private static final String LINE =
             "____________________________________________________________";
-    private static final String NEWLINE = System.lineSeparator();
-
     private InputStream originalInput;
     private PrintStream originalOutput;
     private ByteArrayOutputStream output;
@@ -67,7 +65,7 @@ public class UiTest {
 
         ui.showWelcome();
 
-        assertEquals(LINE + NEWLINE
+        assertEquals(LINE + "\n"
                 + " _____ _                   _\n"
                 + "|_   _(_) __ _ _ __  _   _(_)\n"
                 + "  | | | |/ _` | '_ \\| | | | |\n"
@@ -75,8 +73,8 @@ public class UiTest {
                 + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
                 + "                     |___/\n"
                 + "Hello! I'm Tianyi.\n"
-                + "What can I do for you?" + NEWLINE
-                + LINE + NEWLINE, getOutput());
+                + "What can I do for you?\n"
+                + LINE + "\n", getOutput());
     }
 
     @Test
@@ -85,9 +83,9 @@ public class UiTest {
 
         ui.showResponse("first line\nsecond line");
 
-        assertEquals(LINE + NEWLINE
-                + "first line\nsecond line" + NEWLINE
-                + LINE + NEWLINE, getOutput());
+        assertEquals(LINE + "\n"
+                + "first line\nsecond line\n"
+                + LINE + "\n", getOutput());
     }
 
     @Test
@@ -96,9 +94,9 @@ public class UiTest {
 
         ui.showError("Something went wrong.");
 
-        assertEquals(LINE + NEWLINE
-                + "Oops! Something went wrong." + NEWLINE
-                + LINE + NEWLINE, getOutput());
+        assertEquals(LINE + "\n"
+                + "Oops! Something went wrong.\n"
+                + LINE + "\n", getOutput());
     }
 
     @Test
@@ -107,9 +105,9 @@ public class UiTest {
 
         ui.showGoodbye();
 
-        assertEquals(LINE + NEWLINE
-                + "Bye. Hope to see you again soon!" + NEWLINE
-                + LINE + NEWLINE, getOutput());
+        assertEquals(LINE + "\n"
+                + "Bye. Hope to see you again soon!\n"
+                + LINE + "\n", getOutput());
     }
 
     @Test
@@ -118,7 +116,7 @@ public class UiTest {
 
         ui.showLine();
 
-        assertEquals(LINE + NEWLINE, getOutput());
+        assertEquals(LINE + "\n", getOutput());
     }
 
     private void setInput(String input) {
@@ -126,6 +124,8 @@ public class UiTest {
     }
 
     private String getOutput() {
-        return output.toString(StandardCharsets.UTF_8);
+        return output.toString(StandardCharsets.UTF_8)
+                .replace("\r\n", "\n")
+                .replace('\r', '\n');
     }
 }
