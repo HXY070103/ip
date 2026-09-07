@@ -8,23 +8,41 @@ import tianyi.TianyiException;
  * Represents a supported command type, keyword, and example usage.
  */
 public enum CommandType {
-    /** Ends the application session. */
+    /**
+     * Ends the application session.
+     */
     BYE("bye", "bye"),
-    /** Lists all tasks or dated tasks occurring on a specified date. */
+    /**
+     * Lists all tasks or dated tasks occurring on a specified date.
+     */
     LIST("list", "list 2-12-2019"),
-    /** Adds a todo task. */
+    /**
+     * Adds a todo task.
+     */
     TODO("todo", "todo borrow book"),
-    /** Adds a task with a deadline. */
+    /**
+     * Adds a task with a deadline.
+     */
     DEADLINE("deadline", "deadline return book /by 2-12-2019 18:00"),
-    /** Adds an event with a start and end. */
+    /**
+     * Adds an event with a start and end.
+     */
     EVENT("event", "event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00"),
-    /** Marks a task as completed. */
+    /**
+     * Marks a task as completed.
+     */
     MARK("mark", "mark 1"),
-    /** Marks a task as incomplete. */
+    /**
+     * Marks a task as incomplete.
+     */
     UNMARK("unmark", "unmark 1"),
-    /** Removes a task from the task list. */
+    /**
+     * Removes a task from the task list.
+     */
     DELETE("delete", "delete 1"),
-    /** Finds tasks whose descriptions contain a keyword. */
+    /**
+     * Finds tasks whose descriptions contain a keyword.
+     */
     FIND("find", "find book");
 
     private final String keyword;

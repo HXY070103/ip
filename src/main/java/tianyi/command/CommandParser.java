@@ -118,6 +118,14 @@ public class CommandParser {
         }
     }
 
+    /**
+     * Validates and returns the keyword supplied to a find command.
+     *
+     * @param argument Keyword supplied by the user.
+     * @param example Example included in the validation error.
+     * @return Validated keyword.
+     * @throws TianyiException If the keyword is blank.
+     */
     private String parseFindKeyword(String argument, String example)
             throws TianyiException {
         if (argument.isBlank()) {

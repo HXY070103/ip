@@ -19,6 +19,14 @@ public class FindCommand extends Command {
         this.keyword = keyword;
     }
 
+    /**
+     * Returns tasks whose descriptions contain the command keyword.
+     *
+     * @param tasks Task list to search.
+     * @param storage Storage instance, which is not used.
+     * @return Formatted tasks whose descriptions contain the keyword.
+     * @throws TianyiException If the task search cannot be completed.
+     */
     @Override
     public String execute(TaskList tasks, Storage storage)
             throws TianyiException {
