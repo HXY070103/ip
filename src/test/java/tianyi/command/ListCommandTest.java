@@ -41,7 +41,7 @@ public class ListCommandTest {
         String response = command.execute(tasks, storage);
 
         assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
-                + "1.[D][ ] submit report (by: Tue, Dec 03 2019)", response);
+                + "2.[D][ ] submit report (by: Tue, Dec 03 2019)", response);
         assertNull(storage.savedTasks);
     }
 }

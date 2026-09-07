@@ -113,8 +113,8 @@ public class TaskListTest {
         String response = tasks.listTasks(new TaskTime("2-12-2019"));
 
         assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
-                + "1.[D][ ] active deadline (by: Tue, Dec 03 2019)\n"
-                + "2.[E][ ] active event (from: Mon, Dec 02 2019 "
+                + "3.[D][ ] active deadline (by: Tue, Dec 03 2019)\n"
+                + "5.[E][ ] active event (from: Mon, Dec 02 2019 "
                 + "to: Tue, Dec 03 2019)", response);
     }
 
@@ -139,7 +139,7 @@ public class TaskListTest {
 
         assertEquals("Here are the matching tasks in your list:\n"
                 + "1.[T][ ] read book\n"
-                + "2.[T][ ] return book", response);
+                + "3.[T][ ] return book", response);
     }
 
     @Test
