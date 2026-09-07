@@ -41,6 +41,9 @@ public class TaskTime {
             time = LocalTime.parse(dateTimeParts[1], TIME_FORMAT);
             hasTime = true;
         }
+
+        assert hasTime == (time != null)
+                : "hasTime should be true exactly when time is present";
     }
 
     /**
