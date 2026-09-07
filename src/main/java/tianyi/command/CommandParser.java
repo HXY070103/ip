@@ -65,6 +65,11 @@ public class CommandParser {
      */
     private Task parseTask(CommandType type, String argument, String example)
             throws TianyiException {
+        assert type == CommandType.TODO
+                || type == CommandType.DEADLINE
+                || type == CommandType.EVENT
+                : "parseTask should only receive task-creation command types";
+
         if (argument.isBlank()) {
             throw new TianyiException("The argument of " + type + " command cannot be empty.\n"
                     + "Try: " + example);
@@ -201,7 +206,12 @@ public class CommandParser {
                             + "Try: " + example);
         }
 
-        return taskNumber - 1;
+        int index = taskNumber - 1;
+
+        assert index >= 0 && index < tasks.size()
+                : "Parsed task index should be within the task list";
+
+        return index;
     }
 
     /**
