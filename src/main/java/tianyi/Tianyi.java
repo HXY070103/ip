@@ -34,6 +34,13 @@ public class Tianyi {
     private final CommandParser parser;
 
     /**
+     * Creates a Tianyi application that uses the default data file.
+     */
+    public Tianyi() {
+        this(DATA_FILE_PATH);
+    }
+
+    /**
      * Creates a Tianyi application that persists tasks at the specified path.
      *
      * @param filePath Path of the file used to load and save tasks.
@@ -114,6 +121,6 @@ public class Tianyi {
      * @param args Command-line arguments, which are not used.
      */
     public static void main(String[] args) {
-        new Tianyi(DATA_FILE_PATH).run();
+        new Tianyi().run();
     }
 }

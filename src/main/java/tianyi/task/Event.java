@@ -4,6 +4,11 @@ package tianyi.task;
  * Represents a task occurring between dates with optional times.
  */
 public class Event extends Task {
+    /**
+     * Storage and display marker identifying an event.
+     */
+    public static final String TYPE_MARKER = "E";
+
     private final TaskTime startTime;
     private final TaskTime endTime;
 
@@ -39,7 +44,9 @@ public class Event extends Task {
      */
     @Override
     public String getData() {
-        return "E | " + super.getData() + " | " + startTime.getData() + " | " + endTime.getData();
+        return TYPE_MARKER + DATA_SEPARATOR + super.getData()
+                + DATA_SEPARATOR + startTime.getData()
+                + DATA_SEPARATOR + endTime.getData();
     }
 
     /**
@@ -49,6 +56,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + startTime + " to: " + endTime + ")";
+        return "[" + TYPE_MARKER + "]" + super.toString()
+                + " (from: " + startTime + " to: " + endTime + ")";
     }
 }

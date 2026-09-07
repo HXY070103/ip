@@ -4,6 +4,20 @@ package tianyi.task;
  * Represents a task with a description and completion status.
  */
 public class Task {
+    /**
+     * Storage marker for a completed task.
+     */
+    public static final String DATA_STATUS_DONE = "1";
+    /**
+     * Storage marker for an incomplete task.
+     */
+    public static final String DATA_STATUS_NOT_DONE = "0";
+
+    /**
+     * Separator between fields in a serialized task.
+     */
+    protected static final String DATA_SEPARATOR = " | ";
+
     private final String description;
     private boolean isDone;
 
@@ -58,8 +72,8 @@ public class Task {
      * @return Storage representation of this task's common fields.
      */
     public String getData() {
-        int status = isDone ? 1 : 0;
-        return status + " | " + description;
+        String status = isDone ? DATA_STATUS_DONE : DATA_STATUS_NOT_DONE;
+        return status + DATA_SEPARATOR + description;
     }
 
     /**
