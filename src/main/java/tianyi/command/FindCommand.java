@@ -1,5 +1,6 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
@@ -28,8 +29,11 @@ public class FindCommand extends Command {
      * @throws TianyiException If the task search cannot be completed.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage)
+    public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        return tasks.listTasks(keyword);
+        return createListResponse(
+                "Here are the matching tasks in your list:",
+                tasks.listTasks(keyword)
+        );
     }
 }

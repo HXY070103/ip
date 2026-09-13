@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.TaskList;
 
@@ -16,9 +17,10 @@ public class HelpCommandTest {
     public void execute_always_returnsCommandDescriptionsWithoutSaving() {
         RecordingStorage storage = new RecordingStorage();
 
-        String response = new HelpCommand().execute(new TaskList(), storage);
+        Response response = new HelpCommand().execute(new TaskList(), storage);
 
-        assertEquals(CommandType.getCommands(), response);
+        assertEquals("Here is the list of commands:", response.getHeader());
+        assertEquals(CommandType.getCommands(), response.getMessage());
         assertNull(storage.savedTasks);
     }
 }

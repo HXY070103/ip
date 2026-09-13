@@ -13,14 +13,23 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import tianyi.Response;
 
 /**
- * Represents a dialog box consisting of an ImageView to represent the speaker's face
- * and a label containing text from the speaker.
+ * Displays a speaker image together with an optional heading and message body.
  */
 public class DialogBox extends HBox {
     @FXML
     private Label dialog;
+
+    @FXML
+    private Label heading;
+
+    @FXML
+    private VBox messageContainer;
+
     @FXML
     private ImageView displayPicture;
 
@@ -32,7 +41,9 @@ public class DialogBox extends HBox {
      */
     private DialogBox(String text, Image image) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(DialogBox.class.getResource("/view/DialogBox.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    DialogBox.class.getResource("/view/DialogBox.fxml")
+            );
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
@@ -41,6 +52,8 @@ public class DialogBox extends HBox {
         }
 
         dialog.setText(text);
+        dialog.setMaxWidth(Double.MAX_VALUE);
+
         displayPicture.setImage(image);
     }
 
@@ -52,7 +65,10 @@ public class DialogBox extends HBox {
         Collections.reverse(children);
         getChildren().setAll(children);
         setAlignment(Pos.TOP_LEFT);
-        dialog.getStyleClass().add("reply-label");
+
+        messageContainer.getStyleClass().add("reply-card");
+        messageContainer.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(messageContainer, Priority.ALWAYS);
     }
 
     /**
@@ -76,19 +92,58 @@ public class DialogBox extends HBox {
     public static DialogBox createTianyiDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+
         return dialogBox;
     }
 
     /**
-     * Creates a Tianyi dialog box styled for displaying the welcome banner.
+     * Creates a normal reply with an optional title displayed separately from its body.
+     *
+     * @param response Successful command result.
+     * @param image Tianyi display image.
+     * @return Reply card with a separately styled title when present.
+     */
+    public static DialogBox createTianyiDialog(Response response, Image image) {
+        DialogBox dialogBox = createTianyiDialog(response.getMessage(), image);
+
+        if (!response.getHeader().isEmpty()) {
+            dialogBox.heading.setText(response.getHeader());
+            dialogBox.heading.setVisible(true);
+            dialogBox.heading.setManaged(true);
+        }
+
+        dialogBox.dialog.setVisible(!response.getMessage().isEmpty());
+        dialogBox.dialog.setManaged(!response.getMessage().isEmpty());
+
+        return dialogBox;
+    }
+
+    /**
+     * Creates an error card with a visible heading as well as error colors.
+     *
+     * @param text Error message and any correction guidance.
+     * @param image Tianyi display image.
+     * @return Highlighted error dialog.
+     */
+    public static DialogBox createErrorDialog(String text, Image image) {
+        DialogBox dialogBox = createTianyiDialog(text, image);
+        dialogBox.messageContainer.getStyleClass().add("error-card");
+
+        dialogBox.heading.setText("⚠ Command error");
+        dialogBox.heading.setVisible(true);
+        dialogBox.heading.setManaged(true);
+
+        return dialogBox;
+    }
+
+    /**
+     * Creates a Tianyi dialog box for displaying the welcome greeting.
      *
      * @param text Welcome message text.
      * @param image Tianyi display image.
-     * @return Dialog box with monospaced banner styling.
+     * @return Dialog box with welcome styling.
      */
     public static DialogBox createWelcomeDialog(String text, Image image) {
-        DialogBox dialogBox = createTianyiDialog(text, image);
-        dialogBox.dialog.getStyleClass().add("welcome-label");
-        return dialogBox;
+        return createTianyiDialog(text, image);
     }
 }

@@ -2,6 +2,7 @@ package tianyi.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests task collection updates, response messages, and date filtering.
+ * Tests task collection updates, returned tasks, and query filtering.
  */
 public class TaskListTest {
     @Test
@@ -32,58 +33,53 @@ public class TaskListTest {
     }
 
     @Test
-    public void addTask_validTask_addsTaskAndReturnsUpdatedCount() {
+    public void addTask_validTask_addsTaskAndReturnsTask() {
         TaskList tasks = new TaskList();
 
-        String response = tasks.addTask(new ToDo("read book"));
+        Task result = tasks.addTask(new ToDo("read book"));
 
-        assertEquals("Got it. I've added this task:\n"
-                + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", response);
+        assertEquals("T | 0 | read book", result.getData());
         assertEquals(1, tasks.size());
     }
 
     @Test
-    public void deleteTask_middleTask_removesTaskAndReturnsUpdatedCount() {
+    public void deleteTask_middleTask_removesTaskAndReturnsTask() {
         TaskList tasks = new TaskList(List.of(
                 new ToDo("first"), new ToDo("second"), new ToDo("third")));
 
-        String response = tasks.deleteTask(1);
+        Task result = tasks.deleteTask(1);
 
-        assertEquals("Noted. I've removed this task:\n"
-                + "  [T][ ] second\n"
-                + "Now you have 2 tasks in the list.", response);
+        assertEquals("T | 0 | second", result.getData());
+        assertEquals(2, tasks.size());
         assertEquals("T | 0 | first", tasks.getTasks().get(0).getData());
         assertEquals("T | 0 | third", tasks.getTasks().get(1).getData());
     }
 
     @Test
-    public void markTask_validIndex_marksTaskAndReturnsResponse() {
+    public void markTask_validIndex_marksTaskAndReturnsTask() {
         TaskList tasks = new TaskList(List.of(new ToDo("read book")));
 
-        String response = tasks.markTask(0);
+        Task result = tasks.markTask(0);
 
-        assertEquals("Nice! I've marked this task as done:\n"
-                + "  [T][X] read book", response);
+        assertEquals("T | 1 | read book", result.getData());
         assertEquals("T | 1 | read book", tasks.getTasks().get(0).getData());
     }
 
     @Test
-    public void unmarkTask_markedTask_unmarksTaskAndReturnsResponse() {
+    public void unmarkTask_markedTask_unmarksTaskAndReturnsTask() {
         ToDo task = new ToDo("read book");
         task.markAsDone();
         TaskList tasks = new TaskList(List.of(task));
 
-        String response = tasks.unmarkTask(0);
+        Task result = tasks.unmarkTask(0);
 
-        assertEquals("OK, I've marked this task as not done yet:\n"
-                + "  [T][ ] read book", response);
+        assertEquals("T | 0 | read book", result.getData());
         assertEquals("T | 0 | read book", tasks.getTasks().get(0).getData());
     }
 
     @Test
-    public void listTasks_emptyList_noTasksFound() {
-        assertEquals("No tasks found.", new TaskList().listTasks());
+    public void listTasks_emptyList_returnsEmptyList() {
+        assertTrue(new TaskList().listTasks().isEmpty());
     }
 
     @Test
@@ -92,9 +88,8 @@ public class TaskListTest {
         completedTask.markAsDone();
         TaskList tasks = new TaskList(List.of(completedTask, new ToDo("second")));
 
-        assertEquals("Here are the tasks in your list:\n"
-                + "1.[T][X] first\n"
-                + "2.[T][ ] second", tasks.listTasks());
+        assertEquals(List.of("1.[T][X] first", "2.[T][ ] second"),
+                tasks.listTasks().stream().map(IndexedTask::toString).toList());
     }
 
     @Test
@@ -110,22 +105,22 @@ public class TaskListTest {
                 new Event("future event", new TaskTime("3-12-2019"),
                         new TaskTime("4-12-2019"))));
 
-        String response = tasks.listTasks(new TaskTime("2-12-2019"));
+        List<IndexedTask> result = tasks.listTasks(new TaskTime("2-12-2019"));
 
-        assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
-                + "3.[D][ ] active deadline (by: Tue, Dec 03 2019)\n"
-                + "5.[E][ ] active event (from: Mon, Dec 02 2019 "
-                + "to: Tue, Dec 03 2019)", response);
+        assertEquals(List.of(
+                "3.[D][ ] active deadline (by: Tue, Dec 03 2019)",
+                "5.[E][ ] active event (from: Mon, Dec 02 2019 to: Tue, Dec 03 2019)"
+        ), result.stream().map(IndexedTask::toString).toList());
     }
 
     @Test
-    public void listTasks_dateWithNoMatches_noTasksFound() {
+    public void listTasks_dateWithNoMatches_returnsEmptyList() {
         TaskList tasks = new TaskList(List.of(
                 new ToDo("todo"),
                 new Event("past event", new TaskTime("1-12-2019"),
                         new TaskTime("2-12-2019"))));
 
-        assertEquals("No tasks found.", tasks.listTasks(new TaskTime("3-12-2019")));
+        assertTrue(tasks.listTasks(new TaskTime("3-12-2019")).isEmpty());
     }
 
     @Test
@@ -135,17 +130,16 @@ public class TaskListTest {
                 new ToDo("buy milk"),
                 new ToDo("return book")));
 
-        String response = tasks.listTasks("book");
+        List<IndexedTask> result = tasks.listTasks("book");
 
-        assertEquals("Here are the matching tasks in your list:\n"
-                + "1.[T][ ] read book\n"
-                + "3.[T][ ] return book", response);
+        assertEquals(List.of("1.[T][ ] read book", "3.[T][ ] return book"),
+                result.stream().map(IndexedTask::toString).toList());
     }
 
     @Test
-    public void listTasks_keywordWithNoMatches_noTasksFound() {
+    public void listTasks_keywordWithNoMatches_returnsEmptyList() {
         TaskList tasks = new TaskList(List.of(new ToDo("read book")));
 
-        assertEquals("No tasks found.", tasks.listTasks("milk"));
+        assertTrue(tasks.listTasks("milk").isEmpty());
     }
 }

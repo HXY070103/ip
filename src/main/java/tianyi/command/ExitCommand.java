@@ -1,5 +1,6 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
 
@@ -23,17 +24,7 @@ public class ExitCommand extends Command {
      * @return Farewell message for the user.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage) {
-        return FAREWELL;
-    }
-
-    /**
-     * Reports that executing this command should end the application session.
-     *
-     * @return Always {@code true}.
-     */
-    @Override
-    public boolean isExit() {
-        return true;
+    public Response execute(TaskList tasks, Storage storage) {
+        return Response.exit(FAREWELL);
     }
 }

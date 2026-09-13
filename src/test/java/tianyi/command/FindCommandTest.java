@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.TaskList;
@@ -26,11 +27,11 @@ public class FindCommandTest {
         RecordingStorage storage = new RecordingStorage();
         FindCommand command = new FindCommand("book");
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
-        assertEquals("Here are the matching tasks in your list:\n"
-                + "1.[T][ ] read book\n"
-                + "3.[T][ ] return book", response);
+        assertEquals("Here are the matching tasks in your list:", response.getHeader());
+        assertEquals("1.[T][ ] read book\n"
+                + "3.[T][ ] return book", response.getMessage());
         assertNull(storage.savedTasks);
     }
 
@@ -41,9 +42,10 @@ public class FindCommandTest {
         RecordingStorage storage = new RecordingStorage();
         FindCommand command = new FindCommand("milk");
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
-        assertEquals("No tasks found.", response);
+        assertEquals("", response.getHeader());
+        assertEquals("No tasks found.", response.getMessage());
         assertNull(storage.savedTasks);
     }
 }

@@ -9,7 +9,7 @@
     -fx-border-width: 2px;
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
-    -fx-font: italic bold 20px "Arial";
+    -fx-font: 15px "Arial";
     -fx-text-fill: #1f2937;
 }
 
@@ -27,12 +27,10 @@
 
 .button:hover {
     -fx-background-color: #2188b8;
-    -fx-font-size: 18px;
 }
 
 .button:pressed {
     -fx-background-color: #176b91;
-    -fx-font-size: 20px;
 }
 
 .scroll-pane,
@@ -63,4 +61,10 @@
 .scroll-bar .decrement-button {
     -fx-pref-height: 0;
     -fx-opacity: 0;
+}
+
+.jump-to-latest {
+    -fx-font: bold 13px "Arial";
+    -fx-padding: 7px 12px;
+    -fx-background-radius: 16px;
 }

@@ -1,5 +1,6 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
 import tianyi.task.Task;
@@ -29,10 +30,16 @@ public class AddCommand extends Command {
      * @throws TianyiException If the updated task list cannot be saved.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage)
+    public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        String response = tasks.addTask(task);
+        Task updatedTask = tasks.addTask(task);
+
         storage.save(tasks.getTasks());
-        return response;
+
+        return new Response(
+                "Got it. I've added this task:",
+                "  " + updatedTask + "\n"
+                        + "Now you have " + tasks.size() + " tasks in the list."
+        );
     }
 }

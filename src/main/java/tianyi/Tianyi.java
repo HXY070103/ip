@@ -75,19 +75,19 @@ public class Tianyi {
      * Processes one user command and returns a response suitable for display.
      *
      * @param input Complete command entered by the user.
-     * @return Response containing the display message and exit status.
+     * @return Structured response containing display content and command status.
      */
     public Response getResponse(String input) {
         if (input.isBlank()) {
-            return new Response("", false);
+            return new Response("", "");
         }
 
         try {
             Command command = parser.parse(input, tasks);
-            String message = command.execute(tasks, storage);
-            return new Response(message, command.isExit());
+
+            return command.execute(tasks, storage);
         } catch (TianyiException e) {
-            return new Response("Oops! " + e.getMessage(), false);
+            return Response.error("Oops! " + e.getMessage());
         }
     }
 
@@ -106,7 +106,7 @@ public class Tianyi {
             }
 
             Response response = getResponse(fullCommand);
-            ui.showResponse(response.getMessage());
+            ui.showResponse(response.getFullMessage());
             isExit = response.isExit();
         }
     }

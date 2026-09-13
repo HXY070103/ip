@@ -76,7 +76,7 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = createTwoTodoTasks();
 
-        String response = parser.parse("list", tasks).execute(tasks, storage);
+        String response = parser.parse("list", tasks).execute(tasks, storage).getFullMessage();
 
         assertEquals("Here are the tasks in your list:\n"
                 + "1.[T][ ] first\n"
@@ -92,7 +92,7 @@ public class CommandParserTest {
                 new Event("workshop", new TaskTime("2-12-2019"),
                         new TaskTime("3-12-2019 16:00"))));
 
-        String response = parser.parse("list 2-12-2019", tasks).execute(tasks, storage);
+        String response = parser.parse("list 2-12-2019", tasks).execute(tasks, storage).getFullMessage();
 
         assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
                 + "2.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)\n"
@@ -108,7 +108,7 @@ public class CommandParserTest {
                 new ToDo("buy milk"),
                 new ToDo("return book")));
 
-        String response = parser.parse("find book", tasks).execute(tasks, storage);
+        String response = parser.parse("find book", tasks).execute(tasks, storage).getFullMessage();
 
         assertEquals("Here are the matching tasks in your list:\n"
                 + "1.[T][ ] read book\n"
@@ -121,7 +121,7 @@ public class CommandParserTest {
         Command command = parser.parse("bye", new TaskList());
 
         assertInstanceOf(ExitCommand.class, command);
-        assertTrue(command.isExit());
+        assertTrue(command.execute(new TaskList(), storage).isExit());
     }
 
     @Test
@@ -129,9 +129,9 @@ public class CommandParserTest {
             throws TianyiException {
         TaskList tasks = new TaskList();
 
-        String response = parser.parse("help", tasks).execute(tasks, storage);
+        String response = parser.parse("help", tasks).execute(tasks, storage).getFullMessage();
 
-        assertEquals(CommandType.getCommands(), response);
+        assertEquals("Here is the list of commands:\n" + CommandType.getCommands(), response);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class CommandParserTest {
             throws TianyiException {
         Command command = parser.parse("list", new TaskList());
 
-        assertFalse(command.isExit());
+        assertFalse(command.execute(new TaskList(), storage).isExit());
     }
 
     @Test

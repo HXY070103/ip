@@ -4,27 +4,28 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <fx:root xmlns="http://javafx.com/javafx/17"
          xmlns:fx="http://javafx.com/fxml/1"
          type="javafx.scene.layout.HBox"
          alignment="TOP_RIGHT"
+         fillHeight="false"
          maxHeight="1.7976931348623157E308"
          maxWidth="1.7976931348623157E308"
          prefWidth="400.0"
          stylesheets="@../css/dialog-box.css">
     <children>
-        <Label fx:id="dialog"
-               minHeight="-Infinity"
-               text="Label"
-               wrapText="true">
+        <VBox fx:id="messageContainer" styleClass="message-card" maxWidth="-Infinity" spacing="6.0">
             <HBox.margin>
                 <Insets left="7.0" right="7.0" />
             </HBox.margin>
-            <padding>
-                <Insets top="6.0" right="6.0" bottom="6.0" left="6.0" />
-            </padding>
-        </Label>
+            <children>
+                <Label fx:id="heading" styleClass="message-heading" visible="false"
+                       managed="false" wrapText="true" minHeight="-Infinity" />
+                <Label fx:id="dialog" wrapText="true" minHeight="-Infinity" />
+            </children>
+        </VBox>
 
         <ImageView fx:id="displayPicture"
                    fitHeight="99.0"
