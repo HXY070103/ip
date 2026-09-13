@@ -1,23 +1,45 @@
-.label {
+.message-card {
     -fx-background-color: #ffd6d6;
     -fx-border-color: #e57373;
     -fx-border-width: 2px;
-    -fx-background-radius: 1em 1em 0 1em;
-    -fx-border-radius: 1em 1em 0 1em;
+    -fx-border-radius: 14px 14px 0 14px;
+    -fx-background-radius: 14px 14px 0 14px;
+    -fx-padding: 10px 12px;
+}
+
+.message-card .label {
     -fx-font: italic bold 16px "Arial";
     -fx-text-fill: #7f1d1d;
 }
 
-.reply-label {
+.reply-card {
     -fx-background-color: #66ccff;
-    -fx-border-color: #2996c8;
-    -fx-background-radius: 1em 1em 1em 0;
-    -fx-border-radius: 1em 1em 1em 0;
+    -fx-border-color: #42afe0 #42afe0 #2996c8 #116a96;
+    -fx-border-width: 1px 1px 2px 5px;
+    -fx-background-radius: 3px 12px 12px 3px;
+    -fx-border-radius: 3px 12px 12px 3px;
+}
+
+.reply-card .label {
     -fx-text-fill: #0b2e4f;
 }
 
-.welcome-label {
-    -fx-font: bold 16px "Monospaced";
+.error-card {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #e6a0aa #e6a0aa #dc6775 #b4233b;
+    -fx-border-width: 1px 1px 2px 5px;
+}
+
+.error-card .label {
+    -fx-text-fill: #8c2434;
+}
+
+.message-card .message-heading {
+    -fx-font: bold 17px "Arial";
+    -fx-text-fill: white;
+    -fx-background-color: #a51d35;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 9px;
 }
 
 #displayPicture {

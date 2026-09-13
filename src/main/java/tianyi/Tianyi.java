@@ -87,7 +87,7 @@ public class Tianyi {
             String message = command.execute(tasks, storage);
             return new Response(message, command.isExit());
         } catch (TianyiException e) {
-            return new Response("Oops! " + e.getMessage(), false);
+            return new Response("Oops! " + e.getMessage(), false, true);
         }
     }
 

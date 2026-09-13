@@ -152,6 +152,8 @@ public class TianyiTest {
                 + "Now you have 1 tasks in the list.", addResponse.getMessage());
         assertEquals("Here are the tasks in your list:\n"
                 + "1.[T][ ] read book", listResponse.getMessage());
+        assertFalse(addResponse.isError());
+        assertFalse(listResponse.isError());
         assertFalse(addResponse.isExit());
         assertFalse(listResponse.isExit());
     }
@@ -163,6 +165,7 @@ public class TianyiTest {
         Response response = tianyi.getResponse("abracadabra");
 
         assertEquals("Oops! I'm sorry, but I don't know what that means.", response.getMessage());
+        assertTrue(response.isError());
         assertFalse(response.isExit());
     }
 
