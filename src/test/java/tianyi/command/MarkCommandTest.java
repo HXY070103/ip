@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.TaskList;
@@ -23,13 +24,13 @@ public class MarkCommandTest {
         RecordingStorage storage = new RecordingStorage();
         MarkCommand command = new MarkCommand(1);
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
         assertEquals("T | 0 | first", tasks.getTasks().get(0).getData());
         assertEquals("T | 1 | second", tasks.getTasks().get(1).getData());
         assertNotNull(storage.savedTasks);
         assertEquals("T | 1 | second", storage.savedTasks.get(1).getData());
-        assertEquals("Nice! I've marked this task as done:\n"
-                + "  [T][X] second", response);
+        assertEquals("Nice! I've marked this task as done:", response.getHeader());
+        assertEquals("  [T][X] second", response.getMessage());
     }
 }

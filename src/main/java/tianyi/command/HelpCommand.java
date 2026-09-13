@@ -1,5 +1,6 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
 
@@ -21,7 +22,10 @@ public class HelpCommand extends Command {
      * @return Descriptions and examples for all supported commands.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage) {
-        return CommandType.getCommands();
+    public Response execute(TaskList tasks, Storage storage) {
+        return new Response(
+                "Here is the list of commands:",
+                CommandType.getCommands()
+        );
     }
 }

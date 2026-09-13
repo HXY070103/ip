@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.TaskList;
@@ -21,14 +22,14 @@ public class AddCommandTest {
         RecordingStorage storage = new RecordingStorage();
         AddCommand command = new AddCommand(new ToDo("read book"));
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
         assertEquals(1, tasks.size());
         assertEquals("T | 0 | read book", tasks.getTasks().get(0).getData());
         assertNotNull(storage.savedTasks);
         assertEquals("T | 0 | read book", storage.savedTasks.get(0).getData());
-        assertEquals("Got it. I've added this task:\n"
-                + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", response);
+        assertEquals("Got it. I've added this task:", response.getHeader());
+        assertEquals("  [T][ ] read book\n"
+                + "Now you have 1 tasks in the list.", response.getMessage());
     }
 }

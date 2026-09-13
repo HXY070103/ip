@@ -149,9 +149,9 @@ public class TianyiTest {
 
         assertEquals("Got it. I've added this task:\n"
                 + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", addResponse.getMessage());
+                + "Now you have 1 tasks in the list.", addResponse.getFullMessage());
         assertEquals("Here are the tasks in your list:\n"
-                + "1.[T][ ] read book", listResponse.getMessage());
+                + "1.[T][ ] read book", listResponse.getFullMessage());
         assertFalse(addResponse.isError());
         assertFalse(listResponse.isError());
         assertFalse(addResponse.isExit());
@@ -209,6 +209,66 @@ public class TianyiTest {
 
         assertEquals("Bye. Hope to see you again soon!", response.getMessage());
         assertTrue(response.isExit());
+    }
+
+    @Test
+    public void getResponse_successfulCommands_separatesHeaderFromBody() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+        Response added = tianyi.getResponse("todo read book: chapter 1");
+
+        assertEquals("Got it. I've added this task:", added.getHeader());
+        assertEquals("  [T][ ] read book: chapter 1\n"
+                + "Now you have 1 tasks in the list.", added.getMessage());
+
+        Response listed = tianyi.getResponse("list");
+        assertEquals("Here are the tasks in your list:", listed.getHeader());
+        assertEquals("1.[T][ ] read book: chapter 1", listed.getMessage());
+
+        Response found = tianyi.getResponse("find book");
+        assertEquals("Here are the matching tasks in your list:", found.getHeader());
+        assertEquals(listed.getMessage(), found.getMessage());
+
+        Response marked = tianyi.getResponse("mark 1");
+        assertEquals("Nice! I've marked this task as done:", marked.getHeader());
+        assertEquals("  [T][X] read book: chapter 1", marked.getMessage());
+
+        Response unmarked = tianyi.getResponse("unmark 1");
+        assertEquals("OK, I've marked this task as not done yet:", unmarked.getHeader());
+        assertEquals("  [T][ ] read book: chapter 1", unmarked.getMessage());
+
+        Response deleted = tianyi.getResponse("delete 1");
+        assertEquals("Noted. I've removed this task:", deleted.getHeader());
+        assertEquals("  [T][ ] read book: chapter 1\n"
+                + "Now you have 0 tasks in the list.", deleted.getMessage());
+    }
+
+    @Test
+    public void getResponse_help_preservesBlankLinesBetweenCommands() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+
+        Response response = tianyi.getResponse("help");
+
+        assertEquals("Here is the list of commands:", response.getHeader());
+        assertTrue(response.getMessage().contains("Example: bye\n\n[list]"));
+        assertFalse(response.isError());
+    }
+
+    @Test
+    public void getResponse_emptyResultsAndErrors_haveNoNormalHeader() {
+        Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
+        Response empty = tianyi.getResponse("list");
+
+        assertEquals("", empty.getHeader());
+        assertEquals("No tasks found.", empty.getMessage());
+        assertFalse(empty.isError());
+
+        Response error = tianyi.getResponse("todo");
+
+        assertEquals("", error.getHeader());
+        assertEquals("Oops! The argument of [todo] cannot be empty.\n"
+                + "Try: todo borrow book", error.getMessage());
+        assertTrue(error.isError());
+        assertFalse(error.isExit());
     }
 
     private Tianyi createTianyi(String input, Path dataFile) {

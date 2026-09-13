@@ -34,8 +34,13 @@
     -fx-text-fill: #8c2434;
 }
 
-.message-card .message-heading {
-    -fx-font: bold 17px "Arial";
+.reply-card .message-heading {
+    -fx-font: italic bold 17px "Arial";
+    -fx-text-fill: #4C1D75;
+}
+
+.error-card .message-heading {
+    -fx-font: italic bold 17px "Arial";
     -fx-text-fill: white;
     -fx-background-color: #a51d35;
     -fx-background-radius: 5px;

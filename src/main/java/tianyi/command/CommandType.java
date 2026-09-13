@@ -130,8 +130,7 @@ public enum CommandType {
         String commands = Arrays.stream(values())
                 .map(CommandType::formatHelp)
                 .collect(Collectors.joining("\n\n"));
-        return "Here is the list of commands:\n"
-                + commands;
+        return commands;
     }
 
     /**

@@ -97,10 +97,10 @@ public class MainWindow extends AnchorPane {
 
         Response response = tianyi.getResponse(input);
 
-        appendDialogs(input, response);
+        DialogBox latestReply = appendDialogs(input, response);
         userInput.clear();
 
-        showLatestReply();
+        showLatestReply(latestReply);
 
         if (response.isExit()) {
             scheduleExit();
@@ -112,24 +112,56 @@ public class MainWindow extends AnchorPane {
      *
      * @param input Command entered by the user.
      * @param response Result of processing the command.
+     * @return Tianyi reply added after the user's message.
      */
-    private void appendDialogs(String input, Response response) {
+    private DialogBox appendDialogs(String input, Response response) {
+        DialogBox userDialog = DialogBox.createUserDialog(input, userImage);
+        DialogBox replyDialog = response.isError()
+                ? DialogBox.createErrorDialog(response.getMessage(), tianyiImage)
+                : DialogBox.createTianyiDialog(response, tianyiImage);
+
         dialogContainer.getChildren().addAll(
-                DialogBox.createUserDialog(input, userImage),
-                response.isError()
-                        ? DialogBox.createErrorDialog(response.getMessage(), tianyiImage)
-                        : DialogBox.createTianyiDialog(response.getMessage(), tianyiImage)
+                userDialog,
+                replyDialog
         );
+
+        return replyDialog;
     }
 
     /**
-     * Updates message sizes before scrolling to the latest reply.
+     * Updates message sizes and reveals the latest reply from a useful reading position.
+     *
+     * @param latestReply Reply that was most recently added to the conversation.
      */
-    private void showLatestReply() {
+    private void showLatestReply(DialogBox latestReply) {
         scrollPane.applyCss();
         scrollPane.layout();
 
-        scrollToLatest();
+        double replyHeight = latestReply.getLayoutBounds().getHeight();
+        double viewportHeight = scrollPane.getViewportBounds().getHeight();
+
+        if (replyHeight > viewportHeight) {
+            scrollToReplyStart(latestReply);
+        } else {
+            scrollToLatest();
+        }
+    }
+
+    /**
+     * Aligns the start of a reply with the top of the visible conversation area.
+     *
+     * @param reply Reply whose beginning should be shown.
+     */
+    private void scrollToReplyStart(DialogBox reply) {
+        double scrollableHeight = getScrollableHeight();
+        double replyTop = reply.getBoundsInParent().getMinY();
+        double scrollPosition = scrollableHeight > 0
+                ? replyTop / scrollableHeight
+                : 0;
+
+        scrollPane.setVvalue(Math.clamp(scrollPosition, 0, 1));
+        updateJumpButton();
+        userInput.requestFocus();
     }
 
     /**

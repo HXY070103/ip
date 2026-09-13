@@ -3,7 +3,7 @@ package tianyi.task;
 /**
  * Associates a task with its current one-based number in a task list.
  */
-final class IndexedTask {
+public final class IndexedTask {
     private final int taskNumber;
     private final Task task;
 

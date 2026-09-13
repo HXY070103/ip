@@ -1,7 +1,9 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
+import tianyi.task.Task;
 import tianyi.task.TaskList;
 
 /**
@@ -28,10 +30,15 @@ public class UnmarkCommand extends Command {
      * @throws TianyiException If the updated task list cannot be saved.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage)
+    public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        String response = tasks.unmarkTask(index);
+        Task updatedTask = tasks.unmarkTask(index);
+
         storage.save(tasks.getTasks());
-        return response;
+
+        return new Response(
+                "OK, I've marked this task as not done yet:",
+                "  " + updatedTask
+        );
     }
 }

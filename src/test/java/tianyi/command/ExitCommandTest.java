@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.TaskList;
 
@@ -19,10 +20,11 @@ public class ExitCommandTest {
         RecordingStorage storage = new RecordingStorage();
         ExitCommand command = new ExitCommand();
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
-        assertEquals("Bye. Hope to see you again soon!", response);
+        assertEquals("", response.getHeader());
+        assertEquals("Bye. Hope to see you again soon!", response.getMessage());
         assertNull(storage.savedTasks);
-        assertTrue(command.isExit());
+        assertTrue(response.isExit());
     }
 }

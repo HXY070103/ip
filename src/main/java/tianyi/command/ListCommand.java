@@ -1,5 +1,6 @@
 package tianyi.command;
 
+import tianyi.Response;
 import tianyi.storage.Storage;
 import tianyi.task.TaskList;
 import tianyi.task.TaskTime;
@@ -27,9 +28,14 @@ public class ListCommand extends Command {
      * @return Formatted tasks matching the command.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage) {
-        return date == null
-                ? tasks.listTasks()
-                : tasks.listTasks(date);
+    public Response execute(TaskList tasks, Storage storage) {
+        if (date == null) {
+            return createListResponse("Here are the tasks in your list:", tasks.listTasks());
+        }
+
+        return createListResponse(
+                "Here are deadlines/events occurring on " + date.getData() + ":",
+                tasks.listTasks(date)
+        );
     }
 }

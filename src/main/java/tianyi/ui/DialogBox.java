@@ -15,10 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import tianyi.Response;
 
 /**
- * Represents a dialog box consisting of an ImageView to represent the speaker's face
- * and a label containing text from the speaker.
+ * Displays a speaker image together with an optional heading and message body.
  */
 public class DialogBox extends HBox {
     @FXML
@@ -97,6 +97,28 @@ public class DialogBox extends HBox {
     }
 
     /**
+     * Creates a normal reply with an optional title displayed separately from its body.
+     *
+     * @param response Successful command result.
+     * @param image Tianyi display image.
+     * @return Reply card with a separately styled title when present.
+     */
+    public static DialogBox createTianyiDialog(Response response, Image image) {
+        DialogBox dialogBox = createTianyiDialog(response.getMessage(), image);
+
+        if (!response.getHeader().isEmpty()) {
+            dialogBox.heading.setText(response.getHeader());
+            dialogBox.heading.setVisible(true);
+            dialogBox.heading.setManaged(true);
+        }
+
+        dialogBox.dialog.setVisible(!response.getMessage().isEmpty());
+        dialogBox.dialog.setManaged(!response.getMessage().isEmpty());
+
+        return dialogBox;
+    }
+
+    /**
      * Creates an error card with a visible heading as well as error colors.
      *
      * @param text Error message and any correction guidance.
@@ -122,8 +144,6 @@ public class DialogBox extends HBox {
      * @return Dialog box with welcome styling.
      */
     public static DialogBox createWelcomeDialog(String text, Image image) {
-        DialogBox dialogBox = createTianyiDialog(text, image);
-
-        return dialogBox;
+        return createTianyiDialog(text, image);
     }
 }

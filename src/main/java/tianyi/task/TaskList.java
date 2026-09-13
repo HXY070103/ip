@@ -2,11 +2,10 @@ package tianyi.task;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Stores tasks and provides operations for managing and displaying them.
+ * Stores tasks and provides operations for updating and querying them.
  */
 public class TaskList {
     private final List<Task> tasks;
@@ -55,121 +54,90 @@ public class TaskList {
     }
 
     /**
-     * Adds a task and formats a confirmation message.
+     * Adds a task and returns it.
      *
      * @param task Task to add.
-     * @return Confirmation containing the task and updated count.
+     * @return Added task.
      */
-    public String addTask(Task task) {
+    public Task addTask(Task task) {
         tasks.add(task);
 
-        return "Got it. I've added this task:\n"
-                + "  " + task + "\n"
-                + "Now you have " + tasks.size() + " tasks in the list.";
+        return task;
     }
 
     /**
-     * Deletes a task and formats a confirmation message.
+     * Deletes and returns a task.
      *
      * @param index Zero-based index of the task to delete.
-     * @return Confirmation containing the removed task and updated count.
+     * @return Removed task.
      */
-    public String deleteTask(int index) {
+    public Task deleteTask(int index) {
         Task task = tasks.remove(index);
 
-        return "Noted. I've removed this task:\n"
-                + "  " + task + "\n"
-                + "Now you have " + tasks.size() + " tasks in the list.";
+        return task;
     }
 
     /**
-     * Marks a task as completed and formats a confirmation message.
+     * Marks a task as completed and returns it.
      *
      * @param index Zero-based index of the task to mark.
-     * @return Confirmation containing the updated task.
+     * @return Updated task.
      */
-    public String markTask(int index) {
+    public Task markTask(int index) {
         Task task = tasks.get(index);
         task.markAsDone();
 
-        return "Nice! I've marked this task as done:\n"
-                + "  " + task;
+        return task;
     }
 
     /**
-     * Marks a task as incomplete and formats a confirmation message.
+     * Marks a task as incomplete and returns it.
      *
      * @param index Zero-based index of the task to unmark.
-     * @return Confirmation containing the updated task.
+     * @return Updated task.
      */
-    public String unmarkTask(int index) {
+    public Task unmarkTask(int index) {
         Task task = tasks.get(index);
         task.unmarkAsDone();
 
-        return "OK, I've marked this task as not done yet:\n"
-                + "  " + task;
+        return task;
     }
 
     /**
-     * Formats every task in this list for display.
+     * Returns every task with its original list number.
      *
-     * @return Numbered task list, or a message indicating that no tasks exist.
+     * @return Numbered tasks, or an empty list when no tasks exist.
      */
-    public String listTasks() {
-        return formatTasks(getIndexedTasks(), "Here are the tasks in your list:");
+    public List<IndexedTask> listTasks() {
+        return getIndexedTasks();
     }
 
     /**
-     * Formats dated tasks that occur on the specified date.
+     * Returns dated tasks that occur on the specified date.
      *
      * @param time Date used to select deadlines and events.
-     * @return Numbered matching tasks, or a message indicating that none match.
+     * @return Numbered matching tasks, or an empty list when none match.
      */
-    public String listTasks(TaskTime time) {
+    public List<IndexedTask> listTasks(TaskTime time) {
         List<IndexedTask> occurringTasks = getIndexedTasks().stream()
                 .filter(indexedTask -> indexedTask.getTask().isOccurringOn(time))
                 .toList();
 
-        return formatTasks(
-                occurringTasks,
-                "Here are deadlines/events occurring on " + time.getData() + ":"
-        );
+        return occurringTasks;
     }
 
     /**
-     * Formats tasks whose descriptions contain the specified keyword.
+     * Returns tasks whose descriptions contain the specified keyword.
      *
      * @param keyword Keyword used to select tasks.
-     * @return Numbered matching tasks, or a message indicating that none match.
+     * @return Numbered matching tasks, or an empty list when none match.
      */
-    public String listTasks(String keyword) {
+    public List<IndexedTask> listTasks(String keyword) {
         List<IndexedTask> matchingTasks = getIndexedTasks().stream()
                 .filter(indexedTask -> indexedTask.getTask().matchesKeyword(keyword))
                 .toList();
 
-        return formatTasks(
-                matchingTasks,
-                "Here are the matching tasks in your list:"
-        );
-    }
-
-    /**
-     * Builds a numbered display string for a collection of tasks.
-     *
-     * @param indexedTasks Numbered tasks to display.
-     * @param heading Heading shown before non-empty task results.
-     * @return Formatted task results, or a message indicating that no tasks match.
-     */
-    private String formatTasks(List<IndexedTask> indexedTasks, String heading) {
-        if (indexedTasks.isEmpty()) {
-            return "No tasks found.";
-        }
-
-        String formattedTasks = indexedTasks.stream()
-                .map(IndexedTask::toString)
-                .collect(Collectors.joining("\n"));
-
-        return heading + "\n" + formattedTasks;
+        return matchingTasks;
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import tianyi.Response;
 import tianyi.command.CommandTestFixture.RecordingStorage;
 import tianyi.task.Deadline;
 import tianyi.task.TaskList;
@@ -23,10 +24,10 @@ public class ListCommandTest {
         RecordingStorage storage = new RecordingStorage();
         ListCommand command = new ListCommand(null);
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
-        assertEquals("Here are the tasks in your list:\n"
-                + "1.[T][ ] read book", response);
+        assertEquals("Here are the tasks in your list:", response.getHeader());
+        assertEquals("1.[T][ ] read book", response.getMessage());
         assertNull(storage.savedTasks);
     }
 
@@ -38,10 +39,10 @@ public class ListCommandTest {
         RecordingStorage storage = new RecordingStorage();
         ListCommand command = new ListCommand(new TaskTime("2-12-2019"));
 
-        String response = command.execute(tasks, storage);
+        Response response = command.execute(tasks, storage);
 
-        assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
-                + "2.[D][ ] submit report (by: Tue, Dec 03 2019)", response);
+        assertEquals("Here are deadlines/events occurring on 2-12-2019:", response.getHeader());
+        assertEquals("2.[D][ ] submit report (by: Tue, Dec 03 2019)", response.getMessage());
         assertNull(storage.savedTasks);
     }
 }
