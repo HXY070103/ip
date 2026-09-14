@@ -84,6 +84,17 @@ public class StorageTest {
     }
 
     @Test
+    public void load_sourcePathIsDirectory_exceptionThrown()
+            throws IOException {
+        Path directory = Files.createDirectory(tempDir.resolve("directory"));
+        Storage storage = new Storage(directory.toString());
+
+        StorageException exception = assertThrows(StorageException.class, storage::load);
+
+        assertEquals("Unable to load tasks from " + directory + ".", exception.getMessage());
+    }
+
+    @Test
     public void save_mixedTasks_writesExpectedRecords()
             throws IOException, StorageException {
         Path dataFile = tempDir.resolve("tasks.txt");
@@ -111,6 +122,20 @@ public class StorageTest {
         storage.save(List.of(new ToDo("read book")));
 
         assertTrue(Files.isRegularFile(dataFile));
+    }
+
+    @Test
+    public void save_parentPathIsFile_exceptionThrown()
+            throws IOException {
+        Path parentFile = Files.createFile(tempDir.resolve("parent-file"));
+        Path dataFile = parentFile.resolve("nested/tasks.txt");
+        Storage storage = new Storage(dataFile.toString());
+
+        StorageException exception = assertThrows(
+                StorageException.class, () -> storage.save(List.of(new ToDo("read book"))));
+
+        assertEquals("Unable to create the data folder.", exception.getMessage());
+        assertFalse(Files.exists(dataFile));
     }
 
     @Test
