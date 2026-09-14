@@ -29,7 +29,7 @@ public class FindCommandTest {
 
         Response response = command.execute(tasks, storage);
 
-        assertEquals("Here are the matching tasks in your list:", response.getHeader());
+        assertEquals("Here's what I found for you:", response.getHeader());
         assertEquals("1.[T][ ] read book\n"
                 + "3.[T][ ] return book", response.getMessage());
         assertNull(storage.savedTasks);
@@ -45,7 +45,7 @@ public class FindCommandTest {
         Response response = command.execute(tasks, storage);
 
         assertEquals("", response.getHeader());
-        assertEquals("No tasks found.", response.getMessage());
+        assertEquals("I couldn't find a match. Try another keyword?", response.getMessage());
         assertNull(storage.savedTasks);
     }
 }

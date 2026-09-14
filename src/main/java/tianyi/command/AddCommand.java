@@ -10,6 +10,8 @@ import tianyi.task.TaskList;
  * Adds a task to the task list.
  */
 public class AddCommand extends Command {
+    private static final int INCOMPLETE_TASK_LIMIT = 5;
+
     private final Task task;
 
     /**
@@ -32,14 +34,18 @@ public class AddCommand extends Command {
     @Override
     public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        Task updatedTask = tasks.addTask(task);
-
+        tasks.addTask(task);
         storage.save(tasks.getTasks());
 
+        String encouragement = tasks.countIncompleteTasks() <= INCOMPLETE_TASK_LIMIT
+                ? "You've got this. I'm cheering for you!"
+                : "Remember to rest, too. Take care of yourself.";
+
         return new Response(
-                "Got it. I've added this task:",
-                "  " + updatedTask + "\n"
-                        + "Now you have " + tasks.size() + " tasks in the list."
+                "Got it. I've added this task for you:",
+                "  " + task,
+                "Now you have " + tasks.size() + " tasks in the list.\n"
+                        + encouragement
         );
     }
 }

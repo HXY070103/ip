@@ -12,9 +12,10 @@ public class Ui {
             + "  | | | | (_| | | | | |_| | |\n"
             + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
             + "                     |___/";
-    private static final String GREETING = "Hello! I'm Tianyi.\n"
+    private static final String GREETING = "Hi, I'm Tianyi.\n"
+            + "It's good to see you!\n"
             + "What can I do for you?";
-    private static final String FAREWELL = "Bye. Hope to see you again soon!";
+    private static final String FAREWELL = "Bye for now. Take care, and see you soon!";
 
     private final Scanner scanner;
 

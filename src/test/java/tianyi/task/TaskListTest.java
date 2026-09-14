@@ -33,13 +33,13 @@ public class TaskListTest {
     }
 
     @Test
-    public void addTask_validTask_addsTaskAndReturnsTask() {
+    public void addTask_validTask_addsTask() {
         TaskList tasks = new TaskList();
 
-        Task result = tasks.addTask(new ToDo("read book"));
+        tasks.addTask(new ToDo("read book"));
 
-        assertEquals("T | 0 | read book", result.getData());
         assertEquals(1, tasks.size());
+        assertEquals("T | 0 | read book", tasks.getTasks().get(0).getData());
     }
 
     @Test
@@ -141,5 +141,43 @@ public class TaskListTest {
         TaskList tasks = new TaskList(List.of(new ToDo("read book")));
 
         assertTrue(tasks.listTasks("milk").isEmpty());
+    }
+
+    @Test
+    public void countIncompleteTasks_taskLifecycle_countsCurrentIncompleteTasks() {
+        TaskList tasks = new TaskList();
+        assertEquals(0, tasks.countIncompleteTasks());
+
+        tasks.addTask(new ToDo("first"));
+        tasks.addTask(new ToDo("second"));
+        assertEquals(2, tasks.countIncompleteTasks());
+
+        tasks.markTask(0);
+        tasks.markTask(0);
+        assertEquals(1, tasks.countIncompleteTasks());
+
+        tasks.markTask(1);
+        assertEquals(0, tasks.countIncompleteTasks());
+
+        tasks.unmarkTask(0);
+        assertEquals(1, tasks.countIncompleteTasks());
+
+        tasks.deleteTask(0);
+        assertEquals(0, tasks.countIncompleteTasks());
+    }
+
+    @Test
+    public void countIncompleteTasks_date_countsOnlyMatchingIncompleteTasks() {
+        Deadline completedDeadline = new Deadline("completed", new TaskTime("3-12-2019"));
+        completedDeadline.markAsDone();
+        TaskList tasks = new TaskList(List.of(
+                new ToDo("todo"),
+                completedDeadline,
+                new Deadline("incomplete", new TaskTime("3-12-2019")),
+                new Event("past event", new TaskTime("30-11-2019"),
+                        new TaskTime("1-12-2019"))));
+
+        assertEquals(1, tasks.countIncompleteTasks(new TaskTime("2-12-2019")));
+        assertEquals(0, tasks.countIncompleteTasks(new TaskTime("4-12-2019")));
     }
 }

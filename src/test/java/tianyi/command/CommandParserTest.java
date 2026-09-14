@@ -78,7 +78,7 @@ public class CommandParserTest {
 
         String response = parser.parse("list", tasks).execute(tasks, storage).getFullMessage();
 
-        assertEquals("Here are the tasks in your list:\n"
+        assertEquals("Here's your task list. Let's have a look:\n"
                 + "1.[T][ ] first\n"
                 + "2.[T][ ] second", response);
     }
@@ -94,7 +94,7 @@ public class CommandParserTest {
 
         String response = parser.parse("list 2-12-2019", tasks).execute(tasks, storage).getFullMessage();
 
-        assertEquals("Here are deadlines/events occurring on 2-12-2019:\n"
+        assertEquals("Here are your deadlines and events for 2-12-2019:\n"
                 + "2.[D][ ] submit report (by: Tue, Dec 03 2019, 6:00 PM)\n"
                 + "3.[E][ ] workshop (from: Mon, Dec 02 2019 "
                 + "to: Tue, Dec 03 2019, 4:00 PM)", response);
@@ -110,7 +110,7 @@ public class CommandParserTest {
 
         String response = parser.parse("find book", tasks).execute(tasks, storage).getFullMessage();
 
-        assertEquals("Here are the matching tasks in your list:\n"
+        assertEquals("Here's what I found for you:\n"
                 + "1.[T][ ] read book\n"
                 + "3.[T][ ] return book", response);
     }
@@ -131,7 +131,8 @@ public class CommandParserTest {
 
         String response = parser.parse("help", tasks).execute(tasks, storage).getFullMessage();
 
-        assertEquals("Here is the list of commands:\n" + CommandType.getCommands(), response);
+        assertEquals("Here is the list of commands:\n" + CommandType.getCommands()
+                + "\n\nI hope it helps you!", response);
     }
 
     @Test

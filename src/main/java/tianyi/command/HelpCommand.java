@@ -25,7 +25,8 @@ public class HelpCommand extends Command {
     public Response execute(TaskList tasks, Storage storage) {
         return new Response(
                 "Here is the list of commands:",
-                CommandType.getCommands()
+                CommandType.getCommands() + "\n",
+                "I hope it helps you!"
         );
     }
 }

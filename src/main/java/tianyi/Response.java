@@ -1,11 +1,15 @@
 package tianyi;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
- * Stores a command result with separate display content and session status.
+ * Stores a command result with separate heading, body, footer, and session status.
  */
 public class Response {
     private final String header;
     private final String message;
+    private final String footer;
     private final boolean isExit;
     private final boolean isError;
 
@@ -16,7 +20,18 @@ public class Response {
      * @param message Reply body.
      */
     public Response(String header, String message) {
-        this(header, message, false, false);
+        this(header, message, "", false, false);
+    }
+
+    /**
+     * Creates a successful reply with separately styled main and footer content.
+     *
+     * @param header Reply title, or an empty string for a reply without a title.
+     * @param message Main reply body.
+     * @param footer Supplementary text displayed after the main body.
+     */
+    public Response(String header, String message, String footer) {
+        this(header, message, footer, false, false);
     }
 
     /**
@@ -24,12 +39,14 @@ public class Response {
      *
      * @param header Reply title.
      * @param message Reply body.
+     * @param footer Supplementary text displayed after the main body.
      * @param isExit Whether the application should exit after showing this reply.
      * @param isError Whether this reply reports a failed command.
      */
-    private Response(String header, String message, boolean isExit, boolean isError) {
+    private Response(String header, String message, String footer, boolean isExit, boolean isError) {
         this.header = header;
         this.message = message;
+        this.footer = footer;
         this.isExit = isExit;
         this.isError = isError;
     }
@@ -41,7 +58,7 @@ public class Response {
      * @return Error reply without a normal header.
      */
     public static Response error(String message) {
-        return new Response("", message, false, true);
+        return new Response("", message, "", false, true);
     }
 
     /**
@@ -51,7 +68,7 @@ public class Response {
      * @return Reply requesting application shutdown.
      */
     public static Response exit(String message) {
-        return new Response("", message, true, false);
+        return new Response("", message, "", true, false);
     }
 
     /**
@@ -73,20 +90,23 @@ public class Response {
     }
 
     /**
-     * Combines the title and body for plain-text console display.
+     * Returns supplementary text displayed after the main reply body.
+     *
+     * @return Reply footer, or an empty string when no footer is present.
+     */
+    public String getFooter() {
+        return footer;
+    }
+
+    /**
+     * Combines the title, body, and footer for plain-text console display.
      *
      * @return Complete reply without extra separators for missing content.
      */
     public String getFullMessage() {
-        if (header.isEmpty()) {
-            return message;
-        }
-
-        if (message.isEmpty()) {
-            return header;
-        }
-
-        return header + "\n" + message;
+        return Stream.of(header, message, footer)
+                .filter(part -> !part.isEmpty())
+                .collect(Collectors.joining("\n"));
     }
 
     /**

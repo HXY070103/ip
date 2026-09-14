@@ -30,7 +30,36 @@ public class MarkCommandTest {
         assertEquals("T | 1 | second", tasks.getTasks().get(1).getData());
         assertNotNull(storage.savedTasks);
         assertEquals("T | 1 | second", storage.savedTasks.get(1).getData());
-        assertEquals("Nice! I've marked this task as done:", response.getHeader());
+        assertEquals("Well done! I've marked this task as complete:", response.getHeader());
         assertEquals("  [T][X] second", response.getMessage());
+        assertEquals("", response.getFooter());
+    }
+
+    @Test
+    public void execute_lastIncompleteTask_returnsCompletionEncouragement()
+            throws TianyiException {
+        TaskList tasks = new TaskList(List.of(new ToDo("read book")));
+        RecordingStorage storage = new RecordingStorage();
+
+        Response response = new MarkCommand(0).execute(tasks, storage);
+
+        assertEquals("  [T][X] read book", response.getMessage());
+        assertEquals("That's everything done. You've earned a little rest!", response.getFooter());
+        assertNotNull(storage.savedTasks);
+    }
+
+    @Test
+    public void execute_alreadyCompletedTask_doesNotRepeatCompletionEncouragement()
+            throws TianyiException {
+        ToDo completedTask = new ToDo("read book");
+        completedTask.markAsDone();
+        TaskList tasks = new TaskList(List.of(completedTask));
+        RecordingStorage storage = new RecordingStorage();
+
+        Response response = new MarkCommand(0).execute(tasks, storage);
+
+        assertEquals("  [T][X] read book", response.getMessage());
+        assertEquals("", response.getFooter());
+        assertNotNull(storage.savedTasks);
     }
 }

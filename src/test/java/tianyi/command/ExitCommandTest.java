@@ -23,7 +23,7 @@ public class ExitCommandTest {
         Response response = command.execute(tasks, storage);
 
         assertEquals("", response.getHeader());
-        assertEquals("Bye. Hope to see you again soon!", response.getMessage());
+        assertEquals("Bye for now. Take care, and see you soon!", response.getMessage());
         assertNull(storage.savedTasks);
         assertTrue(response.isExit());
     }

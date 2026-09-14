@@ -24,6 +24,8 @@
                 <Label fx:id="heading" styleClass="message-heading" visible="false"
                        managed="false" wrapText="true" minHeight="-Infinity" />
                 <Label fx:id="dialog" wrapText="true" minHeight="-Infinity" />
+                <Label fx:id="footer" styleClass="message-footer" visible="false"
+                       managed="false" wrapText="true" minHeight="-Infinity" />
             </children>
         </VBox>
 

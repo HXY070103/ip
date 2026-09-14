@@ -8,7 +8,7 @@ import tianyi.task.TaskList;
  * Ends the chatbot session.
  */
 public class ExitCommand extends Command {
-    private static final String FAREWELL = "Bye. Hope to see you again soon!";
+    private static final String FAREWELL = "Bye for now. Take care, and see you soon!";
 
     /**
      * Creates a command that ends the current application session.
