@@ -62,6 +62,21 @@ public class TaskParserTest {
     }
 
     @Test
+    public void parse_argumentContainingStorageSeparator_exceptionThrown() {
+        assertParseFails(CommandType.TODO, "read | write",
+                "The argument of [todo] cannot contain \"|\".\n"
+                        + "Try: todo borrow book");
+        assertParseFails(CommandType.DEADLINE, "return | renew book /by 2-12-2019",
+                "The argument of [deadline] cannot contain \"|\".\n"
+                        + "Try: deadline return book /by 2-12-2019 18:00");
+        assertParseFails(CommandType.EVENT,
+                "team | client meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00",
+                "The argument of [event] cannot contain \"|\".\n"
+                        + "Try: event meeting /from 2-12-2019 14:00 "
+                        + "/to 2-12-2019 16:00");
+    }
+
+    @Test
     public void parse_malformedDeadlineArgument_exceptionThrown() {
         String example = "Try: deadline return book /by 2-12-2019 18:00";
 
@@ -74,6 +89,9 @@ public class TaskParserTest {
         assertParseFails(CommandType.DEADLINE, "return book /by 31-2-2019",
                 "Invalid [deadline] date or time. "
                         + "Please use d-M-yyyy with optional HH:mm.\n" + example);
+        assertParseFails(CommandType.DEADLINE,
+                "return book /by 2-12-2019 /by 3-12-2019",
+                "[deadline] accepts /by only once.\n" + example);
     }
 
     @Test
@@ -93,6 +111,31 @@ public class TaskParserTest {
         assertParseFails(CommandType.EVENT, "meeting /from invalid /to 3-12-2019",
                 "Invalid [event] date or time. "
                         + "Please use d-M-yyyy with optional HH:mm.\n" + example);
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 1-12-2019 /from 2-12-2019 /to 3-12-2019",
+                "[event] accepts /from only once.\n" + example);
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 1-12-2019 /to 2-12-2019 /to 3-12-2019",
+                "[event] accepts /to only once.\n" + example);
+        assertParseFails(CommandType.EVENT, "meeting /to 3-12-2019 /from 2-12-2019",
+                "In [event], /from must appear before /to.\n" + example);
+    }
+
+    @Test
+    public void parse_eventWithInvalidTimeRange_exceptionThrown() {
+        String example = "Try: event meeting /from 2-12-2019 14:00 /to 2-12-2019 16:00";
+        String expectedMessage = "The end of [event] must be later than its start.\n"
+                + "For an event on the same day, please specify both times.\n"
+                + example;
+
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 3-12-2019 /to 2-12-2019", expectedMessage);
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 2-12-2019 18:00 /to 2-12-2019 16:00", expectedMessage);
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 2-12-2019 18:00 /to 2-12-2019 18:00", expectedMessage);
+        assertParseFails(CommandType.EVENT,
+                "meeting /from 2-12-2019 /to 2-12-2019", expectedMessage);
     }
 
     @Test

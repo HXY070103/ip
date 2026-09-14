@@ -113,10 +113,17 @@ public class DataParser {
         }
 
         try {
+            TaskTime startTime = new TaskTime(dataParts[FIELD_INDEX_EVENT_START]);
+            TaskTime endTime = new TaskTime(dataParts[FIELD_INDEX_EVENT_END]);
+
+            if (!startTime.isStrictlyBefore(endTime)) {
+                throw new StorageException("Event start must be before its end in event data: " + data);
+            }
+
             return new Event(
                     dataParts[FIELD_INDEX_DESCRIPTION],
-                    new TaskTime(dataParts[FIELD_INDEX_EVENT_START]),
-                    new TaskTime(dataParts[FIELD_INDEX_EVENT_END])
+                    startTime,
+                    endTime
             );
         } catch (DateTimeParseException e) {
             throw new StorageException("Invalid date and time in event data: " + data);
