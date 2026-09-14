@@ -45,6 +45,27 @@ public class TaskList {
     }
 
     /**
+     * Returns the number of incomplete tasks in this list.
+     *
+     * @return Incomplete task count.
+     */
+    public int countIncompleteTasks() {
+        return (int) tasks.stream().filter(task -> !task.isDone()).count();
+    }
+
+    /**
+     * Returns the number of incomplete dated tasks occurring on the specified date.
+     *
+     * @param time Date used to select deadlines and events.
+     * @return Incomplete matching task count.
+     */
+    public int countIncompleteTasks(TaskTime time) {
+        return (int) listTasks(time).stream()
+                .filter(indexedTask -> !indexedTask.getTask().isDone())
+                .count();
+    }
+
+    /**
      * Returns an unmodifiable snapshot of the current tasks.
      *
      * @return Copy of the current task sequence.
@@ -54,15 +75,12 @@ public class TaskList {
     }
 
     /**
-     * Adds a task and returns it.
+     * Adds a task to this list.
      *
      * @param task Task to add.
-     * @return Added task.
      */
-    public Task addTask(Task task) {
+    public void addTask(Task task) {
         tasks.add(task);
-
-        return task;
     }
 
     /**
@@ -72,9 +90,7 @@ public class TaskList {
      * @return Removed task.
      */
     public Task deleteTask(int index) {
-        Task task = tasks.remove(index);
-
-        return task;
+        return tasks.remove(index);
     }
 
     /**
@@ -119,11 +135,9 @@ public class TaskList {
      * @return Numbered matching tasks, or an empty list when none match.
      */
     public List<IndexedTask> listTasks(TaskTime time) {
-        List<IndexedTask> occurringTasks = getIndexedTasks().stream()
+        return getIndexedTasks().stream()
                 .filter(indexedTask -> indexedTask.getTask().isOccurringOn(time))
                 .toList();
-
-        return occurringTasks;
     }
 
     /**
@@ -133,11 +147,9 @@ public class TaskList {
      * @return Numbered matching tasks, or an empty list when none match.
      */
     public List<IndexedTask> listTasks(String keyword) {
-        List<IndexedTask> matchingTasks = getIndexedTasks().stream()
+        return getIndexedTasks().stream()
                 .filter(indexedTask -> indexedTask.getTask().matchesKeyword(keyword))
                 .toList();
-
-        return matchingTasks;
     }
 
     /**

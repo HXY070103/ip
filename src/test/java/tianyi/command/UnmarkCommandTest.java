@@ -31,7 +31,7 @@ public class UnmarkCommandTest {
         assertEquals("T | 0 | read book", tasks.getTasks().get(0).getData());
         assertNotNull(storage.savedTasks);
         assertEquals("T | 0 | read book", storage.savedTasks.get(0).getData());
-        assertEquals("OK, I've marked this task as not done yet:", response.getHeader());
+        assertEquals("Of course. I've marked this task as not done yet:", response.getHeader());
         assertEquals("  [T][ ] read book", response.getMessage());
     }
 }

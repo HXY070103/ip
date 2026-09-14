@@ -35,12 +35,14 @@
 }
 
 .reply-card .message-heading {
-    -fx-font: italic bold 17px "Arial";
     -fx-text-fill: #4C1D75;
 }
 
+.reply-card .message-footer {
+    -fx-text-fill: #1e40af;
+}
+
 .error-card .message-heading {
-    -fx-font: italic bold 17px "Arial";
     -fx-text-fill: white;
     -fx-background-color: #a51d35;
     -fx-background-radius: 5px;

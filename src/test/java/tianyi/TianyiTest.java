@@ -32,13 +32,14 @@ public class TianyiTest {
             + "  | | | | (_| | | | | |_| | |\n"
             + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
             + "                     |___/\n"
-            + "Hello! I'm Tianyi.\n"
+            + "Hi, I'm Tianyi.\n"
+            + "It's good to see you!\n"
             + "What can I do for you?";
     private static final String WELCOME_OUTPUT = LINE + "\n"
             + WELCOME_MESSAGE + "\n"
             + LINE + "\n";
     private static final String GOODBYE_OUTPUT = LINE + "\n"
-            + "Bye. Hope to see you again soon!\n"
+            + "Bye for now. Take care, and see you soon!\n"
             + LINE + "\n";
 
     @TempDir
@@ -91,8 +92,9 @@ public class TianyiTest {
         tianyi.run();
 
         String listOutput = LINE + "\n"
-                + "Here are the tasks in your list:\n"
+                + "Here's your task list. Let's have a look:\n"
                 + "1.[T][X] read book\n"
+                + "All done. Enjoy a little time for yourself!\n"
                 + LINE + "\n";
         assertEquals(WELCOME_OUTPUT + listOutput + GOODBYE_OUTPUT, getOutput());
     }
@@ -110,7 +112,7 @@ public class TianyiTest {
                 + "Oops! Unknown task type: X | 0 | invalid\n"
                 + LINE + "\n";
         String emptyListOutput = LINE + "\n"
-                + "No tasks found.\n"
+                + "Your list is empty. What would you like to add?\n"
                 + LINE + "\n";
         assertEquals(loadErrorOutput + WELCOME_OUTPUT + emptyListOutput + GOODBYE_OUTPUT,
                 getOutput());
@@ -147,10 +149,11 @@ public class TianyiTest {
         Response addResponse = tianyi.getResponse("todo read book");
         Response listResponse = tianyi.getResponse("list");
 
-        assertEquals("Got it. I've added this task:\n"
+        assertEquals("Got it. I've added this task for you:\n"
                 + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", addResponse.getFullMessage());
-        assertEquals("Here are the tasks in your list:\n"
+                + "Now you have 1 tasks in the list.\n"
+                + "You've got this. I'm cheering for you!", addResponse.getFullMessage());
+        assertEquals("Here's your task list. Let's have a look:\n"
                 + "1.[T][ ] read book", listResponse.getFullMessage());
         assertFalse(addResponse.isError());
         assertFalse(listResponse.isError());
@@ -207,7 +210,7 @@ public class TianyiTest {
 
         Response response = tianyi.getResponse("bye");
 
-        assertEquals("Bye. Hope to see you again soon!", response.getMessage());
+        assertEquals("Bye for now. Take care, and see you soon!", response.getMessage());
         assertTrue(response.isExit());
     }
 
@@ -216,30 +219,32 @@ public class TianyiTest {
         Tianyi tianyi = createTianyi("", tempDir.resolve("tasks.txt"));
         Response added = tianyi.getResponse("todo read book: chapter 1");
 
-        assertEquals("Got it. I've added this task:", added.getHeader());
-        assertEquals("  [T][ ] read book: chapter 1\n"
-                + "Now you have 1 tasks in the list.", added.getMessage());
+        assertEquals("Got it. I've added this task for you:", added.getHeader());
+        assertEquals("  [T][ ] read book: chapter 1", added.getMessage());
+        assertEquals("Now you have 1 tasks in the list.\n"
+                + "You've got this. I'm cheering for you!", added.getFooter());
 
         Response listed = tianyi.getResponse("list");
-        assertEquals("Here are the tasks in your list:", listed.getHeader());
+        assertEquals("Here's your task list. Let's have a look:", listed.getHeader());
         assertEquals("1.[T][ ] read book: chapter 1", listed.getMessage());
 
         Response found = tianyi.getResponse("find book");
-        assertEquals("Here are the matching tasks in your list:", found.getHeader());
+        assertEquals("Here's what I found for you:", found.getHeader());
         assertEquals(listed.getMessage(), found.getMessage());
 
         Response marked = tianyi.getResponse("mark 1");
-        assertEquals("Nice! I've marked this task as done:", marked.getHeader());
+        assertEquals("Well done! I've marked this task as complete:", marked.getHeader());
         assertEquals("  [T][X] read book: chapter 1", marked.getMessage());
+        assertEquals("That's everything done. You've earned a little rest!", marked.getFooter());
 
         Response unmarked = tianyi.getResponse("unmark 1");
-        assertEquals("OK, I've marked this task as not done yet:", unmarked.getHeader());
+        assertEquals("Of course. I've marked this task as not done yet:", unmarked.getHeader());
         assertEquals("  [T][ ] read book: chapter 1", unmarked.getMessage());
 
         Response deleted = tianyi.getResponse("delete 1");
-        assertEquals("Noted. I've removed this task:", deleted.getHeader());
-        assertEquals("  [T][ ] read book: chapter 1\n"
-                + "Now you have 0 tasks in the list.", deleted.getMessage());
+        assertEquals("All right. I've removed this task:", deleted.getHeader());
+        assertEquals("  [T][ ] read book: chapter 1", deleted.getMessage());
+        assertEquals("Now you have 0 tasks in the list.", deleted.getFooter());
     }
 
     @Test
@@ -259,7 +264,7 @@ public class TianyiTest {
         Response empty = tianyi.getResponse("list");
 
         assertEquals("", empty.getHeader());
-        assertEquals("No tasks found.", empty.getMessage());
+        assertEquals("Your list is empty. What would you like to add?", empty.getMessage());
         assertFalse(empty.isError());
 
         Response error = tianyi.getResponse("todo");

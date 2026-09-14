@@ -37,7 +37,7 @@ public class UnmarkCommand extends Command {
         storage.save(tasks.getTasks());
 
         return new Response(
-                "OK, I've marked this task as not done yet:",
+                "Of course. I've marked this task as not done yet:",
                 "  " + updatedTask
         );
     }

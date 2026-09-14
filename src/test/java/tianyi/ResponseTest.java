@@ -20,6 +20,14 @@ public class ResponseTest {
     }
 
     @Test
+    public void getFullMessage_headerBodyAndFooter_joinsAllPartsWithNewlines() {
+        Response response = new Response("Header", "Body", "Footer");
+
+        assertEquals("Header\nBody\nFooter", response.getFullMessage());
+        assertEquals("Footer", response.getFooter());
+    }
+
+    @Test
     public void getFullMessage_missingHeader_returnsBodyWithoutLeadingNewline() {
         Response response = new Response("", "Body");
 
@@ -39,6 +47,7 @@ public class ResponseTest {
 
         assertEquals("", response.getHeader());
         assertEquals("Invalid command", response.getMessage());
+        assertEquals("", response.getFooter());
         assertTrue(response.isError());
         assertFalse(response.isExit());
     }
@@ -49,6 +58,7 @@ public class ResponseTest {
 
         assertEquals("", response.getHeader());
         assertEquals("Goodbye", response.getMessage());
+        assertEquals("", response.getFooter());
         assertFalse(response.isError());
         assertTrue(response.isExit());
     }

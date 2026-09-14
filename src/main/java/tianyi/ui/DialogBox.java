@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import tianyi.Response;
 
 /**
- * Displays a speaker image together with an optional heading and message body.
+ * Displays a speaker image together with an optional heading, message body, and footer.
  */
 public class DialogBox extends HBox {
     @FXML
@@ -26,6 +26,9 @@ public class DialogBox extends HBox {
 
     @FXML
     private Label heading;
+
+    @FXML
+    private Label footer;
 
     @FXML
     private VBox messageContainer;
@@ -53,6 +56,7 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         dialog.setMaxWidth(Double.MAX_VALUE);
+        footer.setMaxWidth(Double.MAX_VALUE);
 
         displayPicture.setImage(image);
     }
@@ -97,11 +101,11 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Creates a normal reply with an optional title displayed separately from its body.
+     * Creates a normal reply with its title, body, and footer displayed separately.
      *
      * @param response Successful command result.
      * @param image Tianyi display image.
-     * @return Reply card with a separately styled title when present.
+     * @return Reply card with separately styled content sections when present.
      */
     public static DialogBox createTianyiDialog(Response response, Image image) {
         DialogBox dialogBox = createTianyiDialog(response.getMessage(), image);
@@ -114,6 +118,10 @@ public class DialogBox extends HBox {
 
         dialogBox.dialog.setVisible(!response.getMessage().isEmpty());
         dialogBox.dialog.setManaged(!response.getMessage().isEmpty());
+
+        dialogBox.footer.setText(response.getFooter());
+        dialogBox.footer.setVisible(!response.getFooter().isEmpty());
+        dialogBox.footer.setManaged(!response.getFooter().isEmpty());
 
         return dialogBox;
     }

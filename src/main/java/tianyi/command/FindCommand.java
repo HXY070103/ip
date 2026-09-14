@@ -1,8 +1,12 @@
 package tianyi.command;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
+import tianyi.task.IndexedTask;
 import tianyi.task.TaskList;
 
 /**
@@ -31,9 +35,16 @@ public class FindCommand extends Command {
     @Override
     public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
-        return createListResponse(
-                "Here are the matching tasks in your list:",
-                tasks.listTasks(keyword)
-        );
+        List<IndexedTask> matches = tasks.listTasks(keyword);
+
+        if (matches.isEmpty()) {
+            return new Response("", "I couldn't find a match. Try another keyword?");
+        }
+
+        String message = matches.stream()
+                .map(IndexedTask::toString)
+                .collect(Collectors.joining("\n"));
+
+        return new Response("Here's what I found for you:", message);
     }
 }

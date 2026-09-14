@@ -25,7 +25,8 @@ public class Tianyi {
                     + "  | | | | (_| | | | | |_| | |\n"
                     + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
                     + "                     |___/\n"
-                    + "Hello! I'm Tianyi.\n"
+                    + "Hi, I'm Tianyi.\n"
+                    + "It's good to see you!\n"
                     + "What can I do for you?";
 
     private final Storage storage;

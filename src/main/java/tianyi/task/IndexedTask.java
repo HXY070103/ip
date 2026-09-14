@@ -18,6 +18,11 @@ public final class IndexedTask {
         this.task = task;
     }
 
+    /**
+     * Returns the task associated with this list number.
+     *
+     * @return Associated task.
+     */
     Task getTask() {
         return task;
     }

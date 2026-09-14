@@ -32,13 +32,21 @@ public class MarkCommand extends Command {
     @Override
     public Response execute(TaskList tasks, Storage storage)
             throws TianyiException {
+        int incompleteBefore = tasks.countIncompleteTasks();
         Task updatedTask = tasks.markTask(index);
 
         storage.save(tasks.getTasks());
 
+        String footer = "";
+
+        if (incompleteBefore > 0 && tasks.countIncompleteTasks() == 0) {
+            footer = "That's everything done. You've earned a little rest!";
+        }
+
         return new Response(
-                "Nice! I've marked this task as done:",
-                "  " + updatedTask
+                "Well done! I've marked this task as complete:",
+                "  " + updatedTask,
+                footer
         );
     }
 }

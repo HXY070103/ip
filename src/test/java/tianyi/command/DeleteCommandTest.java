@@ -31,8 +31,8 @@ public class DeleteCommandTest {
         assertNotNull(storage.savedTasks);
         assertEquals(1, storage.savedTasks.size());
         assertEquals("T | 0 | second", storage.savedTasks.get(0).getData());
-        assertEquals("Noted. I've removed this task:", response.getHeader());
-        assertEquals("  [T][ ] first\n"
-                + "Now you have 1 tasks in the list.", response.getMessage());
+        assertEquals("All right. I've removed this task:", response.getHeader());
+        assertEquals("  [T][ ] first", response.getMessage());
+        assertEquals("Now you have 1 tasks in the list.", response.getFooter());
     }
 }

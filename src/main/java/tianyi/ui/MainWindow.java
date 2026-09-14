@@ -76,7 +76,8 @@ public class MainWindow extends AnchorPane {
 
         dialogContainer.getChildren().add(
                 DialogBox.createWelcomeDialog(
-                        "Hello! I'm Tianyi.\n"
+                        "Hi, I'm Tianyi.\n"
+                                + "It's good to see you!\n"
                                 + "What can I do for you?",
                         tianyiImage
                 )

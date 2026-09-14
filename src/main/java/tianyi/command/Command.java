@@ -1,12 +1,8 @@
 package tianyi.command;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import tianyi.Response;
 import tianyi.TianyiException;
 import tianyi.storage.Storage;
-import tianyi.task.IndexedTask;
 import tianyi.task.TaskList;
 
 /**
@@ -29,23 +25,4 @@ public abstract class Command {
      */
     public abstract Response execute(TaskList tasks, Storage storage)
             throws TianyiException;
-
-    /**
-     * Creates a reply from numbered query results, omitting the header for empty results.
-     *
-     * @param header Title describing the query.
-     * @param indexedTasks Matching tasks with their original list numbers.
-     * @return Structured query response.
-     */
-    protected Response createListResponse(String header, List<IndexedTask> indexedTasks) {
-        if (indexedTasks.isEmpty()) {
-            return new Response("", "No tasks found.");
-        }
-
-        String message = indexedTasks.stream()
-                .map(IndexedTask::toString)
-                .collect(Collectors.joining("\n"));
-
-        return new Response(header, message);
-    }
 }

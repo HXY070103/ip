@@ -20,7 +20,8 @@ public class HelpCommandTest {
         Response response = new HelpCommand().execute(new TaskList(), storage);
 
         assertEquals("Here is the list of commands:", response.getHeader());
-        assertEquals(CommandType.getCommands(), response.getMessage());
+        assertEquals(CommandType.getCommands() + "\n", response.getMessage());
+        assertEquals("I hope it helps you!", response.getFooter());
         assertNull(storage.savedTasks);
     }
 }
