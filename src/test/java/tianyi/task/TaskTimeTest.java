@@ -73,6 +73,20 @@ public class TaskTimeTest {
     }
 
     @Test
+    public void isStrictlyBefore_differentDatesAndTimes_returnsExpectedResults() {
+        assertTrue(new TaskTime("1-12-2019").isStrictlyBefore(new TaskTime("2-12-2019")));
+        assertFalse(new TaskTime("3-12-2019").isStrictlyBefore(new TaskTime("2-12-2019")));
+        assertTrue(new TaskTime("2-12-2019 09:00")
+                .isStrictlyBefore(new TaskTime("2-12-2019 18:00")));
+        assertFalse(new TaskTime("2-12-2019 18:00")
+                .isStrictlyBefore(new TaskTime("2-12-2019 09:00")));
+        assertFalse(new TaskTime("2-12-2019 09:00")
+                .isStrictlyBefore(new TaskTime("2-12-2019 09:00")));
+        assertFalse(new TaskTime("2-12-2019")
+                .isStrictlyBefore(new TaskTime("2-12-2019 18:00")));
+    }
+
+    @Test
     public void toString_dateAndDifferentTimes_formatsForDisplay() {
         assertEquals("Mon, Dec 02 2019", new TaskTime("2-12-2019").toString());
         assertEquals("Mon, Dec 02 2019, 12:00 AM", new TaskTime("2-12-2019 00:00").toString());

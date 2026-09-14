@@ -101,6 +101,17 @@ public class DataParserTest {
         assertParseFails(data, "Invalid date and time in event data: " + data);
     }
 
+    @Test
+    public void parse_eventWithInvalidTimeRange_exceptionThrown() {
+        String reversedData = "E | 0 | workshop | 3-12-2019 | 2-12-2019";
+        String equalData = "E | 0 | workshop | 2-12-2019 09:00 | 2-12-2019 09:00";
+
+        assertParseFails(reversedData,
+                "Event start must be before its end in event data: " + reversedData);
+        assertParseFails(equalData,
+                "Event start must be before its end in event data: " + equalData);
+    }
+
     private void assertParseFails(String data, String expectedMessage) {
         StorageException exception = assertThrows(
                 StorageException.class, () -> parser.parse(data));

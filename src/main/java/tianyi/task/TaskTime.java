@@ -81,6 +81,25 @@ public class TaskTime {
     }
 
     /**
+     * Reports whether this value is strictly earlier than another date and time.
+     * Values on the same date are ordered only when both include a time.
+     *
+     * @param taskTime Value to compare against.
+     * @return {@code true} if this value is strictly earlier, otherwise {@code false}.
+     */
+    public boolean isStrictlyBefore(TaskTime taskTime) {
+        if (date.isBefore(taskTime.date)) {
+            return true;
+        }
+
+        if (date.isAfter(taskTime.date)) {
+            return false;
+        }
+
+        return hasTime && taskTime.hasTime && time.isBefore(taskTime.time);
+    }
+
+    /**
      * Formats this value in the machine-readable storage format.
      *
      * @return Date and optional time in their accepted input formats.

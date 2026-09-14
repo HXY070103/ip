@@ -1,6 +1,7 @@
 package tianyi.command;
 
 import java.time.format.DateTimeParseException;
+import java.util.regex.Pattern;
 
 import tianyi.TianyiException;
 import tianyi.task.Deadline;
@@ -17,6 +18,11 @@ class TaskParser {
     private static final int PART_INDEX_SECOND = 1;
     private static final int PART_COUNT_EXPECTED = 2;
 
+    private static final String SEPARATOR_BY = "/by";
+    private static final String SEPARATOR_FROM = "/from";
+    private static final String SEPARATOR_TO = "/to";
+    private static final String STORAGE_SEPARATOR = "|";
+
     /**
      * Parses the argument of a task-creation command.
      *
@@ -29,6 +35,11 @@ class TaskParser {
             throws TianyiException {
         if (argument.isBlank()) {
             throw new TianyiException("The argument of " + type + " cannot be empty.\n"
+                    + "Try: " + type.getExample());
+        }
+
+        if (argument.contains(STORAGE_SEPARATOR)) {
+            throw new TianyiException("The argument of " + type + " cannot contain \"|\".\n"
                     + "Try: " + type.getExample());
         }
 
@@ -50,12 +61,7 @@ class TaskParser {
      */
     private Task createDeadline(CommandType type, String argument)
             throws TianyiException {
-        String[] deadlineParts = argument.split("\\s*/by\\s*", PART_COUNT_EXPECTED);
-
-        if (deadlineParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException(type + " must contain /by.\n"
-                    + "Try: " + type.getExample());
-        }
+        String[] deadlineParts = splitSingleSeparator(type, argument, SEPARATOR_BY);
 
         String description = getRequiredPart(
                 deadlineParts,
@@ -84,10 +90,12 @@ class TaskParser {
      */
     private Task createEvent(CommandType type, String argument)
             throws TianyiException {
-        String[] eventParts = argument.split("\\s*/from\\s*", PART_COUNT_EXPECTED);
+        String[] eventParts = splitSingleSeparator(type, argument, SEPARATOR_FROM);
 
-        if (eventParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException(type + " must contain /from.\n"
+        int toSeparatorIndex = argument.indexOf(SEPARATOR_TO);
+
+        if (toSeparatorIndex >= 0 && argument.indexOf(SEPARATOR_FROM) > toSeparatorIndex) {
+            throw new TianyiException("In " + type + ", /from must appear before /to.\n"
                     + "Try: " + type.getExample());
         }
 
@@ -104,12 +112,7 @@ class TaskParser {
                         + "Try: " + type.getExample()
         );
 
-        String[] timeParts = timeRange.split("\\s*/to\\s*", PART_COUNT_EXPECTED);
-
-        if (timeParts.length < PART_COUNT_EXPECTED) {
-            throw new TianyiException(type + " must contain /to.\n"
-                    + "Try: " + type.getExample());
-        }
+        String[] timeParts = splitSingleSeparator(type, timeRange, SEPARATOR_TO);
 
         String fromTime = getRequiredPart(
                 timeParts,
@@ -126,7 +129,40 @@ class TaskParser {
 
         TaskTime startTime = parseTaskTime(type, fromTime);
         TaskTime endTime = parseTaskTime(type, toTime);
+
+        if (!startTime.isStrictlyBefore(endTime)) {
+            throw new TianyiException("The end of " + type + " must be later than its start.\n"
+                    + "For an event on the same day, please specify both times.\n"
+                    + "Try: " + type.getExample());
+        }
+
         return new Event(description, startTime, endTime);
+    }
+
+    /**
+     * Splits an argument around a required separator that may appear only once.
+     *
+     * @param type Command type that supplies error context and example usage.
+     * @param argument Complete command argument to split.
+     * @param separator Required command separator.
+     * @return The two components surrounding the separator.
+     * @throws TianyiException If the separator is missing or repeated.
+     */
+    private String[] splitSingleSeparator(CommandType type, String argument, String separator)
+            throws TianyiException {
+        String[] parts = argument.split(Pattern.quote(separator), -1);
+
+        if (parts.length < PART_COUNT_EXPECTED) {
+            throw new TianyiException(type + " must contain " + separator + ".\n"
+                    + "Try: " + type.getExample());
+        }
+
+        if (parts.length > PART_COUNT_EXPECTED) {
+            throw new TianyiException(type + " accepts " + separator + " only once.\n"
+                    + "Try: " + type.getExample());
+        }
+
+        return parts;
     }
 
     /**
