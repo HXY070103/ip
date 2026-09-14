@@ -127,10 +127,9 @@ public enum CommandType {
      * @return Help text for all supported commands.
      */
     public static String getCommands() {
-        String commands = Arrays.stream(values())
+        return Arrays.stream(values())
                 .map(CommandType::formatHelp)
                 .collect(Collectors.joining("\n\n"));
-        return commands;
     }
 
     /**

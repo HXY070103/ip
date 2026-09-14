@@ -100,22 +100,36 @@ public class TianyiTest {
     }
 
     @Test
-    public void constructor_invalidStoredData_showsErrorAndStartsWithEmptyList()
+    public void run_invalidStoredData_blocksCommandsAndClearsFileOnExit()
             throws IOException {
         Path dataFile = tempDir.resolve("invalid.txt");
-        Files.writeString(dataFile, "X | 0 | invalid" + FILE_NEWLINE);
-        Tianyi tianyi = createTianyi("list\nbye\n", dataFile);
+        String invalidData = "X | 0 | invalid" + FILE_NEWLINE;
+        Files.writeString(dataFile, invalidData);
+        Tianyi tianyi = createTianyi("todo replacement task\nbye\n", dataFile);
 
         tianyi.run();
 
-        String loadErrorOutput = LINE + "\n"
-                + "Oops! Unknown task type: X | 0 | invalid\n"
+        String dataErrorOutput = LINE + "\n"
+                + "Oops! The saved data file is damaged and cannot be loaded.\n"
+                + "Please enter [bye] to exit Tianyi. The damaged data will be cleared.\n"
                 + LINE + "\n";
-        String emptyListOutput = LINE + "\n"
-                + "Your list is empty. What would you like to add?\n"
-                + LINE + "\n";
-        assertEquals(loadErrorOutput + WELCOME_OUTPUT + emptyListOutput + GOODBYE_OUTPUT,
-                getOutput());
+        assertEquals(WELCOME_OUTPUT + dataErrorOutput + GOODBYE_OUTPUT, getOutput());
+        assertEquals("", Files.readString(dataFile));
+    }
+
+    @Test
+    public void getResponse_dataErrorCannotBeCleared_returnsErrorWithoutExiting()
+            throws IOException {
+        Path directory = Files.createDirectory(tempDir.resolve("directory"));
+        Tianyi tianyi = createTianyi("", directory);
+
+        Response response = tianyi.getResponse("bye");
+
+        assertEquals("Oops! The damaged data file could not be cleared.\n"
+                + "Please close Tianyi and remove the data file manually.", response.getMessage());
+        assertTrue(response.isError());
+        assertFalse(response.isExit());
+        assertTrue(Files.isDirectory(directory));
     }
 
     @Test

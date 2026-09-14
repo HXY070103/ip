@@ -60,21 +60,14 @@ public class UiTest {
     }
 
     @Test
-    public void showWelcome_always_printsBannerAndGreetingBetweenLines() {
+    public void showWelcome_multilineMessage_printsMessageBetweenLines() {
         Ui ui = new Ui();
 
-        ui.showWelcome();
+        ui.showWelcome("Welcome to Tianyi.\nHow can I help?");
 
         assertEquals(LINE + "\n"
-                + " _____ _                   _\n"
-                + "|_   _(_) __ _ _ __  _   _(_)\n"
-                + "  | | | |/ _` | '_ \\| | | | |\n"
-                + "  | | | | (_| | | | | |_| | |\n"
-                + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
-                + "                     |___/\n"
-                + "Hi, I'm Tianyi.\n"
-                + "It's good to see you!\n"
-                + "What can I do for you?\n"
+                + "Welcome to Tianyi.\n"
+                + "How can I help?\n"
                 + LINE + "\n", getOutput());
     }
 
@@ -98,26 +91,6 @@ public class UiTest {
         assertEquals(LINE + "\n"
                 + "Oops! Something went wrong.\n"
                 + LINE + "\n", getOutput());
-    }
-
-    @Test
-    public void showGoodbye_always_printsFarewellBetweenLines() {
-        Ui ui = new Ui();
-
-        ui.showGoodbye();
-
-        assertEquals(LINE + "\n"
-                + "Bye for now. Take care, and see you soon!\n"
-                + LINE + "\n", getOutput());
-    }
-
-    @Test
-    public void showLine_always_printsSingleSeparator() {
-        Ui ui = new Ui();
-
-        ui.showLine();
-
-        assertEquals(LINE + "\n", getOutput());
     }
 
     private void setInput(String input) {

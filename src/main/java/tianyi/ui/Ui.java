@@ -6,17 +6,6 @@ import java.util.Scanner;
  * Handles all console interactions with the user.
  */
 public class Ui {
-    private static final String BANNER = " _____ _                   _\n"
-            + "|_   _(_) __ _ _ __  _   _(_)\n"
-            + "  | | | |/ _` | '_ \\| | | | |\n"
-            + "  | | | | (_| | | | | |_| | |\n"
-            + "  |_| |_|\\__,_|_| |_|\\__, |_|\n"
-            + "                     |___/";
-    private static final String GREETING = "Hi, I'm Tianyi.\n"
-            + "It's good to see you!\n"
-            + "What can I do for you?";
-    private static final String FAREWELL = "Bye for now. Take care, and see you soon!";
-
     private final Scanner scanner;
 
     /**
@@ -45,10 +34,12 @@ public class Ui {
     }
 
     /**
-     * Displays the application banner and greeting.
+     * Displays the supplied application welcome message.
+     *
+     * @param message Welcome message to display.
      */
-    public void showWelcome() {
-        showMessage(BANNER, GREETING);
+    public void showWelcome(String message) {
+        showMessage(message);
     }
 
     /**
@@ -70,16 +61,9 @@ public class Ui {
     }
 
     /**
-     * Displays the farewell message.
-     */
-    public void showGoodbye() {
-        showMessage(FAREWELL);
-    }
-
-    /**
      * Prints a horizontal separator line.
      */
-    public void showLine() {
+    private void showLine() {
         System.out.println("____________________________________________________________");
     }
 

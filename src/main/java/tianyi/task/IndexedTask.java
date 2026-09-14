@@ -27,6 +27,11 @@ public final class IndexedTask {
         return task;
     }
 
+    /**
+     * Formats the task with its one-based list number.
+     *
+     * @return Numbered task for display.
+     */
     @Override
     public String toString() {
         return taskNumber + "." + task;

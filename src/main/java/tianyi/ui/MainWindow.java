@@ -76,9 +76,7 @@ public class MainWindow extends AnchorPane {
 
         dialogContainer.getChildren().add(
                 DialogBox.createWelcomeDialog(
-                        "Hi, I'm Tianyi.\n"
-                                + "It's good to see you!\n"
-                                + "What can I do for you?",
+                        tianyi.getWelcomeMessage(),
                         tianyiImage
                 )
         );
@@ -104,6 +102,7 @@ public class MainWindow extends AnchorPane {
         showLatestReply(latestReply);
 
         if (response.isExit()) {
+            userInput.setDisable(true);
             scheduleExit();
         }
     }

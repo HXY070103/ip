@@ -42,6 +42,10 @@
     -fx-text-fill: #1e40af;
 }
 
+.welcome-card .label {
+    -fx-font-family: "Monospaced";
+}
+
 .error-card .message-heading {
     -fx-text-fill: white;
     -fx-background-color: #a51d35;

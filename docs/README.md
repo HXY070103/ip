@@ -2,7 +2,7 @@
 
 // Update the title above to match the actual product name
 
-// Product screenshot goes here
+![Tianyi product screenshot](Ui.png)
 
 // Product intro goes here
 

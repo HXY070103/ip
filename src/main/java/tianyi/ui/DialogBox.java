@@ -152,6 +152,9 @@ public class DialogBox extends HBox {
      * @return Dialog box with welcome styling.
      */
     public static DialogBox createWelcomeDialog(String text, Image image) {
-        return createTianyiDialog(text, image);
+        DialogBox dialogBox = createTianyiDialog(text, image);
+        dialogBox.messageContainer.getStyleClass().add("welcome-card");
+
+        return dialogBox;
     }
 }

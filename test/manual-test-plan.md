@@ -7,7 +7,7 @@ with Java 25 in every environment being checked. Use a fresh data file before ea
 
 | ID | Action | Expected result |
 | --- | --- | --- |
-| GUI-01 | Launch the application. | The window opens with the Tianyi title, welcome message, and input field visible. |
+| GUI-01 | Launch the application. | The window opens with the Tianyi title, aligned ASCII banner, welcome message, and input field visible. |
 | GUI-02 | Enter a valid command such as `todo read book`. | User and Tianyi dialog cards appear in order, with distinct avatars and no clipped text. |
 | GUI-03 | Enter an invalid command such as `todo`. | The reply uses the error styling and shows the complete corrective message. |
 | GUI-04 | Submit an empty or whitespace-only input. | No dialog is added and the application remains responsive. |
@@ -17,6 +17,7 @@ with Java 25 in every environment being checked. Use a fresh data file before ea
 | GUI-08 | Resize the window down to its minimum size and then enlarge it. | Controls remain usable, text wraps without overlap, and dialog cards resize with the window. |
 | GUI-09 | Enter `bye`. | The farewell appears, input is disabled, and the application closes after the short delay. |
 | GUI-10 | Close and reopen the application after adding and marking tasks. | Saved tasks, order, types, dates, and completion states are restored. |
+| GUI-11 | Put an invalid record such as `X | 0 | invalid` in `Data/tianyi.txt`, launch the application, and enter `todo replacement task`. | An error reply asks the user to enter `[bye]`; the invalid file is unchanged until `bye` is entered, then it is cleared and Tianyi exits normally. |
 
 ## Environment matrix
 
